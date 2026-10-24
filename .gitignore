@@ -5,3 +5,5 @@ main/
 instance/
 venv/
 /temp_files/
+/testing/alignment/cache/*
+!/testing/alignment/cache/.gitkeep

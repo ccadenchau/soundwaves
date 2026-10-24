@@ -209,3 +209,213 @@ A replacement backend implements `transcribe(audio_path, config) -> Prediction`.
 | `models.py` | Configuration, result types, backend contract |
 
 References: [Basic Pitch](https://github.com/spotify/basic-pitch), [upstream dependency configuration](https://github.com/spotify/basic-pitch/blob/main/pyproject.toml), [inference API](https://github.com/spotify/basic-pitch/blob/main/basic_pitch/inference.py).
+
+## Bar-by-bar performance alignment
+
+`alignment/` compares reference score notes against transcribed notes or a performed
+MIDI. Pitch matching follows musical sequence rather than fixed timestamps. Each
+bar then gets its own robust tempo and start-offset estimate. A fast bar can have
+perfect pitch accuracy and `tempo_status="too_fast"`; the following bar is fitted
+independently, so it is not marked late or early just because the prior bar changed
+the recording timeline. Leading silence does not shift the pitch comparison.
+
+The module uses NumPy, SciPy, and (for MIDI inputs) pretty_midi from the root
+`requirements.txt`. There is no separate requirements file or installation step.
+It does not call the cleaner, recognition engine, or transcription model.
+
+### Call it
+
+Keep the converter's `reference.json`: MIDI alone does not preserve the reference
+measure boundaries needed by this API. Generate one chunk per bar (the default):
+
+```python
+from alignment import align_performance
+from sheet_downloader import convert_score
+from transcribe_recording import transcribe_recording
+
+score = convert_score("score.pdf", "output/score-001", measures_per_chunk=1)
+take = transcribe_recording("recording.wav", "output/take-001")
+
+report = align_performance(
+    score.notes,             # Path to reference.json
+    take,                    # Or take.notes, take.notes_path, or a MIDI path
+    "output/analysis-001.json",
+)
+
+for bar in report["measures"]:
+    print(bar["number"], bar["pitch_recall"], bar["tempo_status"], bar["feedback"])
+```
+
+`reference` accepts a converter reference JSON path or its parsed dictionary.
+`performance` accepts a transcription result, performance JSON path/dictionary,
+an iterable of played-note dictionaries/dataclasses, or a `.mid`/`.midi` path.
+Score onsets/durations are quarter-note beats; performance times are seconds.
+Pass the full performance of the supplied reference passage. For an excerpt,
+convert the corresponding score excerpt first. Multi-bar chunks are rejected;
+reconvert with `measures_per_chunk=1`.
+
+The optional output path is created with its parents and refuses to overwrite an
+existing report. Omitting it returns the report without writing files.
+
+### Matching and feedback
+
+- Nearby performance onsets are grouped into chords (default 50 ms). A monotone
+  sequence alignment compares pitch multisets, allowing inserted/deleted onset
+  groups. Within paired chords, one-to-one assignment identifies correct, wrong,
+  missing, and extra pitches. No played note can satisfy two score notes.
+- Pitch-overlapping onset groups provide beat-to-second anchors. Each bar uses
+  its own robust slope/intercept fit, optionally including an anchor exactly at
+  its ending boundary. Timing residuals are measured against that local fit.
+- `tempo_ratio` compares the fitted bar speed with the score's average tempo for
+  that bar, including encoded tempo changes. A ratio of `1.5` means 50% faster.
+  The default tempo tolerance is 12%; pitch accuracy remains a separate metric.
+- Bars without enough separated anchors, or with poor pitch agreement, have
+  `tempo_status="unassessed"`. Irregular fits are labeled `irregular`. An entirely
+  empty performance returns an uncertain report with candidate missing notes.
+- Reports include global pitch precision/recall/F1, per-bar counts and feedback,
+  note matches, candidate pitch/timing errors, recording timestamps, alignment
+  anchors, settings, and warnings. `measure_occurrence` is a zero-based playback
+  index, so repeated printed measure numbers can be distinguished. Extras outside
+  the anchor span remain unassigned to a bar and are still included in the report.
+
+Customize tolerances if needed:
+
+```python
+from alignment import AlignmentConfig, align_performance
+
+report = align_performance(
+    "output/score-001/reference/reference.json",
+    "output/take-001/notes.json",
+    config=AlignmentConfig(tempo_tolerance=0.15, chord_window_seconds=0.04),
+)
+```
+
+The alignment costs and evidence checks are heuristics, not calibrated confidence
+scores. Audio discrepancies are possible transcription or playing errors.
+Repeated identical passages, rolled chords spanning the grouping window, long
+pauses within a bar, skipped/replayed bars, and missing attacks can make the path
+ambiguous. The matcher assumes forward playback and does not follow jumps or
+automatically locate a partial take. Inspect the reported matches and warnings;
+a good pitch score alone does not prove the location is correct. Timing compares
+against the bar's fitted pace and does not grade fine expressive rubato, duration,
+pedal, or dynamics. The default sequence-matrix limit targets short excerpts and
+rejects oversized inputs rather than allocating without a bound.
+
+### Simple manual runner
+
+From the repository root, using the environment with root dependencies installed:
+
+```sh
+python alignment/test.py
+```
+
+With no file arguments, this starts the upload server. Open
+http://127.0.0.1:5001 and choose your sheet music and MP3 in the browser, then
+click **Compare performance**. Use `--port 5002` to choose another port. Press
+Ctrl+C in the terminal to stop the server.
+
+For optional command-line comparison instead:
+
+```sh
+python alignment/test.py path/to/score.pdf path/to/recording.mp3
+python alignment/test.py "https://example.com/score.pdf" path/to/recording.mp3
+python alignment/test.py path/to/score.musicxml path/to/recording.mp3 --bpm 100 --output output/report-001.json
+```
+
+The runner downloads a direct sheet URL (or reads a local sheet), converts the
+sheet and MP3, and prints per-bar pitch matches and tempo feedback. URLs must
+return PDF/MusicXML content rather than a score-library webpage; downloading
+requires internet access. PDF conversion requires the existing local Audiveris
+installation (`AUDIVERIS_PATH`); MusicXML bypasses recognition. The fallback BPM
+only applies where the score does not supply tempo. Recordings are limited to ten
+minutes and should cover the same passage as the reference. This remains a manual
+runner, not an automated test suite.
+
+### Simple alignment web server
+
+Install the root requirements, then start the server:
+
+```sh
+python -m pip install -r requirements.txt
+python testing/alignment/app.py
+```
+
+Open http://127.0.0.1:5001. Upload sheet music (PDF/MusicXML/XML/MXL) or supply a
+direct sheet download URL, then upload an MP3. The page shows pitch recall and
+precision, per-bar pitch counts, tempo compared with the score, candidate note
+discrepancies, and assessment warnings. Listen buttons seek to the estimated bar
+or note in the recording. Both MIDIs, recognized MusicXML, the score repair log,
+and the JSON report can be downloaded. Pitch accuracy is separate from tempo:
+a fast bar can still have every expected pitch matched.
+
+Uploaded recordings are transcribed directly from the original MP3 without audio
+cleaning, denoising, mastering, or silence trimming. Transcription only decodes,
+downmixes to mono, and resamples the audio. Bar/note seek buttons and recording
+timestamps refer to the original recording. Reports record that cleaning is disabled.
+
+The results page includes the original MP3 and cached harmonic WAV previews of
+the sheet and recording MIDI note times and velocities. Preview length is limited
+to 30 minutes. Only one player plays at a time.
+
+The results page renders the recognized sheet music with a performance overlay:
+green matched notes, orange missing notes, red expected notes for pitch mismatches,
+and purple detected pitches. Play the original recording to follow sounding notes,
+or click a colored played note to seek. Extra notes are placed beside the nearest
+matched note in their bar; notes without a reliable location are listed separately.
+The score uses expanded repeats and any conversion repairs. These are estimated
+transcription/alignment results, not a definitive assessment of playing errors.
+
+Notation is rendered locally with Verovio and cached separately; opening an existing
+report can generate its overlay without redoing transcription. Install the root
+`requirements.txt` to include the renderer. HTML and CSS are in
+`testing/alignment/app.py`; overlay controls are in
+`testing/alignment/static/notation.js`. This is a synchronous local development
+server. The first conversion can take several minutes. Limits are 20 MB per sheet
+and 80 MB per MP3, with a ten-minute decoded audio limit. It binds to loopback on
+port 5001, leaving the existing score-preview server on port 5000 available.
+
+### Shared conversion cache
+
+The CLI and server share `testing/alignment/pipeline.py` and write under:
+
+```text
+testing/alignment/cache/
+  inputs/<sha256>.<extension>          # Downloaded/uploaded sheet and MP3 bytes
+  sheets/<cache-key>/converted/reference/
+    reference.mid                    # Cached sheet MIDI
+    reference.json                   # Score beats and bar boundaries
+    reference.musicxml
+    repairs.json
+  recordings/<cache-key>/converted/
+    performance.mid                  # Cached recording MIDI
+    notes.json                       # Performance times in seconds
+    raw_notes.json
+  notation/<cache-key>/notation.json  # Rendered score and performance overlays
+  playback/<cache-key>/preview.wav    # Browser-playable MIDI audio previews
+  reports/<unique-id>/report.json
+```
+
+Old cleaned audio and its transcription cache entries are bypassed. New recording
+cache keys explicitly identify the original, uncleaned MP3 input.
+
+Conversions are reused by file contents, input type, settings, converter source,
+model weights, and installed dependency versions. A changed recording does not
+invalidate an unchanged sheet conversion. Renaming the same file does not trigger
+conversion again. URLs are fetched on each request, then their downloaded bytes
+determine cache reuse. Alignment runs again on every comparison so edits to the
+alignment engine take effect without retranscribing.
+
+Completed conversions are published atomically and required artifacts are
+hash-checked before reuse. Interrupted builds are discarded; a damaged published
+entry raises an error naming the directory to remove. Changing the external
+Audiveris executable without changing `AUDIVERIS_PATH` is not automatically
+detected: clear the corresponding sheet cache when upgrading Audiveris. Cached
+artifacts are gitignored. Delete cached entries to regenerate them, or the cache
+contents to clear stored recordings, scores, and reports (stop the server first).
+The original converter/transcriber APIs still run fresh when called directly;
+caching belongs to this testing harness. Cleaning is cached separately using the
+original recording, cleaner code, and settings. Transcription uses the cleaned
+WAV and its own cache key, so old uncleaned transcriptions are not reused for the
+new pipeline. MIDI previews are also cached independently.
+
+These runners and conversions have not been executed as part of this change.

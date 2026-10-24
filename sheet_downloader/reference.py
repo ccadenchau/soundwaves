@@ -74,13 +74,16 @@ def build_reference(
     )
     review["applied_fixes"] = fixes
     review["original_issues"] = original_issues
+    # Resolve wedges against the original hierarchy. Repeat expansion copies
+    # notes and can leave spanner endpoints referring to detached originals.
+    # The calculated note velocities are copied into each repeated measure.
+    apply_expression(score)
     try:
         score = score.expandRepeats()
     except repeat.ExpanderException as error:
         raise ValueError(
             "The recognized score has incomplete repeat markings. Try a complete piece."
         ) from error
-    apply_expression(score)
     parts = list(score.parts)
     if not parts:
         raise ValueError("Score must contain measured parts.")
