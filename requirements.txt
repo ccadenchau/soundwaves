@@ -3,3 +3,4 @@ scipy
 soundfile
 noisereduce
 imageio-ffmpeg
+librosa
