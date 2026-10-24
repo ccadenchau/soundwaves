@@ -18,6 +18,7 @@ CACHE = Path(__file__).with_name('cache')
 MAX_SHEET_BYTES = 20 * 1024 * 1024
 MAX_RECORDING_BYTES = 80 * 1024 * 1024
 SHEET_SUFFIXES = {'.pdf', '.musicxml', '.xml', '.mxl'}
+RECORDING_SUFFIXES = {'.mp3', '.wav', '.m4a', '.webm', '.ogg', '.flac'}
 _lock = RLock()
 
 
@@ -81,8 +82,8 @@ def _stage_stream(stream, suffix, limit):
 
 def store_upload(upload, *, recording=False):
     suffix = Path(upload.filename or '').suffix.lower()
-    if suffix not in ({'.mp3'} if recording else SHEET_SUFFIXES):
-        raise ValueError('Choose an MP3 recording.' if recording else 'Choose PDF, MusicXML, XML, or MXL sheet music.')
+    if suffix not in (RECORDING_SUFFIXES if recording else SHEET_SUFFIXES):
+        raise ValueError('Choose an MP3, WAV, M4A, WebM, OGG or FLAC recording.' if recording else 'Choose PDF, MusicXML, XML, or MXL sheet music.')
     return _stage_stream(upload.stream, suffix, MAX_RECORDING_BYTES if recording else MAX_SHEET_BYTES)
 
 
@@ -150,15 +151,16 @@ def compare_files(sheet, recording, *, bpm=120):
         raise ValueError('Fallback BPM must be between 20 and 400.')
     sheet_path = _sheet_source(sheet)
     recording = Path(recording).expanduser().resolve()
-    if recording.suffix.lower() != '.mp3':
-        raise ValueError('Choose a recording.mp3 file.')
+    if recording.suffix.lower() not in RECORDING_SUFFIXES:
+        raise ValueError('Choose an MP3, WAV, M4A, WebM, OGG or FLAC recording.')
     with recording.open('rb') as handle:
-        audio_path = _stage_stream(handle, '.mp3', MAX_RECORDING_BYTES)
+        audio_path = _stage_stream(handle, recording.suffix.lower(), MAX_RECORDING_BYTES)
 
     from sheet_downloader import convert_score
     from transcribe_recording import transcribe_recording
     from transcribe_recording.models import TranscriptionConfig
-    from alignment import align_performance
+    from pianocoach.clean import clean_notes
+    from pianocoach.pipeline import align_windowed, transcriber
     from testing.alignment.playback import render_midi
 
     sheet_signature = _signature('sheet_downloader', dict(bpm=bpm, measures_per_chunk=1,
@@ -167,13 +169,20 @@ def compare_files(sheet, recording, *, bpm=120):
         lambda stage: convert_score(sheet_path, stage / 'converted', bpm=bpm, measures_per_chunk=1),
         dict(midi='converted/reference/reference.mid', notes='converted/reference/reference.json',
              musicxml='converted/reference/reference.musicxml', repairs='converted/reference/repairs.json'))
+    # Transkun when its environment exists (best accuracy), else the bundled Basic Pitch.
+    backend = transcriber()
+    transcriber_name = backend.name if backend is not None else 'basic-pitch'
     recording_signature = _signature('transcribe_recording', dict(
-        config=asdict(TranscriptionConfig()), audio_cleaning=False, input_audio='original_mp3'))
+        config=asdict(TranscriptionConfig()), audio_cleaning=False, input_audio='original', transcriber=transcriber_name))
     take, recording_hit = _cached('recordings', audio_path, recording_signature,
-        lambda stage: transcribe_recording(audio_path, stage / 'converted'),
+        lambda stage: transcribe_recording(audio_path, stage / 'converted', backend=backend),
         dict(midi='converted/performance.mid', notes='converted/notes.json'))
-    report = align_performance(score['notes'], take['notes'])
-    report['preprocessing'] = dict(audio_cleaning=False, timestamp_origin='original_audio')
+    # Clean the detections, merge unison score notes, and pin a short take to the bars it covers.
+    heard = json.loads(Path(take['notes']).read_text(encoding='utf-8'))['notes']
+    kept, cleaning = clean_notes(heard, harmonics=backend is None)
+    report, _ = align_windowed(score['notes'], kept)
+    report['preprocessing'] = dict(report.get('preprocessing', {}), audio_cleaning=False,
+                                   timestamp_origin='original_audio', transcriber=transcriber_name, **cleaning)
 
     playback_signature = _signature('sheet_downloader', dict(
         renderer_sha256=_hash(Path(__file__).with_name('playback.py')), sample_rate=16000))

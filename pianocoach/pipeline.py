@@ -137,10 +137,11 @@ def locate_take(reference, played, *, config=None, full_fraction=0.6):
     return window
 
 
-def align_clean(reference, performance, *, performance_notes=None, musicxml=None, piece=None,
-                take_number=1, audio_duration=None, hands='right', config=None):
-    """Prepare the score, locate a partial take, align, build the page report.
-    Returns (alignment, ui_report)."""
+def align_windowed(reference, performance, *, config=None):
+    """Prepare the score, locate a short take inside it, align. Returns (alignment, prepared_reference).
+
+    `reference` is a reference.json path or dictionary; `performance` is anything the aligner accepts.
+    Occurrence numbers in the result refer to the full score even when only a window was aligned."""
     import json as _json
     data = _json.loads(Path(reference).read_text(encoding='utf-8')) if isinstance(reference, (str, Path)) else reference
     prepared, dropped = prepare_reference(data)
@@ -157,8 +158,25 @@ def align_clean(reference, performance, *, performance_notes=None, musicxml=None
             b['occurrence'] = mapping[b['occurrence']]
         alignment['window'] = dict(first_occurrence=window[0], last_occurrence=window[1],
                                    bars=[c['measures'][0] for c in prepared['chunks'] if window[0] <= c['measure_occurrence'] <= window[1]])
+    # Notes the student never reached are not "missing": keep a missing note only inside the bars that were played.
+    from .report import _played_span
+    span = _played_span(alignment, prepared['chunks'])
+    if span is not None:
+        before = len(alignment['errors'])
+        alignment['errors'] = [e for e in alignment['errors'] if e['category'] != 'missing'
+                               or e.get('measure_occurrence') is None or span[0] <= e['measure_occurrence'] <= span[1]]
+        alignment['played_span'] = dict(first_occurrence=span[0], last_occurrence=span[1],
+                                        unreached_missing_dropped=before - len(alignment['errors']))
     alignment['preprocessing'] = dict(alignment.get('preprocessing', {}), score_notes_merged=len(dropped),
                                       windowed=window is not None)
+    return alignment, prepared
+
+
+def align_clean(reference, performance, *, performance_notes=None, musicxml=None, piece=None,
+                take_number=1, audio_duration=None, hands='right', config=None):
+    """Prepare the score, locate a partial take, align, build the page report.
+    Returns (alignment, ui_report)."""
+    alignment, prepared = align_windowed(reference, performance, config=config)
     report = build_ui_report(prepared, alignment, performance_notes=performance_notes, musicxml=musicxml,
                              piece=piece, take_number=take_number, audio_duration=audio_duration, hands=hands)
     return alignment, report

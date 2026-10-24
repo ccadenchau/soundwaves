@@ -3,7 +3,7 @@
     .venv/bin/python -m pianocoach.selftest            # all cases, prints PASS/FAIL, exit 1 on failure
     .venv/bin/python -m pianocoach.selftest mistakes   # one case
 
-The same cases back the buttons on http://127.0.0.1:5002/test. Each case renders a piano
+The same cases back the buttons on http://127.0.0.1:5001/test. Each case renders a piano
 recording (or MIDI file) of the Minuet in G with mistakes planted at known places, runs the
 real pipeline, and compares what it found with what was planted. Nothing here calls an
 explanation service.

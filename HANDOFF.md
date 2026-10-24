@@ -1,4 +1,4 @@
-**Testing:** `./run.sh` then open http://127.0.0.1:5002/test, or `./check.sh` for everything. See `TESTING.md`.
+**Testing:** `./run.sh` then open http://127.0.0.1:5001/test, or `./check.sh` for everything. See `TESTING.md`.
 
 # Review of Codex's live practice work + branch push — Claude, 2026-10-24 ~16:00
 
@@ -45,7 +45,7 @@ The user clarified the core product: read sheet music while playing, see quiet l
 
 ## State
 
-- Implemented and running at **http://127.0.0.1:5002/practice**. The existing `/record` and saved report routes remain available.
+- Implemented and running at **http://127.0.0.1:5001/practice**. The existing `/record` and saved report routes remain available.
 - Both-hand horizontal score; note-based following (never a nominal-tempo timer); song/you pitch-trail comparison; large Right note / A little higher / A little lower cues; expected-key outlines and played-key flashes; real input waveform; MIDI and provisional mic marks; end-only summary.
 - Microphone uses 1024-sample AudioWorklet PCM batches (~46 ms), begins after 200 ms, requests every 100 ms over up to 1.5 seconds of context, with one request in flight and no stale request queue. Full original MediaRecorder capture still goes through existing final Transkun pipeline.
 - Latest browser synthetic-audio test exercised actual AudioWorklet→WAV→live endpoint→stream merger→score marks: every one of 12 correct melody notes confirmed as detected; one deliberate F5 instead of F#5 showed a higher hint. Onset-to-feedback was 136–275 ms, median 182 ms, wrong note 200 ms. Physical microphone/room latency was not measured. Test-only input mocks were closed/reloaded.
@@ -103,7 +103,7 @@ Codex's currently running server is retained in exec session 40695; it binds loo
 
 ## Resume prompt
 
-> Read HANDOFF.md. The live practice screen is at http://127.0.0.1:5002/practice. Preserve the existing pipeline and plain UI; continue from real-instrument verification in Next steps.
+> Read HANDOFF.md. The live practice screen is at http://127.0.0.1:5001/practice. Preserve the existing pipeline and plain UI; continue from real-instrument verification in Next steps.
 
 ---
 
@@ -151,7 +151,7 @@ testing/render_piano.py                      event list -> WAV with the FluidR3 
 # -> exactly: wrong F#5->F5 bar 3, missing G4 bar 7, B4 +150 ms bar 15, pace.rushed_bars=[5]; P 0.98 R 0.99 (Transkun)
 ```
 
-- Server: `.venv/bin/python -m pianocoach.app` then `http://127.0.0.1:5002/?report=d3b07384d113edec49eaa6238ad5ff00` shows that take in the finished page (checked in Chrome). `/record` records from the mic (WebM upload tested), takes file uploads, and listens to a USB MIDI keyboard (Web MIDI; encoder tested end to end from the browser; no keyboard was attached to test hardware).
+- Server: `.venv/bin/python -m pianocoach.app` then `http://127.0.0.1:5001/?report=d3b07384d113edec49eaa6238ad5ff00` shows that take in the finished page (checked in Chrome). `/record` records from the mic (WebM upload tested), takes file uploads, and listens to a USB MIDI keyboard (Web MIDI; encoder tested end to end from the browser; no keyboard was attached to test hardware).
 - ASAP dataset (expert MIDI performances vs MusicXML): planted mistakes caught 39/40 with 0 new false alarms; ~30 findings per error-free expert Bach performance remain (ornaments, edition differences). See `testing/datasets/README.md`.
 - Transkun vs Basic Pitch on the same sampled-piano take: Transkun exactly the planted mistakes; Basic Pitch 12 findings incl. 8 false. Transkun loads in ~1 s on MPS, ~8 s per 2 min of audio.
 
