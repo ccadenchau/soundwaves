@@ -12,7 +12,8 @@ Prerequisites: [uv](https://docs.astral.sh/uv/) (`brew install uv`). Node is opt
 
 ## The test page
 
-`./run.sh` opens **http://127.0.0.1:5002/test**. Click **Run all checks**. Each card renders a piano
+`./run.sh` opens the original upload page at **http://127.0.0.1:5001** (it now has the new transcriber, cleaning and partial-take detection). The
+new pages are on the same server: **http://127.0.0.1:5001/test**. Click **Run all checks**. Each card renders a piano
 recording of the Minuet in G with mistakes planted at known places, runs the real converters, and tells you
 whether what came out matches what went in:
 
@@ -30,9 +31,9 @@ The top of the page shows which transcriber is active and whether a microphone o
 
 ## Try it by hand
 
-- **http://127.0.0.1:5002/practice** — the live screen. Press **Play demo** for a sampled-piano example with three
+- **http://127.0.0.1:5001/practice** — the live screen. Press **Play demo** for a sampled-piano example with three
   deliberate mistakes, or pick Microphone, USB / MIDI or On-screen keys and play.
-- **http://127.0.0.1:5002/record** — record or upload a whole take and get the full review.
+- **http://127.0.0.1:5001/record** — record or upload a whole take and get the full review.
 - The bottom of `/test` takes any WAV/MP3/M4A/MIDI file of the Minuet in G.
 
 If the microphone hears nothing: Chrome → the lock icon next to the address → allow Microphone, and check the input

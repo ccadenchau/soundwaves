@@ -15,6 +15,15 @@ from testing.alignment.pipeline import CACHE, compare_files, store_upload
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 102 * 1024 * 1024
 
+# The new PianoCoach pages share this server and port: /test (one-click checks), /practice (live
+# screen), /record (mic, file or MIDI keyboard), and /?report=<id> (the review page).
+from pianocoach.app import coach, report_page  # noqa: E402
+from pianocoach.live import practice  # noqa: E402
+from pianocoach.selftest import selftest  # noqa: E402
+
+for _blueprint in (coach, practice, selftest):
+    app.register_blueprint(_blueprint)
+
 PAGE = '''<!doctype html>
 <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Soundwaves · Alignment</title>
@@ -43,11 +52,12 @@ small{font-weight:400}ul{padding-left:21px}li{margin:7px 0}.seek{padding:6px 9px
 @media(max-width:650px){form{grid-template-columns:1fr}.wide{grid-column:auto}.card{padding:15px}}
 </style>
 <main><h1>Performance alignment</h1><p class="muted">Compare sheet music with your piano recording. See correct pitches and tempo separately, bar by bar.</p>
+<p class="muted" style="margin-top:-6px"><strong>New on this server:</strong> <a href="/test">Run the one-click checks</a> · <a href="/practice">Live practice screen</a> · <a href="/record">Record a take</a>. This page now uses the better transcriber, note cleaning and partial-take detection too.</p>
 <section class="card"><form method="post" action="{{ url_for('index') }}" enctype="multipart/form-data" id="upload">
 <label>Sheet music <small>PDF, MusicXML, XML, MXL · up to 20 MB</small>
 <input type="file" name="sheet" accept=".pdf,.musicxml,.xml,.mxl"></label>
-<label>Recording <small>MP3 · up to 80 MB, 10 minutes</small>
-<input type="file" name="recording" accept=".mp3,audio/mpeg" required></label>
+<label>Recording <small>MP3, WAV, M4A · up to 80 MB, 10 minutes</small>
+<input type="file" name="recording" accept=".mp3,.wav,.m4a,.webm,.ogg,.flac,audio/*" required></label>
 <label>Or a direct sheet download URL<input type="url" name="sheet_url" placeholder="https://example.com/score.pdf"></label>
 <label>Fallback score tempo (BPM)<input type="number" name="bpm" min="20" max="400" step="any" value="120" required></label>
 <div class="wide"><button type="submit" id="submit">Compare performance</button>
@@ -138,6 +148,8 @@ def _report_directory(report_id):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
+        if request.args.get('report'):
+            return report_page()  # the PianoCoach review page, e.g. after /record or /test
         return render_template_string(PAGE, result=None, error=None)
     try:
         sheet = request.files.get('sheet')
@@ -146,7 +158,7 @@ def index():
         if bool(sheet and sheet.filename) == bool(sheet_url):
             raise ValueError('Supply either a sheet file or a direct download URL.')
         if not recording or not recording.filename:
-            raise ValueError('Supply an MP3 recording.')
+            raise ValueError('Supply a recording (MP3, WAV or M4A).')
         if sheet_url and not sheet_url.lower().startswith(('http://', 'https://')):
             raise ValueError('Sheet URLs must start with http:// or https://.')
         source = sheet_url if sheet_url else store_upload(sheet)
@@ -225,13 +237,16 @@ def notation(report_id):
 @app.errorhandler(RequestEntityTooLarge)
 def too_large(error):
     return render_template_string(PAGE, result=None,
-                                  error='Upload too large. Sheet limit: 20 MB; MP3 limit: 80 MB.'), 413
+                                  error='Upload too large. Sheet limit: 20 MB; recording limit: 80 MB.'), 413
 
 
 def run_server(port=5001):
-    print(f'Open http://127.0.0.1:{port} to upload your sheet music and MP3 recording.', flush=True)
+    from pianocoach.app import warm_transcriber
+    print(f'Open http://127.0.0.1:{port} to upload your sheet music and recording.', flush=True)
+    print(f'  one-click checks: http://127.0.0.1:{port}/test   live practice: http://127.0.0.1:{port}/practice', flush=True)
     print('Press Ctrl+C to stop the server.', flush=True)
-    app.run(host='127.0.0.1', port=port, debug=False, use_reloader=False)
+    warm_transcriber()
+    app.run(host='127.0.0.1', port=port, debug=False, use_reloader=False, threaded=True)
 
 
 if __name__ == '__main__':

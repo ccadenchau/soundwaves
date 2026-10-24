@@ -12,7 +12,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from flask import Flask, abort, jsonify, request, send_file  # noqa: E402
+from flask import Blueprint, Flask, abort, jsonify, request, send_file  # noqa: E402
 
 from pianocoach.pipeline import AUDIO_SUFFIXES, MIDI_SUFFIXES, TooFewNotes, analyze  # noqa: E402
 
@@ -21,8 +21,10 @@ UI = ROOT / 'pianocoach-ui' / 'index.html'
 PIECES = Path(__file__).with_name('pieces')
 SESSIONS = Path(__file__).with_name('sessions')
 ID = re.compile(r'^[a-f0-9]{32}$')
+SESSIONS.mkdir(exist_ok=True)
 
 app = Flask(__name__)
+coach = Blueprint('coach', __name__)
 app.config['MAX_CONTENT_LENGTH'] = 120 * 1024 * 1024
 
 from pianocoach.live import practice  # noqa: E402
@@ -210,20 +212,27 @@ def _no_cache(response):
     return response
 
 
-@app.get('/')
-def index():
+def report_page():
+    """The finished report page. Opens /?report=<id> by fetching that report."""
+    from flask import Response
     html = UI.read_text(encoding='utf-8')
     if '</body>' in html:
         html = html.replace('</body>', LOADER + '</body>', 1)
-    return _no_cache(app.response_class(html, mimetype='text/html'))
+    return _no_cache(Response(html, mimetype='text/html'))
 
 
-@app.get('/record')
+@app.get('/')
+def index():
+    return report_page()
+
+
+@coach.get('/record')
 def record():
-    return _no_cache(app.response_class(RECORD, mimetype='text/html'))
+    from flask import Response
+    return _no_cache(Response(RECORD, mimetype='text/html'))
 
 
-@app.get('/api/pieces')
+@coach.get('/api/pieces')
 def pieces():
     return jsonify([{k: v for k, v in p.items() if k != 'meta'} for p in _pieces()])
 
@@ -242,7 +251,7 @@ def _session_dir(report_id):
     return directory
 
 
-@app.get('/api/report/<report_id>')
+@coach.get('/api/report/<report_id>')
 def report(report_id):
     path = _session_dir(report_id) / 'report.json'
     if not path.is_file():
@@ -250,7 +259,7 @@ def report(report_id):
     return _no_cache(send_file(path, mimetype='application/json'))
 
 
-@app.get('/api/audio/<report_id>')
+@coach.get('/api/audio/<report_id>')
 def audio(report_id):
     matches = [p for p in _session_dir(report_id).glob('recording.*') if p.suffix.lower() in AUDIO_SUFFIXES]
     if not matches:
@@ -258,7 +267,7 @@ def audio(report_id):
     return _no_cache(send_file(matches[0]))
 
 
-@app.post('/api/analyze')
+@coach.post('/api/analyze')
 def analyze_route():
     upload = request.files.get('performance')
     if upload is None or not upload.filename:
@@ -299,8 +308,11 @@ def analyze_route():
     return jsonify(id=session_id, url=f'/?report={session_id}')
 
 
-def run_server(port=5002):
-    SESSIONS.mkdir(exist_ok=True)
+app.register_blueprint(coach)
+
+
+def warm_transcriber():
+    """Load the transcriber in the background so the first take is not slow."""
     from threading import Thread
     from pianocoach.pipeline import transcriber
 
@@ -313,6 +325,11 @@ def run_server(port=5002):
         print(f"[pianocoach] transcriber: Transkun on {info.get('device')} (loaded in {info.get('load_seconds')} s)", flush=True)
 
     Thread(target=warm, daemon=True).start()
+
+
+def run_server(port=5002):
+    SESSIONS.mkdir(exist_ok=True)
+    warm_transcriber()
     app.run(host='127.0.0.1', port=port, debug=False, threaded=True)
 
 

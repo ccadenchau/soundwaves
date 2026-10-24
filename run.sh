@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # One command to set up and start PianoCoach.   ./run.sh            full setup (Transkun, best accuracy)
 #                                               ./run.sh --fast     skip Transkun (Basic Pitch only, much smaller install)
-# Then open http://127.0.0.1:5002/test
+# Then open http://127.0.0.1:5001   (the original upload page, plus /test, /practice, /record)
 set -euo pipefail
 cd "$(dirname "$0")"
 FAST=0; [ "${1:-}" = "--fast" ] && FAST=1
-PORT="${PORT:-5002}"
+PORT="${PORT:-5001}"
 
 command -v uv >/dev/null 2>&1 || { echo "Install uv first:  brew install uv   (or see https://docs.astral.sh/uv/)"; exit 1; }
 
@@ -29,7 +29,7 @@ fi
 
 if [ -z "${NO_BROWSER:-}" ]; then
   ( for _ in $(seq 1 40); do curl -s -o /dev/null "http://127.0.0.1:$PORT/test" && break; sleep 0.5; done
-    (command -v open >/dev/null && open "http://127.0.0.1:$PORT/test") || (command -v xdg-open >/dev/null && xdg-open "http://127.0.0.1:$PORT/test") || true ) &
+    (command -v open >/dev/null && open "http://127.0.0.1:$PORT/") || (command -v xdg-open >/dev/null && xdg-open "http://127.0.0.1:$PORT/") || true ) &
 fi
-echo "==> PianoCoach on http://127.0.0.1:$PORT   (test page: /test, live practice: /practice)   Ctrl+C to stop"
-exec .venv/bin/python -m pianocoach.app "$PORT"
+echo "==> http://127.0.0.1:$PORT   (one-click checks: /test, live practice: /practice, record: /record)   Ctrl+C to stop"
+exec .venv/bin/python alignment/test.py --port "$PORT"
