@@ -158,6 +158,15 @@ def align_windowed(reference, performance, *, config=None):
             b['occurrence'] = mapping[b['occurrence']]
         alignment['window'] = dict(first_occurrence=window[0], last_occurrence=window[1],
                                    bars=[c['measures'][0] for c in prepared['chunks'] if window[0] <= c['measure_occurrence'] <= window[1]])
+    # Notes the student never reached are not "missing": keep a missing note only inside the bars that were played.
+    from .report import _played_span
+    span = _played_span(alignment, prepared['chunks'])
+    if span is not None:
+        before = len(alignment['errors'])
+        alignment['errors'] = [e for e in alignment['errors'] if e['category'] != 'missing'
+                               or e.get('measure_occurrence') is None or span[0] <= e['measure_occurrence'] <= span[1]]
+        alignment['played_span'] = dict(first_occurrence=span[0], last_occurrence=span[1],
+                                        unreached_missing_dropped=before - len(alignment['errors']))
     alignment['preprocessing'] = dict(alignment.get('preprocessing', {}), score_notes_merged=len(dropped),
                                       windowed=window is not None)
     return alignment, prepared
