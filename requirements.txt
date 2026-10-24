@@ -1,7 +1,8 @@
-numpy
-scipy
-soundfile
+numpy>=2.3,<3
+scipy>=1.16,<2
+soundfile>=0.12,<1
 noisereduce
-imageio-ffmpeg
+imageio-ffmpeg>=0.5,<1
 music21>=9.9,<10
-numpy>=2.0,<3
+onnxruntime>=1.24.3,<2
+pretty_midi>=0.2.10,<0.3

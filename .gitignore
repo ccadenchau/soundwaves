@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 main/
 instance/
+venv/
+/temp_files/
