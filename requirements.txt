@@ -1,2 +1,7 @@
+numpy
+scipy
+soundfile
+noisereduce
+imageio-ffmpeg
 music21>=9.9,<10
 numpy>=2.0,<3

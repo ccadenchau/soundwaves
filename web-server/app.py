@@ -17,7 +17,7 @@ from flask import (
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from soundwaves import convert_score
+from sheet_downloader import convert_score
 from preview import create_preview
 
 app = Flask(
