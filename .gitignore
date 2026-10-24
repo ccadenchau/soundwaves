@@ -11,3 +11,5 @@ venv/
 /pianocoach/cache/
 /.venv-transkun/
 .env
+/testing/datasets/results/
+/testing/datasets/results_long/

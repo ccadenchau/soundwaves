@@ -33,10 +33,12 @@ def _read_json(value):
     return value
 
 
-def pitch_name(midi, flats=False):
-    """Spell a MIDI pitch the way the page expects: C, C#/Db, ... with octave."""
+def pitch_name(midi, flats=False, sharps=False):
+    """Spell a MIDI pitch the way the page expects: C, C#/Db, ... with octave.
+    Flat keys spell black keys as flats, sharp keys as sharps; otherwise music21's default."""
     p = m21pitch.Pitch(midi=int(midi))
-    if flats and p.accidental is not None and p.accidental.alter > 0:
+    alter = p.accidental.alter if p.accidental is not None else 0
+    if (flats and alter > 0) or (sharps and alter < 0):
         p = p.getEnharmonic()
     return p.nameWithOctave.replace('-', 'b')
 
@@ -111,7 +113,8 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
         time_signature = [min(16, max(1, int(round(bar_beats)))), 4]
     bpb, denominator = int(time_signature[0]), int(time_signature[1])
     unit = denominator / 4.0  # quarter-note beats -> beats of the time signature
-    flats = (piece.pop('sharps', None) if 'sharps' in piece else meta.get('sharps', 0)) < 0
+    key_sharps = piece.pop('sharps', None) if 'sharps' in piece else meta.get('sharps', 0)
+    flats, sharps = key_sharps < 0, key_sharps > 0
 
     ref_notes = {n['id']: n for n in reference['notes']}
     rh_part = _right_hand_part(reference['notes'])
@@ -141,7 +144,7 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
         rows.sort()
         for index, (beat, midi, dur) in enumerate(rows, 1):
             beat = min(beat, bpb + 1 - 1e-3)
-            ui_notes.append([m, beat, pitch_name(midi, flats), _round(max(dur, 1e-3))])
+            ui_notes.append([m, beat, pitch_name(midi, flats, sharps), _round(max(dur, 1e-3))])
             slot_of[(m, beat, midi)] = f'n{m}-{index}'
         if rows:
             rh_low[m] = min(r[1] for r in rows)
@@ -282,8 +285,8 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
             confidence = 0.8
         entry = dict(id=f'err-{len(errors) + 1}', category=category, measure=m, beat=beat,
                      note_id=slot,
-                     expected=pitch_name(err['expected_pitch'], flats) if err['expected_pitch'] is not None else None,
-                     actual=pitch_name(err['actual_pitch'], flats) if err['actual_pitch'] is not None else None,
+                     expected=pitch_name(err['expected_pitch'], flats, sharps) if err['expected_pitch'] is not None else None,
+                     actual=pitch_name(err['actual_pitch'], flats, sharps) if err['actual_pitch'] is not None else None,
                      audio_time=_round(audio_time, 3))
         if category == 'timing':
             delta = err['onset_error_seconds'] or 0.0
@@ -307,6 +310,16 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
     if played_span:
         errors = [e for e in errors if e['category'] != 'missing' or e.get('_occurrence') is None
                   or played_span[0] <= e['_occurrence'] <= played_span[1]]
+        # In a partial take the student may have stopped mid-bar: notes after the
+        # last one they played were not skipped, they were never reached.
+        partial = (played_span[1] - played_span[0] + 1) < 0.8 * len(chunks)
+        last_played_beat = max((m['score_beat'] for m in alignment['matches']
+                                if m['category'] == 'correct' and m['score_beat'] is not None
+                                and m['measure_occurrence'] is not None
+                                and played_span[0] <= m['measure_occurrence'] <= played_span[1]), default=None)
+        if partial and last_played_beat is not None:
+            errors = [e for e in errors if e['category'] != 'missing' or e.get('_score_beat') is None
+                      or e['_score_beat'] <= last_played_beat + 1e-6]
     else:
         errors = [e for e in errors if e['category'] != 'missing']
     errors = _repair_same_pitch(errors, bars, ui_measure, occurrence_chunk, time_at_beat, unit)

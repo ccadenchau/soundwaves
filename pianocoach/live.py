@@ -359,7 +359,10 @@ def _summary_payload(report_id, report, alignment):
     first, last = anchors[0]['score_beat'], anchors[-1]['score_beat']
     expected_prefix = sum(n['onset'] <= last for n in score_notes)
     correct = sum(m['category'] == 'correct' and m['score_beat'] <= last for m in matches)
-    reliable = (len(anchors) >= 3 and first < measures[0]['end_beat']
+    # A located partial take lists one lead-in bar before the first played bar,
+    # so the first anchor may sit in the second listed bar.
+    lead_in_end = measures[min(1, len(measures) - 1)]['end_beat']
+    reliable = (len(anchors) >= 3 and first < lead_in_end
                 and correct / max(1, expected_prefix) >= 0.5 and correct / max(1, heard) >= 0.5)
     if not reliable:
         return result

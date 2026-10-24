@@ -1,0 +1,522 @@
+{
+  "piece": {
+    "title": "Minuet in G major",
+    "catalog": "BWV Anh. 114",
+    "composer": "Petzold",
+    "time_signature": [
+      3,
+      4
+    ],
+    "marked_bpm": 108,
+    "measures": 16
+  },
+  "take": {
+    "number": 3,
+    "source": "audio",
+    "bpm": 96,
+    "duration_seconds": 30.0
+  },
+  "notes": [
+    [
+      1,
+      1,
+      "D5",
+      1
+    ],
+    [
+      1,
+      2,
+      "G4",
+      0.5
+    ],
+    [
+      1,
+      2.5,
+      "A4",
+      0.5
+    ],
+    [
+      1,
+      3,
+      "B4",
+      0.5
+    ],
+    [
+      1,
+      3.5,
+      "C5",
+      0.5
+    ],
+    [
+      2,
+      1,
+      "D5",
+      1
+    ],
+    [
+      2,
+      2,
+      "G4",
+      1
+    ],
+    [
+      2,
+      3,
+      "G4",
+      1
+    ],
+    [
+      3,
+      1,
+      "E5",
+      1
+    ],
+    [
+      3,
+      2,
+      "C5",
+      0.5
+    ],
+    [
+      3,
+      2.5,
+      "D5",
+      0.5
+    ],
+    [
+      3,
+      3,
+      "E5",
+      0.5
+    ],
+    [
+      3,
+      3.5,
+      "F#5",
+      0.5
+    ],
+    [
+      4,
+      1,
+      "G5",
+      1
+    ],
+    [
+      4,
+      2,
+      "G4",
+      1
+    ],
+    [
+      4,
+      3,
+      "G4",
+      1
+    ],
+    [
+      5,
+      1,
+      "C5",
+      1
+    ],
+    [
+      5,
+      2,
+      "D5",
+      0.5
+    ],
+    [
+      5,
+      2.5,
+      "C5",
+      0.5
+    ],
+    [
+      5,
+      3,
+      "B4",
+      0.5
+    ],
+    [
+      5,
+      3.5,
+      "A4",
+      0.5
+    ],
+    [
+      6,
+      1,
+      "B4",
+      1
+    ],
+    [
+      6,
+      2,
+      "C5",
+      0.5
+    ],
+    [
+      6,
+      2.5,
+      "B4",
+      0.5
+    ],
+    [
+      6,
+      3,
+      "A4",
+      0.5
+    ],
+    [
+      6,
+      3.5,
+      "G4",
+      0.5
+    ],
+    [
+      7,
+      1,
+      "F#4",
+      1
+    ],
+    [
+      7,
+      2,
+      "G4",
+      0.5
+    ],
+    [
+      7,
+      2.5,
+      "A4",
+      0.5
+    ],
+    [
+      7,
+      3,
+      "B4",
+      0.5
+    ],
+    [
+      7,
+      3.5,
+      "G4",
+      0.5
+    ],
+    [
+      8,
+      1,
+      "A4",
+      3
+    ],
+    [
+      9,
+      1,
+      "D5",
+      1
+    ],
+    [
+      9,
+      2,
+      "G4",
+      0.5
+    ],
+    [
+      9,
+      2.5,
+      "A4",
+      0.5
+    ],
+    [
+      9,
+      3,
+      "B4",
+      0.5
+    ],
+    [
+      9,
+      3.5,
+      "C5",
+      0.5
+    ],
+    [
+      10,
+      1,
+      "D5",
+      1
+    ],
+    [
+      10,
+      2,
+      "G4",
+      1
+    ],
+    [
+      10,
+      3,
+      "G4",
+      1
+    ],
+    [
+      11,
+      1,
+      "E5",
+      1
+    ],
+    [
+      11,
+      2,
+      "C5",
+      0.5
+    ],
+    [
+      11,
+      2.5,
+      "D5",
+      0.5
+    ],
+    [
+      11,
+      3,
+      "E5",
+      0.5
+    ],
+    [
+      11,
+      3.5,
+      "F#5",
+      0.5
+    ],
+    [
+      12,
+      1,
+      "G5",
+      1
+    ],
+    [
+      12,
+      2,
+      "G4",
+      1
+    ],
+    [
+      12,
+      3,
+      "G4",
+      1
+    ],
+    [
+      13,
+      1,
+      "C5",
+      1
+    ],
+    [
+      13,
+      2,
+      "D5",
+      0.5
+    ],
+    [
+      13,
+      2.5,
+      "C5",
+      0.5
+    ],
+    [
+      13,
+      3,
+      "B4",
+      0.5
+    ],
+    [
+      13,
+      3.5,
+      "A4",
+      0.5
+    ],
+    [
+      14,
+      1,
+      "B4",
+      1
+    ],
+    [
+      14,
+      2,
+      "C5",
+      0.5
+    ],
+    [
+      14,
+      2.5,
+      "B4",
+      0.5
+    ],
+    [
+      14,
+      3,
+      "A4",
+      0.5
+    ],
+    [
+      14,
+      3.5,
+      "G4",
+      0.5
+    ],
+    [
+      15,
+      1,
+      "A4",
+      1
+    ],
+    [
+      15,
+      2,
+      "B4",
+      0.5
+    ],
+    [
+      15,
+      2.5,
+      "A4",
+      0.5
+    ],
+    [
+      15,
+      3,
+      "G4",
+      0.5
+    ],
+    [
+      15,
+      3.5,
+      "F#4",
+      0.5
+    ],
+    [
+      16,
+      1,
+      "G4",
+      3
+    ]
+  ],
+  "errors": [
+    {
+      "id": "err-1",
+      "category": "wrong_pitch",
+      "tier": "confident",
+      "measure": 3,
+      "beat": 3.5,
+      "note_id": "n3-5",
+      "expected": "F#5",
+      "actual": "F5",
+      "confidence": 0.91,
+      "audio_time": 5.31,
+      "explanation": "The sharp dropped at the top of the climb.",
+      "tip": "Loop E5, F♯5, G5 at 60 and say \"sharp\" before each pass. Five clean, then speed up."
+    },
+    {
+      "id": "err-2",
+      "category": "timing",
+      "tier": "confident",
+      "measure": 5,
+      "beat": 1,
+      "note_id": "n5-1",
+      "expected": "C5",
+      "actual": "C5",
+      "confidence": 0.84,
+      "audio_time": 7.5,
+      "delta_ms": -180,
+      "explanation": "The eighths after it stay ahead of the beat.",
+      "tip": "Metronome at 80. Let the C5 wait for the click, then keep the eighths under it."
+    },
+    {
+      "id": "err-3",
+      "category": "missing",
+      "tier": "likely",
+      "measure": 7,
+      "beat": 2,
+      "note_id": "n7-2",
+      "expected": "G4",
+      "actual": null,
+      "confidence": 0.77,
+      "audio_time": 11.88,
+      "explanation": "It may have been too soft to pick up.",
+      "tip": "Bar 7 alone, right hand. Make the second eighth as loud as the first until it stops vanishing."
+    },
+    {
+      "id": "err-4",
+      "category": "wrong_pitch",
+      "tier": "confident",
+      "measure": 11,
+      "beat": 3.5,
+      "note_id": "n11-5",
+      "expected": "F#5",
+      "actual": "F5",
+      "confidence": 0.88,
+      "audio_time": 20.31,
+      "explanation": "Same spot as bar 3.",
+      "tip": "Same drill as bar 3. Both climbs, one after the other, at 60."
+    },
+    {
+      "id": "err-5",
+      "category": "duration",
+      "tier": "possible",
+      "measure": 12,
+      "beat": 1,
+      "note_id": "n12-1",
+      "expected": "G5",
+      "actual": "G5",
+      "confidence": 0.62,
+      "audio_time": 20.63,
+      "held_beats": 0.4,
+      "explanation": "Pedal can hide this, so take it with a grain of salt.",
+      "tip": "Hold the G5 for the full beat with no pedal, then add the pedal back."
+    },
+    {
+      "id": "err-6",
+      "category": "extra",
+      "tier": "possible",
+      "measure": 13,
+      "beat": 1.5,
+      "note_id": null,
+      "expected": null,
+      "actual": "B4",
+      "confidence": 0.58,
+      "audio_time": 22.81,
+      "explanation": "Could be a harmonic rather than a key you pressed.",
+      "tip": "Play bar 13 slowly and listen for a B. If it isn't there, mark this as fine."
+    },
+    {
+      "id": "err-7",
+      "category": "timing",
+      "tier": "likely",
+      "measure": 15,
+      "beat": 2,
+      "note_id": "n15-2",
+      "expected": "B4",
+      "actual": "B4",
+      "confidence": 0.71,
+      "audio_time": 26.88,
+      "delta_ms": 140,
+      "explanation": "A small hesitation before the run down.",
+      "tip": "Bars 14 to 15 at 0.7×. Think of the B4 as the start of the run, not a breath before it."
+    },
+    {
+      "id": "err-8",
+      "category": "unsure",
+      "tier": "unsure",
+      "measure": 16,
+      "beat": 1,
+      "note_id": "n16-1",
+      "expected": "G4",
+      "actual": null,
+      "confidence": 0.3,
+      "audio_time": 28.13,
+      "explanation": "Too quiet to transcribe. It isn't counted either way.",
+      "tip": "Nothing to fix. Record the ending a little louder next time so it can be heard."
+    }
+  ]
+}
