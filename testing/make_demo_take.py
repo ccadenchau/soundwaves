@@ -31,10 +31,11 @@ def _pair(text, count):
     return parts
 
 
-def build(score, out, *, tempo=96, lead=1.0, wrong=(), drop=(), rush=(), late=(), lh_wrong=()):
+def build(score, out, *, tempo=96, lead=1.0, wrong=(), drop=(), rush=(), late=(), lh_wrong=(),
+          max_bars=None, score_cache=None):
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
-    paths = convert_once(score, out / 'score', bpm=tempo)
+    paths = convert_once(score, score_cache or out / 'score', bpm=tempo)
     ref = json.loads(Path(paths['notes']).read_text(encoding='utf-8'))
     parts = sorted({n['part'] for n in ref['notes']})
     rh = max(parts, key=lambda p: statistics.median(n['pitch'] for n in ref['notes'] if n['part'] == p))
@@ -67,6 +68,8 @@ def build(score, out, *, tempo=96, lead=1.0, wrong=(), drop=(), rush=(), late=()
     for n in ref['notes']:
         c = occurrence(n['onset'])
         m, occ = c['measures'][0], c['measure_occurrence']
+        if max_bars is not None and occ >= max_bars:
+            continue  # a partial take: the student stopped here
         first = occ == first_occurrence[m]
         b = n['beat_in_measure']
         pitch = n['pitch']
@@ -111,9 +114,11 @@ def main(argv):
     parser.add_argument('--rush', action='append', default=[])
     parser.add_argument('--late', action='append', default=[])
     parser.add_argument('--lh-wrong', action='append', default=[])
+    parser.add_argument('--bars', type=int, help='play only the first N bars')
     args = parser.parse_args(argv[1:])
     wav, planted, duration = build(args.score, args.out, tempo=args.tempo, lead=args.lead, wrong=args.wrong,
-                                   drop=args.drop, rush=args.rush, late=args.late, lh_wrong=args.lh_wrong)
+                                   drop=args.drop, rush=args.rush, late=args.late, lh_wrong=args.lh_wrong,
+                                   max_bars=args.bars)
     print(f'{wav} {duration:.1f}s')
     for p in planted:
         print('  planted', p)

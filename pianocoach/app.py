@@ -27,6 +27,8 @@ app.config['MAX_CONTENT_LENGTH'] = 120 * 1024 * 1024
 
 from pianocoach.live import practice  # noqa: E402
 app.register_blueprint(practice)
+from pianocoach.selftest import selftest  # noqa: E402
+app.register_blueprint(selftest)
 
 LOADER = """
 <script>
