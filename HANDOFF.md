@@ -1,3 +1,5 @@
+**Testing:** `./run.sh` then open http://127.0.0.1:5002/test, or `./check.sh` for everything. See `TESTING.md`.
+
 # Review of Codex's live practice work + branch push — Claude, 2026-10-24 ~16:00
 
 - **Pushed** `audio-midi-converters` (commit 738dacc) to GitHub: Codex's live stack (`pianocoach/live.py`,
