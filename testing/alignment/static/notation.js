@@ -90,6 +90,69 @@ async function displayNotation() {
       }
       if (item.audio_time !== null) timed.push({item, target, note});
     }
+    for (const wedge of data.wedges || []) {
+      const start = elements.get(wedge.start_xml_id), end = elements.get(wedge.end_xml_id);
+      if (!start || !end) continue;
+      const headOf = el => el.querySelector('.notehead') || el;
+      const a = headOf(start).getBBox(), b = headOf(end).getBBox();
+      const staff = start.closest('.staff');
+      const staffLines = [...(staff?.querySelectorAll(':scope > path') || [])]
+        .map(el => el.getBBox()).filter(box => box.width > 100);
+      const y = staffLines.length ? Math.max(...staffLines.map(box => box.y + box.height)) + 55
+        : Math.max(a.y + a.height, b.y + b.height) + 65;
+      const x1 = a.x + a.width / 2, x2 = b.x + b.width / 2;
+      if (x2 <= x1 + 3) continue;
+      const narrow = wedge.kind === 'crescendo' ? 2 : 14;
+      const wide = wedge.kind === 'crescendo' ? 14 : 2;
+      const group = document.createElementNS(ns, 'g');
+      const cls = `dynamic-wedge${wedge.status ? ` ${wedge.status}` : ''}`;
+      for (const sign of [-1, 1]) {
+        const path = document.createElementNS(ns, 'path');
+        path.setAttribute('class', cls);
+        path.setAttribute('d', `M${x1} ${y + sign * narrow} L${x2} ${y + sign * wide}`);
+        group.append(path);
+      }
+      const title = document.createElementNS(ns, 'title');
+      title.textContent = `${wedge.kind === 'crescendo' ? 'Crescendo' : 'Decrescendo'}${wedge.status === 'wrong' ? ' needs more shaping' : wedge.status === 'good' ? ' followed in the performance' : ''}`;
+      group.append(title);
+      start.ownerSVGElement.append(group);
+    }
+    // Low-confidence alignments can occasionally place one detected note in a
+    // much later bar. Use nearby exact pitch matches as a progress guide and
+    // suppress annotations that jump well outside the expected score position.
+    const scoreAnchors = [...new Map(timed.filter(({item}) => item.category === 'correct'
+      && item.score_beat !== null && Number.isFinite(item.audio_time))
+      .sort((a,b) => a.item.audio_time - b.item.audio_time)
+      .map(({item}) => [item.audio_time.toFixed(3), {time:item.audio_time, beat:item.score_beat}])).values()];
+    const rates = scoreAnchors.slice(1).map((point,i) =>
+      (point.beat-scoreAnchors[i].beat)/(point.time-scoreAnchors[i].time))
+      .filter(rate => Number.isFinite(rate) && rate > 0 && rate < 12).sort((a,b) => a-b);
+    const typicalRate = rates.length ? rates[Math.floor(rates.length/2)] : null;
+    const stableAnchors = [];
+    for (const point of scoreAnchors) {
+      const previous = stableAnchors.at(-1);
+      if (!previous) { stableAnchors.push(point); continue; }
+      const elapsed = point.time-previous.time, advance = point.beat-previous.beat;
+      // Keep the score cursor near a plausible pace, even if several later
+      // pitch matches share the same bad measure assignment.
+      const maximumAdvance = typicalRate ? Math.max(2, typicalRate*elapsed*2.5+1) : 12;
+      if (elapsed <= 0 || (advance >= 0 && advance <= maximumAdvance)) stableAnchors.push(point);
+    }
+    const scoreBeatAt = time => {
+      if (!stableAnchors.length) return null;
+      if (stableAnchors.length === 1) return stableAnchors[0].beat + (time-stableAnchors[0].time)*(typicalRate || 2);
+      let right = stableAnchors.findIndex(point => point.time >= time);
+      if (right < 0) return stableAnchors.at(-1).beat + (time-stableAnchors.at(-1).time)*(typicalRate || 2);
+      if (right === 0) return stableAnchors[0].beat + (time-stableAnchors[0].time)*(typicalRate || 2);
+      const left = stableAnchors[right-1], next = stableAnchors[right];
+      const portion = Math.max(0, Math.min(1, (time-left.time)/(next.time-left.time)));
+      return left.beat + portion*(next.beat-left.beat);
+    };
+    const plausible = item => {
+      const expected = scoreBeatAt(item.audio_time);
+      const position = item.display_beat ?? item.score_beat ?? item.alignment_beat;
+      return expected === null || position === null || Math.abs(position-expected) <= 1.5;
+    };
     const unplaced = document.getElementById('unplaced-notes');
     unplaced.hidden = !data.unplaced.length;
     for (const item of data.unplaced) {
@@ -114,7 +177,7 @@ async function displayNotation() {
     let lastMeasure, frame;
     const update = () => {
       container.querySelectorAll('.active-note').forEach(el => el.classList.remove('active-note'));
-      const current = timed.filter(({item}) => audio.currentTime >= item.audio_time && audio.currentTime < item.audio_time + item.duration);
+      const current = timed.filter(({item}) => audio.currentTime >= item.audio_time && audio.currentTime < item.audio_time + item.duration && plausible(item));
       current.forEach(({target}) => target.classList.add('active-note'));
       const caption = current.length ? `Playing: ${[...new Set(current.map(({item}) => item.actual_name))].join(', ')}` : 'Between detected notes';
       const label = document.getElementById('playing-notes');

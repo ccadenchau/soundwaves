@@ -1,20 +1,29 @@
 #!/usr/bin/env python3
-"""AI noise removal and mastering for voice recordings.
+"""Noise removal for piano recordings (default), and the original voice cleaner.
 
-Version 3 pipeline: DeepFilterNet neural denoising, high-pass filtering,
-presence/air EQ, compression, trimming, and loudness normalization.
+Piano mode (default) keeps everything a transcriber needs: the whole piano range
+(only rumble below A0 is filtered), quiet notes and their decays, dynamics, and
+the exact timeline (nothing is trimmed, so timestamps still match the original).
+It applies one gentle stationary noise-subtraction pass, profiled from the
+quietest parts of the take, and skips even that when the room is already quiet.
+
+Voice mode is the original version 3 pipeline: DeepFilterNet neural denoising,
+high-pass filtering, presence/air EQ, compression, trimming, and loudness
+normalization. It is tuned for speech and removes a lot of piano, so it is only
+used when asked for with mode="voice" or --voice.
 
 Python usage:
     from clean_audio import clean_audio
 
     clean_audio("recording.webm", "cleaned.wav")
     clean_audio("recording.webm", output_path="cleaned.wav", use_ai=False)
-    clean_audio("recording.wav", presence_gain=6.0, target_db=-16.0)
+    clean_audio("recording.wav", mode="voice", presence_gain=6.0, target_db=-16.0)
 
 Command-line usage:
-    python clean_audio.py recording.wav
-    python clean_audio.py recording.webm -o cleaned.wav
-    python clean_audio.py recording.wav --no-ai
+    python clean_audio.py recording.wav                 # piano mode
+    python clean_audio.py recording.wav --strength 0.5  # gentler piano denoise
+    python clean_audio.py recording.webm --voice -o cleaned.wav
+    python clean_audio.py recording.wav --voice --no-ai
 """
 
 import argparse
@@ -59,6 +68,11 @@ AI_SHA256 = {
 class CleanConfig:
     """Settings for :func:`clean_audio`. ``None`` means "pick a sensible default"."""
 
+    mode: str = "piano"
+    # Piano mode: how much of the profiled noise to subtract (0-1), and the room
+    # quietness (dB between the noise floor and the playing) above which it does nothing.
+    strength: float = 0.7
+    skip_above_snr_db: float = 50.0
     use_ai: bool = True
     ai_binary: Path | None = None
     noise_strength: float = 1.0
@@ -83,13 +97,18 @@ class CleanConfig:
             self,
             highpass=(
                 self.highpass if self.highpass is not None
+                else 25.0 if self.mode == "piano"
                 else (60.0 if self.use_ai else 100.0)
             ),
             presence_gain=self.presence_gain if self.presence_gain is not None else 5.0,
         )
 
     def validate(self) -> None:
-        for name in ("noise_strength", "residual_strength"):
+        if self.mode not in ("piano", "voice"):
+            raise ValueError('mode must be "piano" or "voice"')
+        if self.mode == "piano" and self.highpass is not None and self.highpass > 27.0:
+            raise ValueError("Piano mode keeps the whole keyboard: the high-pass must stay below 27 Hz (A0 is 27.5 Hz)")
+        for name in ("noise_strength", "residual_strength", "strength"):
             value = getattr(self, name)
             if not 0.0 <= value <= 1.0:
                 raise ValueError(f"{name.replace('_', ' ')} must be between 0 and 1")
@@ -351,6 +370,37 @@ def polish(x, sr, config):
     )
 
 
+def room_snr_db(x, sr):
+    """Decibels between the playing (loud frames) and the room (quietest frames)."""
+    levels, _, _ = frame_levels_db(x, sr)
+    return float(np.percentile(levels, 95) - np.percentile(levels, 10))
+
+
+def clean_channel_piano(x, sr, config):
+    """Gentle, timeline-preserving cleanup for piano. Returns the same number of samples."""
+    x = x - np.mean(x)
+    x = highpass(x, sr, config.highpass)
+    if room_snr_db(x, sr) >= config.skip_above_snr_db or config.strength <= 0:
+        return x
+    levels, hop, frame = frame_levels_db(x, sr)
+    count = max(5, int(len(levels) * 0.1))
+    quiet = np.sort(np.argsort(levels)[:count])
+    profile = np.concatenate([x[i * hop:i * hop + frame] for i in quiet])
+    cleaned = nr.reduce_noise(
+        y=x,
+        sr=sr,
+        y_noise=profile,
+        prop_decrease=config.strength,
+        stationary=True,
+        n_fft=2048,
+        time_mask_smooth_ms=40,
+        # Smoothing must span at least two frequency bins, which widen with the sample rate
+        # (8 Hz bins at 16 kHz, 23 Hz at 48 kHz phone recordings).
+        freq_mask_smooth_hz=max(40.0, 2.1 * sr / 2048),
+    )
+    return fit_length(cleaned, len(x))
+
+
 def clean_channel_ai(x, sr, config, binary):
     x48 = resample(x - np.mean(x), sr, AI_SAMPLE_RATE)
     enhanced = ai_denoise_channel(x48, AI_SAMPLE_RATE, binary)
@@ -385,7 +435,7 @@ def clean_audio(
     verbose: bool = False,
     **overrides,
 ) -> Path:
-    """Clean a voice recording and return the output path.
+    """Clean a recording (piano by default, ``mode="voice"`` for speech) and return the output path.
 
     ``output_path`` defaults to ``<input>_clean.wav``. Settings can be passed as a
     :class:`CleanConfig` or as keyword overrides, for example::
@@ -409,7 +459,11 @@ def clean_audio(
     if verbose:
         print(f"Loaded {input_path} ({data.shape[1]} ch, {sr} Hz, {len(data) / sr:.2f} s)")
 
-    if config.use_ai:
+    if config.mode == "piano":
+        if verbose:
+            print(f"Piano cleanup (strength {config.strength}, high-pass {config.highpass:g} Hz) ...")
+        channels = [clean_channel_piano(data[:, c], sr, config) for c in range(data.shape[1])]
+    elif config.use_ai:
         binary = find_deep_filter(config.ai_binary)
         if verbose:
             print(f"Denoising with DeepFilterNet {AI_VERSION} ...")
@@ -425,8 +479,13 @@ def clean_audio(
 
     length = min(len(channel) for channel in channels)
     audio = np.column_stack([channel[:length] for channel in channels])
-    audio = fade_edges(audio, sr)
-    audio = normalize(audio, config.target_db)
+    if config.mode == "piano":
+        # Peak-normalise only: relative dynamics matter for soft notes and velocities.
+        peak = float(np.max(np.abs(audio))) or 1.0
+        audio = audio * (10 ** (-1.0 / 20) / peak)
+    else:
+        audio = fade_edges(audio, sr)
+        audio = normalize(audio, config.target_db)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     sf.write(output_path, audio, sr)
@@ -437,7 +496,7 @@ def clean_audio(
 
 def build_parser():
     parser = argparse.ArgumentParser(
-        description="AI noise removal and mastering for voice recordings."
+        description="Noise removal for piano recordings (default) or voice recordings (--voice)."
     )
     parser.add_argument(
         "input", type=Path,
@@ -447,6 +506,10 @@ def build_parser():
         "-o", "--output", type=Path,
         help="Output file (default: <input>_clean.wav)",
     )
+    parser.add_argument("--voice", action="store_true",
+                        help="Use the original voice cleaner (trims, EQ, compression). Removes a lot of piano.")
+    parser.add_argument("--strength", type=float, default=0.7,
+                        help="(piano) how much of the room noise to subtract, 0-1 (default: 0.7)")
     parser.add_argument("--no-ai", action="store_true",
                         help="Use the version 2 spectral denoiser instead of DeepFilterNet")
     parser.add_argument("--ai-binary", type=Path,
@@ -456,7 +519,7 @@ def build_parser():
     parser.add_argument("--residual-strength", type=float, default=1.0,
                         help="(no-ai) how hard to chase leftover noise, 0-1 (default: 1.0)")
     parser.add_argument("--highpass", type=float, default=None,
-                        help="High-pass cutoff in Hz (default: 60 with AI, 100 without)")
+                        help="High-pass cutoff in Hz (default: 25 for piano, 60 voice with AI, 100 voice without)")
     parser.add_argument("--threshold-db", type=float, default=None,
                         help="Speech detection level in dBFS. Auto-detected if omitted.")
     parser.add_argument("--presence-hz", type=float, default=3200.0,
@@ -491,6 +554,8 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     config = CleanConfig(
+        mode="voice" if args.voice else "piano",
+        strength=args.strength,
         use_ai=not args.no_ai,
         ai_binary=args.ai_binary,
         noise_strength=args.noise_strength,

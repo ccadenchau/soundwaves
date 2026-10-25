@@ -7,3 +7,11 @@ venv/
 /temp_files/
 /testing/alignment/cache/*
 !/testing/alignment/cache/.gitkeep
+/pianocoach/sessions/
+/pianocoach/cache/
+/.venv-transkun/
+.env
+/testing/datasets/results/
+/testing/datasets/results_long/
+/pianocoach/pieces/upload-*
+/testing/datasets/results_audio/

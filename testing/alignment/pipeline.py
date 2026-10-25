@@ -18,6 +18,7 @@ CACHE = Path(__file__).with_name('cache')
 MAX_SHEET_BYTES = 20 * 1024 * 1024
 MAX_RECORDING_BYTES = 80 * 1024 * 1024
 SHEET_SUFFIXES = {'.pdf', '.musicxml', '.xml', '.mxl'}
+RECORDING_SUFFIXES = {'.mp3', '.wav', '.m4a', '.webm', '.ogg', '.flac'}
 _lock = RLock()
 
 
@@ -81,8 +82,8 @@ def _stage_stream(stream, suffix, limit):
 
 def store_upload(upload, *, recording=False):
     suffix = Path(upload.filename or '').suffix.lower()
-    if suffix not in ({'.mp3'} if recording else SHEET_SUFFIXES):
-        raise ValueError('Choose an MP3 recording.' if recording else 'Choose PDF, MusicXML, XML, or MXL sheet music.')
+    if suffix not in (RECORDING_SUFFIXES if recording else SHEET_SUFFIXES):
+        raise ValueError('Choose an MP3, WAV, M4A, WebM, OGG or FLAC recording.' if recording else 'Choose PDF, MusicXML, XML, or MXL sheet music.')
     return _stage_stream(upload.stream, suffix, MAX_RECORDING_BYTES if recording else MAX_SHEET_BYTES)
 
 
@@ -144,21 +145,22 @@ def _cached(kind, source, signature, build, artifacts):
         return {name: destination / relative for name, relative in artifacts.items()}, False
 
 
-def compare_files(sheet, recording, *, bpm=120):
+def compare_files(sheet, recording, *, bpm=120, title=None, piece_id=None):
     """Reuse conversions, rerun alignment, and save a uniquely identified report."""
     if not math.isfinite(bpm) or not 20 <= bpm <= 400:
         raise ValueError('Fallback BPM must be between 20 and 400.')
     sheet_path = _sheet_source(sheet)
     recording = Path(recording).expanduser().resolve()
-    if recording.suffix.lower() != '.mp3':
-        raise ValueError('Choose a recording.mp3 file.')
+    if recording.suffix.lower() not in RECORDING_SUFFIXES:
+        raise ValueError('Choose an MP3, WAV, M4A, WebM, OGG or FLAC recording.')
     with recording.open('rb') as handle:
-        audio_path = _stage_stream(handle, '.mp3', MAX_RECORDING_BYTES)
+        audio_path = _stage_stream(handle, recording.suffix.lower(), MAX_RECORDING_BYTES)
 
     from sheet_downloader import convert_score
     from transcribe_recording import transcribe_recording
     from transcribe_recording.models import TranscriptionConfig
-    from alignment import align_performance
+    from pianocoach.clean import clean_notes
+    from pianocoach.pipeline import align_windowed, prepare_for_transcription, transcriber, trim_to_played
     from testing.alignment.playback import render_midi
 
     sheet_signature = _signature('sheet_downloader', dict(bpm=bpm, measures_per_chunk=1,
@@ -167,13 +169,29 @@ def compare_files(sheet, recording, *, bpm=120):
         lambda stage: convert_score(sheet_path, stage / 'converted', bpm=bpm, measures_per_chunk=1),
         dict(midi='converted/reference/reference.mid', notes='converted/reference/reference.json',
              musicxml='converted/reference/reference.musicxml', repairs='converted/reference/repairs.json'))
+    # Transkun when its environment exists (best accuracy), else the bundled Basic Pitch.
+    backend = transcriber()
+    transcriber_name = backend.name if backend is not None else 'basic-pitch'
+    clean_mode = os.environ.get('PIANOCOACH_CLEAN', 'auto').lower()
+    audio_cleaning = 'none' if clean_mode == 'off' or (clean_mode == 'auto' and backend is not None) else 'piano'
+    cleaner_version = _hash(ROOT / 'audio_cleaner' / 'clean_audio.py') if audio_cleaning == 'piano' else None
     recording_signature = _signature('transcribe_recording', dict(
-        config=asdict(TranscriptionConfig()), audio_cleaning=False, input_audio='original_mp3'))
-    take, recording_hit = _cached('recordings', audio_path, recording_signature,
-        lambda stage: transcribe_recording(audio_path, stage / 'converted'),
+        config=asdict(TranscriptionConfig()), audio_cleaning=audio_cleaning, cleaner=cleaner_version,
+        input_audio='original', transcriber=transcriber_name))
+
+    def transcribe(stage):
+        source, _ = prepare_for_transcription(audio_path, stage, backend) if audio_cleaning == 'piano' else (audio_path, 'none')
+        return transcribe_recording(source, stage / 'converted', backend=backend)
+
+    take, recording_hit = _cached('recordings', audio_path, recording_signature, transcribe,
         dict(midi='converted/performance.mid', notes='converted/notes.json'))
-    report = align_performance(score['notes'], take['notes'])
-    report['preprocessing'] = dict(audio_cleaning=False, timestamp_origin='original_audio')
+    # Clean the detections, merge unison score notes, and pin a short take to the bars it covers.
+    heard = json.loads(Path(take['notes']).read_text(encoding='utf-8'))['notes']
+    kept, cleaning = clean_notes(heard, harmonics=backend is None)
+    report, _ = align_windowed(score['notes'], kept)
+    trim_to_played(report)  # only the bars the student played: no "missed" notes past the end of a short take
+    report['preprocessing'] = dict(report.get('preprocessing', {}), audio_cleaning=audio_cleaning,
+                                   timestamp_origin='original_audio', transcriber=transcriber_name, **cleaning)
 
     playback_signature = _signature('sheet_downloader', dict(
         renderer_sha256=_hash(Path(__file__).with_name('playback.py')), sample_rate=16000))
@@ -194,5 +212,38 @@ def compare_files(sheet, recording, *, bpm=120):
                      audio=audio_path, original_audio=audio_path, sheet=sheet_path,
                      **previews)
     _write_json(directory / 'artifacts.json', {k: str(v.relative_to(CACHE)) for k, v in artifacts.items()})
+    name = title or Path(str(sheet)).stem.replace('_', ' ').replace('-', ' ').strip().title()
+    _write_json(directory / 'meta.json', dict(title=name, piece_id=piece_id))
+    prefetch_feedback(report_id)
     return dict(report=report, report_id=report_id, report_path=report_path,
                 cache=dict(sheet_hit=sheet_hit, recording_hit=recording_hit))
+
+
+_feedback_jobs = {}
+
+
+def prefetch_feedback(report_id):
+    """Start the teacher's notes (Claude) and the bar notes (Gemini) as soon as a comparison is
+    saved, in parallel, so both are ready by the time the report opens. The page's requests wait."""
+    import threading
+    from pianocoach.teacher import bar_notes, teacher_feedback
+    directory = CACHE / 'reports' / report_id
+    meta = directory / 'meta.json'
+    title = json.loads(meta.read_text(encoding='utf-8')).get('title', '') if meta.is_file() else ''
+
+    def run(kind):
+        try:
+            report = json.loads((directory / 'report.json').read_text(encoding='utf-8'))
+            (teacher_feedback if kind == 'teacher' else bar_notes)(report, directory, title)
+        except Exception:  # noqa: BLE001 - the page asks again and shows the reason
+            pass
+    for kind in ('teacher', 'bars'):
+        job = threading.Thread(target=run, args=(kind,), daemon=True, name=f'{kind}-{report_id[:8]}')
+        _feedback_jobs[(report_id, kind)] = job
+        job.start()
+
+
+def wait_for_feedback(report_id, kind='teacher', timeout=90):
+    job = _feedback_jobs.get((report_id, kind))
+    if job is not None:
+        job.join(timeout)

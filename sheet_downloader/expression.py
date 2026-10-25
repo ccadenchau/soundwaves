@@ -33,18 +33,15 @@ def expression_for_part(score, part, related_parts):
         priority = int(related is part)
         for mark in related.recurse().getElementsByClass(dynamics.Dynamic):
             if mark.value in VELOCITIES:
-                marks.append((
-                    float(mark.getOffsetInHierarchy(score)),
-                    priority,
-                    VELOCITIES[mark.value],
-                ))
+                at = _offset(mark, score)
+                if at is not None:
+                    marks.append((at, priority, VELOCITIES[mark.value]))
         for wedge in related.recurse().getElementsByClass(dynamics.DynamicWedge):
             endpoints = list(wedge.getSpannedElements())
             if len(endpoints) < 2:
                 continue
-            start = float(endpoints[0].getOffsetInHierarchy(score))
-            end = float(endpoints[-1].getOffsetInHierarchy(score))
-            if end <= start:
+            start, end = _offset(endpoints[0], score), _offset(endpoints[-1], score)
+            if start is None or end is None or end <= start:
                 continue
             direction = 1 if isinstance(wedge, dynamics.Crescendo) else -1
             ramps.append((start, end, direction))
@@ -81,12 +78,24 @@ def expression_for_part(score, part, related_parts):
     return velocity_at
 
 
+def _offset(element, score):
+    """Offset in the score, or None when repairs moved the element out of the score's hierarchy
+    (a hairpin can still point at a note that was merged into a chord)."""
+    from music21.sites import SitesException
+    try:
+        return float(element.getOffsetInHierarchy(score))
+    except SitesException:
+        return None
+
+
 def apply_expression(score):
     groups = piano_groups(score)
     for part in score.parts:
         velocity_at = expression_for_part(score, part, groups.get(id(part), [part]))
         for element in part.recurse().notes:
-            beat = float(element.getOffsetInHierarchy(score))
+            beat = _offset(element, score)
+            if beat is None:
+                continue
             velocity = velocity_at(beat)
             velocity += round(sum(art.volumeShift for art in element.articulations) * 127)
             element.volume.velocity = max(1, min(127, velocity))

@@ -73,7 +73,7 @@ def inspect_score(score):
                         continue
                     pitches = sorted(p.midi for p in element.pitches)
                     previous = previous_pitches.get(voice_id)
-                    if previous and min(abs(a - b) for a in previous for b in pitches) >= 19 and not clefs:
+                    if previous and pitches and min(abs(a - b) for a in previous for b in pitches) >= 19 and not clefs:
                         report('pitch_jump', part, measure,
                                'Large pitch jump without a clef change. Check for a missed clef or octave marking.', onset + 1)
                     previous_pitches[voice_id] = pitches

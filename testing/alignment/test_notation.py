@@ -8,7 +8,7 @@ from xml.etree import ElementTree
 from music21 import bar, chord, note, stream
 
 from sheet_downloader.reference import build_reference
-from testing.alignment.notation import build_notation
+from testing.alignment.notation import _extra_anchor, build_notation
 
 
 class NotationTests(unittest.TestCase):
@@ -83,6 +83,49 @@ class NotationTests(unittest.TestCase):
                 with client.get('/static/notation.js') as response:
                     self.assertEqual(response.status_code, 200)
                 self.assertEqual(client.get('/').status_code, 200)
+
+
+class ExtraAnchorTests(unittest.TestCase):
+    """An extra note must not be pinned to the other hand's note that merely sounds beside it."""
+
+    def setUp(self):
+        notes = [dict(id='L1', pitch=48, onset=0.0, part='P1-Staff2', measure=1),
+                 dict(id='L2', pitch=43, onset=1.0, part='P1-Staff2', measure=1),
+                 dict(id='R1', pitch=76, onset=0.0, part='P1-Staff1', measure=1),
+                 dict(id='R2', pitch=79, onset=1.0, part='P1-Staff1', measure=1)]
+        self.notes, self.by_id = notes, {n['id']: n for n in notes}
+        self.locations = {n['id']: 'x-' + n['id'] for n in notes}
+
+    def match(self, note_id, category, played, time):
+        n = self.by_id[note_id]
+        return dict(score_note_id=note_id, category=category, score_beat=n['onset'], measure_occurrence=0,
+                    expected_pitch=n['pitch'], actual_pitch=played, audio_time=time)
+
+    def report(self, matches):
+        return dict(matches=matches, alignment=dict(anchors=[dict(score_beat=0.0, audio_time=0.0),
+                                                              dict(score_beat=2.0, audio_time=2.0)]))
+
+    def anchor(self, matches, extra):
+        located = [m for m in matches if m['score_note_id'] in self.locations]
+        return _extra_anchor(extra, self.report(matches), located, self.locations, self.notes, self.by_id)
+
+    def test_octave_slip_goes_to_the_missing_right_hand_note(self):
+        matches = [self.match('L1', 'correct', 48, 0.0), self.match('R1', 'correct', 76, 0.0),
+                   self.match('L2', 'correct', 43, 1.02), self.match('R2', 'missing', None, None)]
+        extra = dict(score_note_id=None, category='extra', actual_pitch=67, audio_time=1.0, measure_occurrence=0)
+        self.assertEqual(self.anchor(matches, extra)['score_note_id'], 'R2')
+
+    def test_stray_high_note_stays_on_the_right_hand_staff(self):
+        matches = [self.match('L1', 'correct', 48, 0.0), self.match('R1', 'correct', 76, 0.0),
+                   self.match('L2', 'correct', 43, 1.02), self.match('R2', 'correct', 79, 1.5)]
+        extra = dict(score_note_id=None, category='extra', actual_pitch=74, audio_time=1.0, measure_occurrence=0)
+        self.assertEqual(self.anchor(matches, extra)['score_note_id'], 'R2')  # right hand, though L2 is nearer in time
+
+    def test_low_extra_still_goes_to_the_left_hand(self):
+        matches = [self.match('L1', 'correct', 48, 0.0), self.match('R1', 'correct', 76, 0.0),
+                   self.match('L2', 'correct', 43, 1.02), self.match('R2', 'correct', 79, 1.05)]
+        extra = dict(score_note_id=None, category='extra', actual_pitch=45, audio_time=1.0, measure_occurrence=0)
+        self.assertEqual(self.anchor(matches, extra)['score_note_id'], 'L2')
 
 
 if __name__ == '__main__':

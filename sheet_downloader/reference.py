@@ -99,7 +99,7 @@ def build_reference(
             if not math.isfinite(value) or value <= 0:
                 raise ValueError("Score contains invalid tempo.")
             if beat in changes and beat != 0 and changes[beat] != value:
-                raise ValueError("Conflicting tempo marks across parts.")
+                continue  # parts disagree; keep the mark seen first (the top staff)
             changes[beat] = value
     tempi = sorted(changes.items())
     if not any(
@@ -118,15 +118,20 @@ def build_reference(
         return result
 
     events = []
+    # Grace notes take no time in the notation, so they are not timed reference events. They are
+    # kept as ornaments (the onset of the note they decorate, and their pitches) so a comparison
+    # can recognise them in a performance instead of calling them wrong or extra notes.
+    ornaments = []
     for pi, part in enumerate(parts):
         tied = part.stripTies()
         for element in tied.recurse().notes:
             onset = float(element.getOffsetInHierarchy(tied)) + float(part.offset)
             duration = float(element.quarterLength)
             if duration <= 0:
-                raise ValueError(
-                    "Grace notes are unsupported; resolve their playback durations first."
-                )
+                pitches = element.pitches if isinstance(element, chord.Chord) else [element.pitch]
+                ornaments.extend({"onset": onset, "pitch": p.midi, "part": str(part.id or pi)}
+                                 for p in pitches if p.ps == p.midi)
+                continue
             pitches = (
                 element.pitches if isinstance(element, chord.Chord) else [element.pitch]
             )
@@ -180,7 +185,18 @@ def build_reference(
     )
     (output / "repairs.json").write_text(json.dumps(review, indent=2) + "\n")
     score.write("midi", fp=output / "reference.mid")
-    score.write("musicxml", fp=output / "reference.musicxml", makeNotation=False)
+    try:
+        score.write("musicxml", fp=output / "reference.musicxml", makeNotation=False)
+    except Exception:  # complex durations left by repairs; let music21 re-notate them
+        try:
+            score.write("musicxml", fp=output / "reference.musicxml", makeNotation=True)
+        except Exception:
+            # The notation file is only drawn on screen and read for title, key and metre. If the
+            # repaired score cannot be written out, show the original notation rather than fail.
+            import shutil
+            shutil.copyfile(output / "original.musicxml", output / "reference.musicxml")
+            review.setdefault("notes", []).append("Notation shown as uploaded: the repaired score could not be exported.")
+            (output / "repairs.json").write_text(json.dumps(review, indent=2) + "\n")
     chunks = []
     for index in range(0, len(measures), measures_per_chunk):
         group = measures[index : index + measures_per_chunk]
@@ -239,6 +255,7 @@ def build_reference(
         "duration_seconds": sample_count / sample_rate,
         "tempo_changes": tempi,
         "notes": events,
+        "ornaments": [dict(o, start_seconds=seconds(o["onset"])) for o in ornaments],
         "chunks": chunks,
         "alignment_hint": "Align onset/pitch sequences monotonically with DTW or score following; fit local beat-to-second maps. Do not slice performance at reference timestamps.",
     }

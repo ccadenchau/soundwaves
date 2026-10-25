@@ -41,6 +41,41 @@ def _fit_bar(anchors, start, end):
                 anchor_count=len(points), median_residual_seconds=residual)
 
 
+def _merge_split_notes(matches, anchors):
+    """A missing note and an extra of the same pitch right next to it are one note.
+
+    The aligner groups attacks into chords with a fixed window, so a chord note that lands a
+    little late (or a transcriber that stamps it late) falls into its own group: the score
+    note is reported missing and the played note extra. When the extra has the missing note's
+    pitch and sounds within about half a beat of where that score note should fall, they are
+    merged into one correct match; any real lateness is then judged as timing, not as a
+    wrong note."""
+    if len(anchors) < 2:
+        return matches
+    beats, times = [a[0] for a in anchors], [a[1] for a in anchors]
+    if beats[-1] <= beats[0] or times[-1] <= times[0]:
+        return matches
+    seconds_per_beat = (times[-1] - times[0]) / (beats[-1] - beats[0])
+    window = max(0.25, 0.5 * seconds_per_beat)
+    extras = [m for m in matches if m['category'] == 'extra' and m['audio_time'] is not None]
+    drop = set()
+    for missing in matches:
+        if missing['category'] != 'missing' or missing['score_beat'] is None:
+            continue
+        predicted = float(np.interp(missing['score_beat'], beats, times))
+        near = [x for x in extras if id(x) not in drop and x['actual_pitch'] == missing['expected_pitch']
+                and abs(x['audio_time'] - predicted) <= window]
+        if not near:
+            continue
+        extra = min(near, key=lambda x: abs(x['audio_time'] - predicted))
+        drop.add(id(extra))
+        for key in ('performance_note_id', 'audio_time', 'actual_pitch',
+                    'performance_duration_seconds', 'performance_velocity'):
+            missing[key] = extra[key]
+        missing['category'] = 'correct'
+    return [m for m in matches if id(m) not in drop]
+
+
 def align_performance(reference, performance, output_path=None, *, config=None):
     """Return a JSON-serializable report; optionally save it without overwriting.
 
@@ -73,6 +108,11 @@ def align_performance(reference, performance, output_path=None, *, config=None):
                                 expected_pitch=s['pitch'] if s else None,
                                 actual_pitch=p['pitch'] if p else None,
                                 category=category, onset_error_seconds=None,
+                                score_duration_beats=s['duration'] if s else None,
+                                performance_duration_seconds=p['duration'] if p else None,
+                                score_velocity=s.get('velocity') if s else None,
+                                performance_velocity=p.get('velocity') if p else None,
+                                duration_ratio=None, relative_dynamics_delta=None,
                                 measure=None, measure_occurrence=None))
     # Extras get a score-location estimate from surrounding sequence anchors,
     # never from the reference's absolute timestamps.
@@ -83,11 +123,25 @@ def align_performance(reference, performance, output_path=None, *, config=None):
             return None
         return float(np.interp(time, [t for _, t in anchors], [b for b, _ in anchors]))
 
+    matches = _merge_split_notes(matches, anchors)
     correct_total = sum(m['category'] == 'correct' for m in matches)
     recall = correct_total / len(score)
     precision = correct_total / len(played) if played else 0.0
     reliable = (bool(anchors) and recall >= config.minimum_pitch_recall
                 and precision >= config.minimum_pitch_recall)
+    correct_matches = [m for m in matches if m['category'] == 'correct']
+    score_velocities = [m['score_velocity'] for m in correct_matches if m['score_velocity'] is not None]
+    played_velocities = [m['performance_velocity'] for m in correct_matches if m['performance_velocity'] is not None]
+    # Use the matched notes' average velocity as the recording-level calibration point.
+    score_velocity_center = float(np.mean(score_velocities)) if score_velocities else None
+    played_velocity_center = float(np.mean(played_velocities)) if played_velocities else None
+    dynamics_assessable = (len(score_velocities) >= 4 and len(played_velocities) >= 4
+                           and float(np.percentile(score_velocities, 90) - np.percentile(score_velocities, 10)) >= 8)
+    for match in correct_matches:
+        if dynamics_assessable and match['score_velocity'] is not None and match['performance_velocity'] is not None:
+            # Compare each note with its source's average matched-note loudness.
+            match['relative_dynamics_delta'] = ((match['performance_velocity'] - played_velocity_center)
+                                                - (match['score_velocity'] - score_velocity_center))
     warnings = list(warnings)
     if not reliable:
         warnings.append('Insufficient pitch agreement for reliable alignment; discrepancies are candidates and tempo feedback is withheld.')
@@ -127,12 +181,49 @@ def align_performance(reference, performance, output_path=None, *, config=None):
                 match['onset_error_seconds'] = delta
                 if abs(delta) > tolerance:
                     errors.append(_error('timing', match, source_type))
+                if match['score_duration_beats'] and match['performance_duration_seconds']:
+                    expected_seconds = match['score_duration_beats'] * fit['seconds_per_beat']
+                    match['duration_ratio'] = match['performance_duration_seconds'] / expected_seconds
+        timed = [m for m in local if m['category'] == 'correct' and m['onset_error_seconds'] is not None]
+        duration_ratios = [m['duration_ratio'] for m in timed if m['duration_ratio'] is not None]
+        dynamic_deltas = [abs(m['relative_dynamics_delta']) for m in local if m['relative_dynamics_delta'] is not None]
+        signed_dynamic_deltas = [m['relative_dynamics_delta'] for m in local if m['relative_dynamics_delta'] is not None]
+        abs_timing = [abs(m['onset_error_seconds']) for m in timed]
+        dynamic_notes = [m for m in local if m['category'] == 'correct'
+                         and m['score_velocity'] is not None and m['performance_velocity'] is not None
+                         and m['score_beat'] is not None]
+        dynamics_trend = None
+        score_dynamic_slope = performance_dynamic_slope = None
+        if (len(dynamic_notes) >= 4 and
+                float(np.percentile([m['score_velocity'] for m in dynamic_notes], 90)
+                      - np.percentile([m['score_velocity'] for m in dynamic_notes], 10)) >= 6):
+            beats = np.array([m['score_beat'] for m in dynamic_notes], dtype=float)
+            score_dynamic_slope = float(np.polyfit(beats, [m['score_velocity'] for m in dynamic_notes], 1)[0])
+            performance_dynamic_slope = float(np.polyfit(beats, [m['performance_velocity'] for m in dynamic_notes], 1)[0])
+            if score_dynamic_slope >= 1.5:
+                dynamics_trend = ('crescendo_needs_more'
+                                  if performance_dynamic_slope < score_dynamic_slope * 0.5
+                                  else 'crescendo_followed')
+            elif score_dynamic_slope <= -1.5:
+                dynamics_trend = ('decrescendo_needs_more'
+                                  if performance_dynamic_slope > score_dynamic_slope * 0.5
+                                  else 'decrescendo_followed')
         summary = dict(bar, expected_notes=expected, correct_notes=correct,
                        missing_notes=sum(m['category'] == 'missing' for m in local),
                        extra_notes=sum(m['category'] == 'extra' for m in local),
                        wrong_pitch_notes=sum(m['category'] == 'wrong_pitch' for m in local),
                        pitch_recall=local_recall, tempo_status=tempo_status,
                        tempo_ratio=tempo_ratio, tempo_fit=fit,
+                       median_absolute_timing_error_seconds=float(np.median(abs_timing)) if abs_timing else None,
+                       early_notes=sum(m['onset_error_seconds'] < -config.timing_tolerance_seconds for m in timed),
+                       late_notes=sum(m['onset_error_seconds'] > config.timing_tolerance_seconds for m in timed),
+                       median_duration_ratio=float(np.median(duration_ratios)) if duration_ratios else None,
+                       dynamics_note_count=len(dynamic_deltas),
+                       median_relative_dynamics_difference=float(np.median(dynamic_deltas)) if dynamic_deltas else None,
+                       relative_dynamics_level_difference=float(np.mean(signed_dynamic_deltas)) if signed_dynamic_deltas else None,
+                       dynamics_trend=dynamics_trend,
+                       score_dynamic_slope=score_dynamic_slope,
+                       performance_dynamic_slope=performance_dynamic_slope,
                        reference_average_bpm=60 * (end - start) / reference_duration,
                        performed_average_bpm=60 / fit['seconds_per_beat'] if fit else None,
                        estimated_start_seconds=fit['intercept'] + fit['seconds_per_beat'] * start if fit else None,
@@ -151,7 +242,11 @@ def align_performance(reference, performance, output_path=None, *, config=None):
                                correct_notes=correct_total, pitch_precision=precision,
                                pitch_recall=recall,
                                pitch_f1=2 * precision * recall / (precision + recall) if precision + recall else 0.0,
-                               tempo_assessed_measures=sum(b['tempo_fit'] is not None for b in measure_reports)),
+                               tempo_assessed_measures=sum(b['tempo_fit'] is not None for b in measure_reports),
+                               dynamics_assessed_notes=sum(m['relative_dynamics_delta'] is not None for m in correct_matches),
+                               median_relative_dynamics_difference=float(np.median([abs(m['relative_dynamics_delta']) for m in correct_matches if m['relative_dynamics_delta'] is not None])) if any(m['relative_dynamics_delta'] is not None for m in correct_matches) else None,
+                               median_absolute_timing_error_seconds=float(np.median([abs(m['onset_error_seconds']) for m in correct_matches if m['onset_error_seconds'] is not None])) if any(m['onset_error_seconds'] is not None for m in correct_matches) else None,
+                               median_duration_ratio=float(np.median([m['duration_ratio'] for m in correct_matches if m['duration_ratio'] is not None])) if any(m['duration_ratio'] is not None for m in correct_matches) else None),
                   measures=measure_reports, matches=matches, errors=errors, warnings=warnings)
     if output_path is not None:
         path = Path(output_path)
@@ -169,6 +264,8 @@ def _error(category, match, source_type):
                 score_beat=match['score_beat'], audio_time=match['audio_time'],
                 expected_pitch=match['expected_pitch'], actual_pitch=match['actual_pitch'],
                 onset_error_seconds=match['onset_error_seconds'],
+                duration_ratio=match['duration_ratio'],
+                relative_dynamics_delta=match['relative_dynamics_delta'],
                 evidence_confidence=None,
                 assessment='candidate' if source_type == 'midi' else 'possible_transcription_or_playing_error')
 
@@ -186,4 +283,13 @@ def _feedback(bar):
         result.append('Not enough reliable, separated note anchors to assess this bar’s tempo.')
     if bar['missing_notes'] or bar['wrong_pitch_notes'] or bar['extra_notes']:
         result.append('Review the candidate pitch discrepancies against the recording and score.')
+    level_delta = bar.get('relative_dynamics_level_difference')
+    if level_delta is not None and level_delta >= 8:
+        result.append('This bar’s relative level is stronger than the score suggests; try playing it softer.')
+    elif level_delta is not None and level_delta <= -8:
+        result.append('This bar’s relative level is softer than the score suggests; bring it out more.')
+    if bar.get('dynamics_trend') == 'crescendo_needs_more':
+        result.append('The score builds here; increase the volume more gradually through the crescendo.')
+    elif bar.get('dynamics_trend') == 'decrescendo_needs_more':
+        result.append('The score fades here; decrease the volume more gradually through the decrescendo.')
     return result

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Play live · PianoCoach</title>
+<link rel="stylesheet" href="/site.css">
+<style>
+.controls{display:grid;grid-template-columns:2fr 1.5fr 0.7fr 2fr auto;gap:16px;align-items:end}
+.live-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#aebdd2;margin-right:7px;vertical-align:1px}
+.live-dot.on{background:var(--wrong);animation:pulse 1.2s infinite}@keyframes pulse{50%{opacity:.35}}
+.level{height:6px;background:#e7ecf4;border-radius:3px;overflow:hidden;width:160px;margin-top:8px}.level i{display:block;height:100%;width:0;background:var(--accent);transition:width .08s}
+.split{display:grid;grid-template-columns:1fr 320px;gap:18px}.split>.card{margin:0}
+.notation{height:560px}.notation .note{transition:color .25s,fill .25s}
+.notation .note.heard{color:var(--matched);fill:var(--matched);opacity:.45}
+.notation .note.now{filter:drop-shadow(0 0 30px var(--here));stroke:var(--here);stroke-width:12}
+.notation .fresh{animation:pop .7s ease-out}@keyframes pop{0%{filter:none}30%{filter:drop-shadow(0 0 40px currentColor)}100%{filter:none}}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.85);font-size:19px;color:var(--accent);text-align:center;padding:20px;z-index:2}
+.spin{width:22px;height:22px;border:3px solid #c9d6f5;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-right:12px;flex:none}@keyframes spin{to{transform:rotate(360deg)}}
+.feed{height:560px;overflow:auto;margin-top:10px}.feed .item{border-left:4px solid var(--c,var(--accent));padding:6px 12px;margin:0 0 10px;background:#f8fafd;border-radius:0 8px 8px 0;animation:slide .35s ease-out}.feed .item.seen{animation:none}
+.feed .item small{display:block;color:var(--muted);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+@keyframes slide{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+tr.newest td{background:#f2f6ff}[hidden]{display:none!important}
+@media(max-width:900px){.controls{grid-template-columns:1fr}.split{grid-template-columns:1fr}.feed{height:auto;max-height:320px}}
+</style>
+<!--SITE_HEADER--><main>
+<h1>Play live</h1>
+<p class="lede">Pick your piece, press Start and play. Notes turn green, red or orange on the score about two seconds after you play them, and the list on the right says what went wrong. Press Stop for your full review.</p>
+
+<section class="card">
+  <div class="controls">
+    <label>Piece<select id="piece"><option>Loading…</option></select></label>
+    <label>Listen to<select id="mode"><option value="mic">Microphone (live player)</option><option value="file">A recording, played as if live</option></select></label>
+    <label>Start at bar<input type="number" id="start-bar" min="1" value="1"></label>
+    <label id="file-wrap" hidden>Recording <small style="font-weight:400">MP3, WAV, M4A</small><input type="file" id="file" accept=".mp3,.wav,.m4a,.webm,.ogg,.flac,audio/*"></label>
+    <span id="file-spacer"></span>
+    <button id="go" disabled>Start</button>
+  </div>
+  <p class="muted" style="margin:14px 0 0;display:flex;gap:18px;flex-wrap:wrap;align-items:center"><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="speak"> Speak the feedback aloud</label><span id="speak-hint">Your eyes are on the keys, so the coach can say it: "Bar 5, you skipped the E". With a microphone, use headphones so the voice isn't heard as notes.</span></p>
+  <div id="message" class="error" hidden></div>
+</section>
+
+<section class="card">
+  <div class="metrics">
+    <div class="metric"><strong id="bar">–</strong>Bar</div>
+    <div class="metric ok"><strong id="n-ok">0</strong>Right</div>
+    <div class="metric bad"><strong id="n-wrong">0</strong>Wrong keys</div>
+    <div class="metric miss"><strong id="n-miss">0</strong>Skipped</div>
+    <div class="metric extra"><strong id="n-extra">0</strong>Extra</div>
+    <div class="metric"><span class="live-dot" id="dot"></span><span id="state">Ready</span><div class="level"><i id="level"></i></div><small class="muted" id="behind"></small></div>
+  </div>
+</section>
+
+<div class="split">
+  <section class="card" style="margin:0">
+    <div class="legend"><span style="color:var(--matched)">● Right</span><span style="color:var(--missed)">● Skipped</span><span style="color:var(--wrong)">● Wrong key (the written note)</span><span style="color:var(--extra)">● What you played / extra</span><span style="color:var(--here)">● You are here</span></div>
+    <div class="notation" id="notation"><div class="overlay" id="overlay"><span class="spin"></span>Drawing the score…</div></div>
+  </section>
+  <section class="card" style="margin:0">
+    <h2>As you play</h2>
+    <div class="feed" id="feed"><p class="muted" id="feed-empty">Feedback appears here while you play: wrong keys, skipped notes, extra notes, and bars that rush or drag.</p></div>
+  </section>
+</div>
+
+<section class="card">
+  <h2>Bar by bar <small class="muted" style="font-weight:400">updates as you play</small></h2>
+  <div class="scroll"><table><thead><tr><th>Bar</th><th>Notes right</th><th>Skipped / wrong / extra</th><th>Tempo</th><th>Score → you (BPM)</th><th>Timing</th><th>Feedback</th></tr></thead><tbody id="bars"><tr><td colspan="7" class="muted">Nothing yet.</td></tr></tbody></table></div>
+</section>
+<audio id="player" hidden></audio>
+</main><!--SITE_FOOTER-->
+<script src="/practice-assets/live-stream.js"></script>
+<script src="/practice-assets/live-matcher.js"></script>
+<script src="/live-assets/live.js"></script>
+</html>
