@@ -68,7 +68,7 @@ REPORT = '''<!doctype html>
 <style>
 .notation{height:620px}.notation .note{cursor:pointer}
 .notation .active-note{filter:drop-shadow(0 0 35px var(--here));stroke:var(--here);stroke-width:14}
-.notation .played-marker{cursor:pointer}
+.notation .played-marker{cursor:pointer}.notation .played-marker.faint{opacity:.45}
 .notation .dynamic-wedge{fill:none;stroke:#58677c;stroke-width:5;stroke-linecap:round}.notation .dynamic-wedge.good{stroke:var(--matched)}.notation .dynamic-wedge.wrong{stroke:var(--wrong)}
 .score-tools{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.score-tools label{display:flex;align-items:center;gap:7px;font-weight:400}.score-tools select{width:auto;margin:0}
 .notation.hide-overlays .played-marker{display:none}.notation.hide-overlays .note{color:black;fill:black}
@@ -90,7 +90,7 @@ td .barnote{font-weight:600;margin-bottom:4px}
 <div class="metric ok"><strong>{{ '%.0f'|format(metrics.pitch_recall * 100) }}%</strong>Score notes you got right</div>
 <div class="metric bad"><strong>{{ summary.wrong }}</strong>Wrong keys</div>
 <div class="metric miss"><strong>{{ summary.missing }}</strong>Skipped notes</div>
-<div class="metric extra"><strong>{{ summary.extra }}</strong>Extra notes</div>
+<div class="metric extra"><strong>{{ summary.extra }}</strong>Extra notes{% if summary.noise %}<br><small class="muted">+{{ summary.noise }} possibly room noise, shown faded</small>{% endif %}</div>
 <div class="metric"><strong>{{ summary.tempo }}</strong>Your tempo (score {{ summary.score_bpm }})</div>
 </div>
 <audio controls preload="metadata" id="audio" src="{{ url_for('artifact', report_id=result.report_id, kind='audio') }}"></audio>
@@ -150,7 +150,7 @@ td .barnote{font-weight:600;margin-bottom:4px}
 <a href="{{ url_for('artifact', report_id=result.report_id, kind=kind) }}">{{ label }}</a>{% endfor %}</div>
 <h3>Every finding</h3><div class="scroll"><table>
 <tr><th>Bar</th><th>Type</th><th>Written / played</th><th>Recording</th></tr>
-{% for error in report.errors %}<tr><td>{{ error.measure if error.measure is not none else '—' }}</td><td>{{ {'missing':'skipped','wrong_pitch':'wrong key','extra':'extra','timing':'timing'}.get(error.category, error.category) }}</td>
+{% for error in report.errors %}<tr><td>{{ error.measure if error.measure is not none else '—' }}</td><td>{{ 'extra (possibly noise)' if error.category == 'extra' and error.maybe_noise else {'missing':'skipped','wrong_pitch':'wrong key','extra':'extra','timing':'timing'}.get(error.category, error.category) }}</td>
 <td>{{ error.expected_name or '—' }} / {{ error.actual_name or '—' }}</td>
 <td>{% if error.audio_time is not none %}<button class="seek" data-time="{{ error.audio_time }}">{{ '%.1f'|format(error.audio_time) }} s</button>{% endif %}</td></tr>{% endfor %}
 </table></div>
@@ -275,7 +275,9 @@ def _summary(report, directory):
     bars = report['measures']
     numbers = [b['number'] for b in bars]
     span = f'{min(numbers)}–{max(numbers)}' if numbers and min(numbers) != max(numbers) else str(numbers[0]) if numbers else '—'
-    counts = {k: sum(m['category'] == k for m in report['matches']) for k in ('missing', 'wrong_pitch', 'extra')}
+    counts = {k: sum(m['category'] == k for m in report['matches']) for k in ('missing', 'wrong_pitch')}
+    counts['extra'] = sum(m['category'] == 'extra' and not m.get('maybe_noise') for m in report['matches'])
+    noise = sum(m['category'] == 'extra' and bool(m.get('maybe_noise')) for m in report['matches'])
     played = [b['performed_average_bpm'] for b in bars if b.get('performed_average_bpm')]
     score_bpm = round(bars[0]['reference_average_bpm']) if bars else None
     tempo = round(median(played)) if played else None
@@ -292,7 +294,7 @@ def _summary(report, directory):
     line = (f'You played bar{"s" if "–" in span else ""} {span} and got {right:.0%} of the written notes, '
             f'{pace}. Start with the teacher notes below, then look for red and orange on the score.')
     return dict(title=title or 'Your take', piece_id=piece_id, bars=span, tempo=tempo or '—', score_bpm=score_bpm or '—', line=line,
-                wrong=counts['wrong_pitch'], missing=counts['missing'], extra=counts['extra'],
+                wrong=counts['wrong_pitch'], missing=counts['missing'], extra=counts['extra'], noise=noise,
                 repeats=len(set(numbers)) != len(numbers))
 
 

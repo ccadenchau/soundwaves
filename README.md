@@ -39,6 +39,8 @@ Measured on real data, details in `testing/datasets/README.md`:
 | Planted mistakes in expert ASAP performances | 39 of 40, no new false alarms |
 | Live marks agreeing with the final report, test clip | 245 of 247 notes |
 
+Those rows were measured on the comparison adapter in `pianocoach/report.py`, which the older review page uses. The review and live pages in `testing/alignment` run a lighter path: the same aligner with the split-note merge, end-of-take trimming and the room-noise rules, without the adapter's other repairs. On the same hand-labelled student set that path catches 86 to 88% of mistakes, and 94% of its flags are real in a quiet room, 79% with someone talking at 10 dB. Bringing the remaining repairs across is the next job.
+
 The self-checks at `/test` run five end-to-end cases (planted mistakes, a clean take, a MIDI take, a partial take, silence) in about 30 seconds.
 
 ## Run it
