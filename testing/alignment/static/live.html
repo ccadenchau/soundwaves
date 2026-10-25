@@ -10,6 +10,7 @@
 .split{display:grid;grid-template-columns:1fr 320px;gap:18px}.split>.card{margin:0}
 .notation{height:560px}.notation .note{transition:color .25s,fill .25s}
 .notation .note.heard{color:var(--matched);fill:var(--matched);opacity:.45}
+.notation .played-marker.faint{opacity:.45}
 .notation .note.now{filter:drop-shadow(0 0 30px var(--here));stroke:var(--here);stroke-width:12}
 .notation .fresh{animation:pop .7s ease-out}@keyframes pop{0%{filter:none}30%{filter:drop-shadow(0 0 40px currentColor)}100%{filter:none}}
 .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.85);font-size:19px;color:var(--accent);text-align:center;padding:20px;z-index:2}

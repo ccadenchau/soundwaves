@@ -191,6 +191,8 @@ class LiveSession:
             alignment = self._align(kept, total)
         except ValueError:
             return
+        from pianocoach.noise import apply_noise_rules
+        apply_noise_rules(alignment, kept, self.reference['notes'])
         self.state = self._summary(alignment, kept, total)
 
     def _align(self, kept, total):
@@ -266,6 +268,8 @@ class LiveSession:
                 continue
             mark = dict(id=m['score_note_id'], category=category, expected=m['expected_pitch'], actual=m['actual_pitch'],
                         time=m['audio_time'], measure=m['measure'], occurrence=m['measure_occurrence'])
+            if m.get('maybe_noise'):
+                mark['maybe_noise'] = True
             if category == 'correct' and timing.get(m['score_note_id']) is not None:
                 mark['timing_ms'] = round(timing[m['score_note_id']] * 1000)
             marks.append(mark)

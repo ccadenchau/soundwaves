@@ -190,8 +190,11 @@ def compare_files(sheet, recording, *, bpm=120, title=None, piece_id=None):
     kept, cleaning = clean_notes(heard, harmonics=backend is None)
     report, _ = align_windowed(score['notes'], kept)
     trim_to_played(report)  # only the bars the student played: no "missed" notes past the end of a short take
+    # Room sound the transcriber turned into notes: drop the quiet ones, mark the ones that don't fit the music.
+    from pianocoach.noise import apply_noise_rules
+    noise = apply_noise_rules(report, kept, json.loads(Path(score['notes']).read_text(encoding='utf-8'))['notes'])
     report['preprocessing'] = dict(report.get('preprocessing', {}), audio_cleaning=audio_cleaning,
-                                   timestamp_origin='original_audio', transcriber=transcriber_name, **cleaning)
+                                   timestamp_origin='original_audio', transcriber=transcriber_name, **cleaning, **noise)
 
     playback_signature = _signature('sheet_downloader', dict(
         renderer_sha256=_hash(Path(__file__).with_name('playback.py')), sample_rate=16000))
