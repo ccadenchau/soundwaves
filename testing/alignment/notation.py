@@ -105,7 +105,7 @@ def build_notation(musicxml, reference, performance, report):
             detected = pitch.Pitch(midi=actual)
             shift = detected.diatonicNoteNum - engraved.diatonicNoteNum
         event = played.get(match['performance_note_id'])
-        annotations.append(dict(match, xml_id=xml_id, staff_steps=shift,
+        annotations.append(dict(match, xml_id=xml_id, display_beat=anchor.get('score_beat'), staff_steps=shift,
                                 actual_name=pitch.Pitch(midi=actual).nameWithOctave if actual is not None else None,
                                 expected_name=pitch.Pitch(midi=match['expected_pitch']).nameWithOctave
                                 if match['expected_pitch'] is not None else None,
