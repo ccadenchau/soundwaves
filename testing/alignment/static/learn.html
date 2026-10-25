@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Learn a tune · PianoCoach</title>
+<link rel="stylesheet" href="/site.css">
+<style>
+.controls{display:grid;grid-template-columns:2fr 1.4fr 2fr auto;gap:16px;align-items:end}
+.stage{display:grid;grid-template-columns:1fr 300px;gap:18px}.stage>.card{margin:0}
+.next{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.next .big{font-size:64px;font-weight:800;line-height:1;color:var(--here);min-width:120px}
+.next .big.ok{color:var(--matched)}.next .big.bad{color:var(--wrong)}
+.next .say{font-size:19px;max-width:520px}.next .sub{color:var(--muted);font-size:15px;margin-top:4px}
+.progress{height:8px;background:#e7ecf4;border-radius:4px;overflow:hidden;margin:14px 0 4px}.progress i{display:block;height:100%;width:0;background:var(--matched);transition:width .3s}
+.kb{position:relative;height:190px;user-select:none;margin-top:10px}
+.kb .k{position:absolute;top:0;border:1px solid #9aa7bd;border-radius:0 0 7px 7px;background:#fff;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;font:600 13px system-ui;color:#6b7891;box-sizing:border-box;transition:background .08s}
+.kb .k.b{background:#1d2735;color:#cbd5e6;height:58%;z-index:2;border-radius:0 0 5px 5px;width:3.2%;margin-left:-1.6%}
+.kb .k.w{height:100%;z-index:1}
+.kb .k.next{background:#d9e6ff;box-shadow:inset 0 0 0 3px var(--here);animation:pulse 1.1s infinite}
+.kb .k.b.next{background:#3a5cc2}
+.kb .k.hit{background:#cdeedd!important;box-shadow:inset 0 0 0 3px var(--matched)}
+.kb .k.miss{background:#ffd9d9!important;box-shadow:inset 0 0 0 3px var(--wrong)}
+@keyframes pulse{50%{box-shadow:inset 0 0 0 6px var(--here)}}
+.notation{height:300px}.notation .note.done{color:var(--matched);fill:var(--matched)}
+.notation .note.now{filter:drop-shadow(0 0 30px var(--here));stroke:var(--here);stroke-width:12}
+.notation .note.hard{color:var(--missed);fill:var(--missed)}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.85);font-size:19px;color:var(--accent);text-align:center;padding:20px;z-index:2}
+.spin{width:22px;height:22px;border:3px solid #c9d6f5;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-right:12px;flex:none}@keyframes spin{to{transform:rotate(360deg)}}
+.stats{display:flex;gap:26px;flex-wrap:wrap}.stats strong{display:block;font-size:30px;line-height:1.1}
+.live-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#aebdd2;margin-right:7px;vertical-align:1px}.live-dot.on{background:var(--wrong);animation:pulse2 1.2s infinite}@keyframes pulse2{50%{opacity:.35}}
+.level{height:6px;background:#e7ecf4;border-radius:3px;overflow:hidden;width:160px;margin-top:8px}.level i{display:block;height:100%;width:0;background:var(--accent);transition:width .08s}
+.tips{color:var(--muted);font-size:14px;line-height:1.6}
+#finish{display:none}#finish.show{display:block}
+[hidden]{display:none!important}
+@media(max-width:900px){.controls{grid-template-columns:1fr}.stage{grid-template-columns:1fr}.next .big{font-size:48px}}
+</style>
+<!--SITE_HEADER--><main>
+<h1>Learn a tune</h1>
+<p class="lede">For someone who has never touched a piano. The next key lights up on the keyboard below and on the score. Press it, and the page waits for you. Wrong key, it tells you which way to go. Right key, it moves on. No tempo, no pressure. When you finish, try it in time on Play live.</p>
+
+<section class="card">
+  <div class="controls">
+    <label>Tune<select id="piece"><option>Loading…</option></select></label>
+    <label>Listen to<select id="mode"><option value="mic">Microphone</option><option value="tap">Tap the keys on screen</option><option value="file">A recording, played as if live</option></select></label>
+    <label id="file-wrap" hidden>Recording<input type="file" id="file" accept=".mp3,.wav,.m4a,.webm,.ogg,.flac,audio/*"></label>
+    <span id="file-spacer"></span>
+    <button id="go" disabled>Start</button>
+  </div>
+  <div id="message" class="error" hidden></div>
+</section>
+
+<section class="card">
+  <div class="next">
+    <div class="big" id="big">–</div>
+    <div><div class="say" id="say">Pick a tune and press Start.</div><div class="sub" id="sub"></div></div>
+    <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap"><button class="ghost" id="hear">Hear this note</button><button class="ghost" id="hear-all">Hear the tune</button></div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+  <div class="stats" style="margin-top:8px">
+    <div><strong id="n-done">0</strong><span class="muted">of <span id="n-total">0</span> notes</span></div>
+    <div><strong id="n-ok">0</strong><span class="muted">right first time</span></div>
+    <div><strong id="n-wrong">0</strong><span class="muted">wrong tries</span></div>
+    <div><strong id="streak">0</strong><span class="muted">in a row</span></div>
+    <div><span class="live-dot" id="dot"></span><span id="state">Ready</span><div class="level"><i id="level"></i></div></div>
+  </div>
+  <div class="kb" id="kb"></div>
+</section>
+
+<div class="stage">
+  <section class="card"><div class="legend"><span style="color:var(--here)">● Next</span><span style="color:var(--matched)">● Done</span><span style="color:var(--missed)">● Took a few tries</span></div>
+  <div class="notation" id="notation"><div class="overlay" id="overlay"><span class="spin"></span>Drawing the score…</div></div></section>
+  <section class="card"><h2>How to read it</h2><p class="tips" id="tips">White keys repeat the pattern C D E F G A B, left to right, low to high. The black keys come in groups of two and three; C is the white key just left of a group of two. Middle C, called C4, is near the middle of the keyboard. Each note on the score sits higher on the lines as the key moves right.</p>
+  <div id="finish"><h2>You played the whole tune</h2><p id="finish-text"></p><div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" id="go-live">Now try it in time</a><button class="ghost" id="again">Again</button></div></div></section>
+</div>
+<audio id="player" hidden></audio>
+</main><!--SITE_FOOTER-->
+<script src="/practice-assets/live-stream.js"></script>
+<script src="/live-assets/learn.js"></script>
+</html>

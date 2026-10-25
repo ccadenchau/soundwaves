@@ -32,9 +32,18 @@ def live_page():
 
 @live_demo.get('/live-assets/<name>')
 def live_asset(name):
-    if name not in ('live.js',):
+    if name not in ('live.js', 'learn.js'):
         return ('', 404)
     return send_file(PAGE.with_name(name), mimetype='text/javascript', max_age=0)
+
+
+@live_demo.get('/learn')
+def learn_page():
+    """Step-by-step mode for someone who has never played: the next key is shown, the page waits for it."""
+    from flask import Response
+    from pianocoach.site import FOOTER, header
+    html = PAGE.with_name('learn.html').read_text(encoding='utf-8').replace('<!--SITE_HEADER-->', header('learn')).replace('<!--SITE_FOOTER-->', FOOTER)
+    return Response(html, mimetype='text/html', headers={'Cache-Control': 'no-store'})
 
 
 @live_demo.get('/api/live/notation/<piece_id>')

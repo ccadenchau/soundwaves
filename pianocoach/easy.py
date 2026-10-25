@@ -22,6 +22,21 @@ SCORE_CACHE = Path(__file__).with_name('sessions') / 'scores'
 NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 WHITE = {0, 2, 4, 5, 7, 9, 11}
 
+# Melody extraction settings. Chosen by a grid search on testing/datasets/easy_bench.py (eight known
+# tunes rendered with piano accompaniment, as a synthetic voice, and as a voice over accompaniment):
+# melody match went from 76/83/66% to 90/88/83% on those three conditions.
+PARAMS = dict(
+    low=50, high=88,          # MIDI range the tune may live in (D3 to E6)
+    min_duration=0.07,        # shorter notes are blips
+    loud_ratio=0.6,           # among notes struck together, candidates within this share of the loudest
+    held_ratio=1.0,           # an attack under a held higher note is accompaniment unless louder than it
+    held_margin=0.05,         # seconds before the held note ends where attacks still count as "under" it
+    fragment_gap=0.08,        # same-pitch pieces closer than this can be one note
+    blip_short=0.2, blip_semitones=2, blip_near=0.1,  # short quieter neighbours of a note go
+    ghost_window=0.15,        # an octave twin inside this window is an overtone
+    restrike_min=0.2, restrike_ratio=1.0,   # a same-pitch piece that is long or at least as loud is a new note
+    drop_below=5, drop_quiet=1.0, track=4,  # accompaniment: below the recent tune and not louder than it
+)
 
 def _groups(notes, gap=0.05):
     """Notes struck together, oldest first."""
@@ -61,13 +76,15 @@ def estimate_beat(onsets, *, low_bpm=66, high_bpm=132, prefer_bpm=96):
     return beat, round(60.0 / beat)
 
 
-def _merge_fragments(notes, gap=0.12):
+def _merge_fragments(notes, gap=None):
     """A sung or hummed note wobbles, and the transcriber cuts it into pieces of the same pitch.
     Pieces that follow each other closely are one note again."""
+    gap = PARAMS['fragment_gap'] if gap is None else gap
     out = []
     for n in sorted(notes, key=lambda n: (n['onset'], n['pitch'])):
         last = out[-1] if out else None
-        if last and last['pitch'] == n['pitch'] and n['onset'] - (last['onset'] + last['duration']) <= gap:
+        continuation = last is not None and (n['duration'] < PARAMS['restrike_min'] or n['velocity'] < PARAMS['restrike_ratio'] * last['velocity'])
+        if last and last['pitch'] == n['pitch'] and n['onset'] - (last['onset'] + last['duration']) <= gap and continuation:
             last['duration'] = max(last['duration'], n['onset'] + n['duration'] - last['onset'])
             last['velocity'] = max(last['velocity'], n['velocity'])
             continue
@@ -75,9 +92,12 @@ def _merge_fragments(notes, gap=0.12):
     return out
 
 
-def _drop_neighbour_blips(notes, *, short=0.15, semitones=2, near=0.1):
+def _drop_neighbour_blips(notes, *, short=None, semitones=None, near=None):
     """A voice slides and wobbles, so the transcriber adds short, quieter notes a semitone or two
     from the real one. A short note next to a longer, louder note within two semitones goes."""
+    short = PARAMS['blip_short'] if short is None else short
+    semitones = PARAMS['blip_semitones'] if semitones is None else semitones
+    near = PARAMS['blip_near'] if near is None else near
     out = []
     for n in notes:
         if n['duration'] < short and any(
@@ -89,21 +109,30 @@ def _drop_neighbour_blips(notes, *, short=0.15, semitones=2, near=0.1):
     return out
 
 
-def extract_melody(notes, *, low=50, high=88, min_duration=0.07):
+def extract_melody(notes, *, low=None, high=None, min_duration=None):
     """One note per attack: the top of what is loud enough. Bass and drum-like blips are dropped
     by range and length; among notes struck together the highest of the loud ones is the tune;
     an attack under a melody note that is still sounding is accompaniment and is skipped."""
+    low = PARAMS['low'] if low is None else low
+    high = PARAMS['high'] if high is None else high
+    min_duration = PARAMS['min_duration'] if min_duration is None else min_duration
     in_range = [n for n in notes if low <= n['pitch'] <= high and n['duration'] >= min_duration]
     kept = _merge_fragments(_drop_neighbour_blips(in_range))
     melody = []
     for group in _groups(kept):
         loudest = max(n['velocity'] for n in group)
-        candidates = [n for n in group if n['velocity'] >= 0.6 * loudest]
+        candidates = [n for n in group if n['velocity'] >= PARAMS['loud_ratio'] * loudest]
         top = max(candidates, key=lambda n: n['pitch'])
         held = melody[-1] if melody else None
-        if (held and top['pitch'] < held['pitch'] and top['onset'] < held['onset'] + held['duration'] - 0.05
-                and top['velocity'] <= 1.15 * held['velocity']):
+        if (held and top['pitch'] < held['pitch'] and top['onset'] < held['onset'] + held['duration'] - PARAMS['held_margin']
+                and top['velocity'] <= PARAMS['held_ratio'] * held['velocity']):
             continue  # a chord or bass note under the tune's held note
+        recent = melody[-PARAMS['track']:]
+        if len(recent) >= 2:
+            mid = median(n['pitch'] for n in recent)
+            loud = median(n['velocity'] for n in recent)
+            if top['pitch'] < mid - PARAMS['drop_below'] and top['velocity'] < PARAMS['drop_quiet'] * loud:
+                continue  # a chord tone between tune notes: well below where the tune has been, and softer
         melody.append(dict(top))
     # A note immediately followed by a higher one is a grace note or a smear into the real note,
     # and a note an octave from its neighbour within a blink is the transcriber hearing an overtone.
@@ -113,7 +142,7 @@ def extract_melody(notes, *, low=50, high=88, min_duration=0.07):
         prev = cleaned[-1] if cleaned else None
         if nxt and nxt['onset'] - n['onset'] < 0.12 and nxt['pitch'] > n['pitch']:
             continue
-        if prev and abs(n['pitch'] - prev['pitch']) in (12, 24) and n['onset'] - prev['onset'] < 0.15 and n['velocity'] <= prev['velocity']:
+        if prev and abs(n['pitch'] - prev['pitch']) in (12, 24) and n['onset'] - prev['onset'] < PARAMS['ghost_window'] and n['velocity'] <= prev['velocity']:
             continue
         cleaned.append(n)
     return _merge_fragments(cleaned, gap=0.08)
@@ -234,17 +263,43 @@ def _load_clip(audio, start_seconds, seconds):
     return mono[a:b], sr
 
 
-def make_easy(audio, *, title, level=3, bars=8, start_seconds=0.0, seconds=60.0, bpm=72,
-              solo_piano=False, workdir=None):
-    """Recording in, an easy piece in the list out. Returns a JSON-ready summary."""
+def separate_voice(wav, workdir):
+    """Pull the singing out of a mix with Demucs (in the Transkun environment, which has PyTorch).
+    Returns the vocal stem path, or None when Demucs is missing, fails, or finds no voice."""
+    import subprocess
+    import soundfile as sf
+    python = ROOT / '.venv-transkun' / 'bin' / 'python'
+    if not python.is_file():
+        return None
+    out = Path(workdir) / 'stems'
+    try:
+        subprocess.run([str(python), '-m', 'demucs', '--two-stems=vocals', '-n', 'htdemucs', '-d', 'mps',
+                        '-o', str(out), str(wav)], check=True, capture_output=True, timeout=90)
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
+        try:  # MPS can refuse some ops; the CPU path is slower but works
+            subprocess.run([str(python), '-m', 'demucs', '--two-stems=vocals', '-n', 'htdemucs', '-d', 'cpu',
+                            '-o', str(out), str(wav)], check=True, capture_output=True, timeout=120)
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
+            return None
+    stems = list(out.glob('htdemucs/*/vocals.wav'))
+    if not stems:
+        return None
+    voice, sr = sf.read(stems[0], always_2d=True)
+    mix, _ = sf.read(wav, always_2d=True)
+    share = float(np.sqrt((voice ** 2).mean()) / (np.sqrt((mix ** 2).mean()) + 1e-9))
+    return stems[0] if share >= 0.08 else None  # almost nothing came out: there was no singing
+
+
+def analyze_recording(audio, *, level=3, bars=8, start_seconds=0.0, seconds=60.0, solo_piano=False,
+                      separate='auto', workdir=None):
+    """Recording in, simplified melody out: (events, info). No piece is written."""
     import tempfile
     import soundfile as sf
     from transcribe_recording import transcribe_recording
     from .clean import clean_notes
-    from .pipeline import convert_once, transcriber
+    from .pipeline import transcriber
 
     audio = Path(audio)
-    title = (title or audio.stem.replace('_', ' ').replace('-', ' ').strip().title() or 'Easy tune')[:80]
     level = int(min(3, max(1, level)))
     bars = int(min(32, max(4, bars)))
     work = Path(workdir) if workdir else Path(tempfile.mkdtemp(prefix='easy-'))
@@ -252,10 +307,15 @@ def make_easy(audio, *, title, level=3, bars=8, start_seconds=0.0, seconds=60.0,
     clip, sr = _load_clip(audio, start_seconds, seconds)
     wav = work / 'clip.wav'
     sf.write(wav, clip, sr)
+    source, separated = wav, False
+    if not solo_piano and separate in ('auto', True):
+        stem = separate_voice(wav, work)
+        if stem is not None:
+            source, separated = stem, True
     # Transkun hears piano very well and everything else as if it were piano; Basic Pitch is the
     # general model. Solo piano recordings get Transkun, anything else Basic Pitch.
     backend = transcriber() if solo_piano else None
-    take = transcribe_recording(wav, work / 'take', backend=backend)
+    take = transcribe_recording(source, work / 'take', backend=backend)
     notes, _ = clean_notes(take.notes, harmonics=backend is None)
     if len(notes) < 4:
         raise ValueError('Too few notes were heard in that stretch. Try a different start time, or a clearer recording.')
@@ -265,6 +325,23 @@ def make_easy(audio, *, title, level=3, bars=8, start_seconds=0.0, seconds=60.0,
     events, info = simplify(melody, level=level, bars=bars)
     if len(events) < 3:
         raise ValueError('The tune came out too short to practise. Try more bars or a different start time.')
+    info.update(heard_notes=len(notes), melody_notes=len(melody), transcriber=backend.name if backend else 'basic-pitch',
+                voice_separated=separated, level=level)
+    return events, info
+
+
+def make_easy(audio, *, title, level=3, bars=8, start_seconds=0.0, seconds=60.0, bpm=72,
+              solo_piano=False, separate='auto', workdir=None):
+    """Recording in, an easy piece in the list out. Returns a JSON-ready summary."""
+    import tempfile
+    from .pipeline import convert_once
+
+    audio = Path(audio)
+    title = (title or audio.stem.replace('_', ' ').replace('-', ' ').strip().title() or 'Easy tune')[:80]
+    work = Path(workdir) if workdir else Path(tempfile.mkdtemp(prefix='easy-'))
+    events, info = analyze_recording(audio, level=level, bars=bars, start_seconds=start_seconds, seconds=seconds,
+                                     solo_piano=solo_piano, separate=separate, workdir=work)
+    level = info['level']
     xml = work / 'easy.musicxml'
     to_musicxml(events, xml, title=f'{title} (easy)', bpm=bpm, key_name=info['key'])
     data = xml.read_bytes()
@@ -279,5 +356,6 @@ def make_easy(audio, *, title, level=3, bars=8, start_seconds=0.0, seconds=60.0,
     reference = json.loads(Path(paths['notes']).read_text(encoding='utf-8'))
     return dict(id=piece_id, title=f'{title} (easy)', level=level, bars=len(reference['chunks']),
                 notes=len(reference['notes']), bpm=bpm, bpm_detected=info['bpm_detected'], key=info['key'],
-                heard_notes=len(notes), melody_notes=len(melody), transcriber=backend.name if backend else 'basic-pitch',
+                heard_notes=info['heard_notes'], melody_notes=info['melody_notes'], transcriber=info['transcriber'],
+                voice_separated=info['voice_separated'],
                 tune=[dict(beat=e['beat'], name=f"{NAMES[e['pitch'] % 12]}{e['pitch'] // 12 - 1}", length=e['length']) for e in events])

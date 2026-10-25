@@ -439,7 +439,7 @@ EASY_PAGE = """<!doctype html>
 <section class="card" id="done"><h2 id="title"></h2><p class="muted" id="facts"></p>
 <div class="notation" id="notation"></div>
 <p class="tune" id="tune"></p>
-<div class="row"><a class="btn" id="go-live">Play it live</a><a class="btn ghost" id="go-again" href="/easy">Make another</a></div></section>
+<div class="row"><a class="btn" id="go-learn">Learn it step by step</a><a class="btn ghost" id="go-live">Play it live</a><a class="btn ghost" id="go-again" href="/easy">Make another</a></div></section>
 </main>""" + SITE_FOOTER + """<script>
 const $=s=>document.querySelector(s);
 async function send(file){
@@ -450,7 +450,7 @@ async function send(file){
     $('#msg').textContent='';$('#title').textContent=d.title;
     $('#facts').textContent=`${d.bars} bars, ${d.notes} notes, in ${d.key}. Heard ${d.heard_notes} notes with ${d.transcriber}${d.bpm_detected?`, pulse about ${d.bpm_detected} bpm`:''}; written at ${d.bpm} bpm.`;
     $('#tune').textContent=d.tune.map(t=>t.name).join(' ');
-    $('#go-live').href='/live?piece='+encodeURIComponent(d.id);$('#done').classList.add('show');
+    $('#go-live').href='/live?piece='+encodeURIComponent(d.id);$('#go-learn').href='/learn?piece='+encodeURIComponent(d.id);$('#done').classList.add('show');
     const n=await fetch('/api/live/notation/'+encodeURIComponent(d.id));const nd=await n.json();const box=$('#notation');box.innerHTML='';
     if(n.ok)for(const page of nd.pages){const doc=new DOMParser().parseFromString(page,'image/svg+xml');const svg=document.importNode(doc.documentElement,true);svg.setAttribute('viewBox',`0 0 ${parseFloat(svg.getAttribute('width'))} ${parseFloat(svg.getAttribute('height'))}`);box.append(svg);}
   }catch(e){$('#msg').className='err';$('#msg').textContent=e.message;}

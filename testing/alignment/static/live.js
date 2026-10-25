@@ -380,7 +380,7 @@ async function finish() {
 }
 
 $('#go').addEventListener('click', () => S.phase === 'live' ? void finish() : void start());
-$('#piece').addEventListener('change', () => { history.replaceState(null, '', `?piece=${encodeURIComponent($('#piece').value)}`); void loadPiece(); });
+$('#piece').addEventListener('change', () => { history.replaceState(null, '', `?piece=${encodeURIComponent($('#piece').value)}`); const l = $('#learn-link'); if (l) l.href = `/learn?piece=${encodeURIComponent($('#piece').value)}`; void loadPiece(); });
 $('#mode').addEventListener('change', () => { $('#file-wrap').hidden = $('#mode').value !== 'file'; $('#file-spacer').hidden = $('#mode').value === 'file'; $('#speak').checked = $('#mode').value === 'file'; setPhase(S.phase); });
 $('#file').addEventListener('change', () => setPhase(S.phase));
 window.addEventListener('pagehide', () => { if (S.session) navigator.sendBeacon?.(`/api/live/session/${S.session}/stop`); S.phase = 'idle'; void cleanup(); });
@@ -392,6 +392,7 @@ window.addEventListener('pagehide', () => { if (S.session) navigator.sendBeacon?
     const params = new URLSearchParams(location.search), want = params.get('piece');
     if (want && pieces.some(p => p.id === want)) $('#piece').value = want;
     if (params.get('bar')) $('#start-bar').value = params.get('bar');
+    const l = $('#learn-link'); if (l) l.href = `/learn?piece=${encodeURIComponent($('#piece').value)}`;
     await loadPiece();
   } catch (error) { overlay(''); message(error.message); }
 })();
