@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Falling keys · C4–C5</title><style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:#0c181b;overflow:hidden;touch-action:manipulation}
+body{font:15px -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;color:#eff6f4}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+#bar{position:fixed;top:0;left:0;right:0;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:10px 16px;background:#142428ee;border-bottom:1px solid #ffffff18;transition:opacity .3s}
+#bar.hide{opacity:0;pointer-events:none}
+button,label.b,select{background:#ffffff16;border:1px solid #ffffff26;color:inherit;padding:8px 16px;border-radius:18px;font:inherit}
+label.b input{position:absolute;opacity:0;width:0}
+.c{display:flex;align-items:center;gap:6px;font-size:12px;color:#a4b8b9}
+input[type=range]{accent-color:#b9efdf}
+option{color:#000}
+#msg{color:#ff9b87;font-size:12px}
+</style></head><body>
+<canvas id="cv"></canvas>
+<div id="bar">
+  <button id="play">Play</button>
+  <button id="restart">Restart</button>
+  <label class="b">Open MIDI<input id="file" type="file" accept=".mid,.midi"></label>
+  <select id="song"><option value="ode">Ode to Joy (demo)</option><option value="scale">C major scale (check alignment)</option></select>
+  <label class="c">Speed <input id="speed" type="range" min="0.25" max="2" step="0.05" value="1" style="width:90px"></label>
+  <label class="c">Fall <input id="fall" type="range" min="1" max="6" step="0.25" value="3" style="width:90px"></label>
+  <label class="c">Out of range <select id="oor"><option value="fold">fold into C4–C5</option><option value="skip">skip</option></select></label>
+  <label class="c"><input id="snd" type="checkbox" checked> sound</label>
+  <label class="c"><input id="mon" type="checkbox"> keyboard</label>
+  <span id="msg"></span>
+</div>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+function parseMidi(buf) {
+  const d = new DataView(buf); let p = 0;
+  const str = n => { let s = ""; for (let i = 0; i < n; i++) s += String.fromCharCode(d.getUint8(p++)); return s; };
+  if (str(4) !== "MThd") throw new Error("Not a MIDI file");
+  p += 4; p += 2; // length, format
+  const ntrk = d.getUint16(p); p += 2;
+  const div = d.getUint16(p); p += 2;
+  if (div & 0x8000) throw new Error("SMPTE timing is not supported");
+  const tempos = [{ tick: 0, uspq: 500000 }];
+  const raw = []; // {tick, ch, note, vel, on}
+  for (let t = 0; t < ntrk && p + 8 <= d.byteLength; t++) {
+    const id = str(4), len = d.getUint32(p); p += 4;
+    const end = Math.min(p + len, d.byteLength);
+    if (id !== "MTrk") { p = end; continue; }
+    let tick = 0, status = 0;
+    const vlq = () => { let v = 0, b; do { b = d.getUint8(p++); v = (v << 7) | (b & 0x7f); } while (b & 0x80); return v; };
+    while (p < end) {
+      tick += vlq();
+      let b = d.getUint8(p);
+      if (b & 0x80) { status = b; p++; }
+      if (status === 0xff) {
+        const type = d.getUint8(p++), l = vlq();
+        if (type === 0x51 && l === 3) tempos.push({ tick, uspq: (d.getUint8(p) << 16) | (d.getUint8(p + 1) << 8) | d.getUint8(p + 2) });
+        p += l;
+      } else if (status === 0xf0 || status === 0xf7) { p += vlq(); }
+      else {
+        const hi = status & 0xf0, ch = status & 15;
+        if (hi === 0xc0 || hi === 0xd0) { p += 1; }
+        else {
+          const a = d.getUint8(p++), v = d.getUint8(p++);
+          if (hi === 0x90 && v > 0) raw.push({ tick, ch, note: a, vel: v, on: true });
+          else if (hi === 0x80 || hi === 0x90) raw.push({ tick, ch, note: a, vel: 0, on: false });
+        }
+      }
+    }
+    p = end;
+  }
+  tempos.sort((a, b) => a.tick - b.tick);
+  // tick -> seconds via tempo map
+  const seg = []; let acc = 0;
+  tempos.forEach((t, i) => {
+    if (i) acc += (t.tick - tempos[i - 1].tick) * tempos[i - 1].uspq / 1e6 / div;
+    seg.push({ tick: t.tick, sec: acc, uspq: t.uspq });
+  });
+  const toSec = tick => { let s = seg[0]; for (const x of seg) { if (x.tick <= tick) s = x; else break; } return s.sec + (tick - s.tick) * s.uspq / 1e6 / div; };
+  raw.sort((a, b) => a.tick - b.tick || a.on - b.on); // offs before ons at same tick
+  const open = new Map(), notes = [];
+  for (const e of raw) {
+    const k = e.ch * 128 + e.note;
+    if (e.on) { const s = open.get(k) || []; s.push(e); open.set(k, s); }
+    else { const s = open.get(k); if (s && s.length) { const o = s.shift(); notes.push({ t: toSec(o.tick), end: toSec(e.tick), note: o.note, vel: o.vel, ch: o.ch }); } }
+  }
+  for (const s of open.values()) for (const o of s) { const t = toSec(o.tick); notes.push({ t, end: t + 0.5, note: o.note, vel: o.vel, ch: o.ch }); }
+  notes.sort((a, b) => a.t - b.t);
+  if (!notes.length) throw new Error("No notes found in this file");
+  return { notes, duration: Math.max(...notes.map(n => n.end)) };
+}
+// ---------- keyboard geometry: the ONE source of truth for keys and falling bars ----------
+const LO = 60, HI = 72;                       // C4 .. C5 (MIDI)
+const WHITE_PC = [0, 2, 4, 5, 7, 9, 11, 12];  // 8 white keys: C D E F G A B C
+const isBlack = n => [1, 3, 6, 8, 10].includes(n % 12);
+const BLACK_FRAC = 0.62, GAP = 2;             // black width as fraction of white; gap px (device) between bars/keys
+let W = 0, H = 0, dpr = 1, kbTop = 0;
+// x-range [x0,x1) in device pixels, integer-snapped, for a MIDI note. Same result for key and bar.
+function keyX(n) {
+  const w = W / 8;
+  if (!isBlack(n)) {
+    const i = WHITE_PC.indexOf(n - 60);
+    return [Math.round(i * w) + GAP / 2, Math.round((i + 1) * w) - GAP / 2];
+  }
+  const i = WHITE_PC.indexOf(n - 60 - 1);     // white key just below; black sits on its right edge
+  const c = Math.round((i + 1) * w), half = Math.round(w * BLACK_FRAC / 2);
+  return [c - half, c + half];
+}
+function resize() {
+  dpr = window.devicePixelRatio || 1;
+  const cv = $("cv");
+  cv.width = W = Math.round(innerWidth * dpr); cv.height = H = Math.round(innerHeight * dpr);
+  kbTop = Math.round(H * 0.74);
+}
+addEventListener("resize", resize);
+
+// ---------- songs ----------
+const mk = (seq, bpm) => { const s = 60 / bpm; return seq.map(([n, b, d], i) => ({ t: b * s, end: (b + d) * s - 0.03, note: n, vel: 90 })); };
+const ODE = [64,64,65,67,67,65,64,62,60,60,62,64,64,62,62, 64,64,65,67,67,65,64,62,60,60,62,64,62,60,60,
+             62,62,64,60,62,64,65,64,60,62,64,65,64,62,60,62,55];
+const SONGS = {
+  ode: (() => { let b = 0; const q = []; ODE.forEach((n, i) => { const long = [14,29,45].includes(i); const d = long ? 1.5 : [15,30,46].includes(i) ? 0.5 : 1; q.push([n, b, d]); b += d; }); return { notes: mk(q, 100), duration: b * 0.6 + 1 }; })(),
+  scale: (() => { const n = [60,62,64,65,67,69,71,72,71,69,67,65,64,62,60,61,63,66,68,70]; return { notes: mk(n.map((x, i) => [x, i, 0.9]), 90), duration: n.length * 0.667 + 1 }; })(),
+};
+let song = SONGS.ode, view = [];
+function prepare() {
+  const fold = $("oor").value === "fold";
+  view = [];
+  for (const n of song.notes) {
+    let p = n.note;
+    if (p < LO || p > HI) {
+      if (!fold) continue;
+      p = LO + ((p - LO) % 12 + 12) % 12;
+      if (p === LO && n.note > HI) p = HI;
+    }
+    view.push({ ...n, p });
+  }
+}
+
+// ---------- audio ----------
+let ctx = null, master = null;
+function ensureAudio() {
+  if (ctx) { if (ctx.state === "suspended") ctx.resume(); return; }
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  master = ctx.createGain(); master.gain.value = 0.7; master.connect(ctx.destination);
+}
+function voice(note, vel, when, dur) {
+  const f = 440 * Math.pow(2, (note - 69) / 12), peak = Math.pow(vel / 127, 1.4) * 0.3;
+  const g = ctx.createGain(); g.connect(master);
+  const os = [[1, 1, "triangle"], [2, 0.35, "sine"], [3, 0.15, "sine"]].map(([m, a, ty]) => {
+    const o = ctx.createOscillator(), og = ctx.createGain(); o.type = ty; o.frequency.value = f * m; og.gain.value = a; o.connect(og); og.connect(g); o.start(when); return o; });
+  const off = when + Math.max(0.08, dur);
+  g.gain.setValueAtTime(0.0001, when); g.gain.linearRampToValueAtTime(peak, when + 0.005);
+  g.gain.setTargetAtTime(peak * 0.3, when + 0.005, 0.4); g.gain.setTargetAtTime(0.0001, off, 0.04);
+  os.forEach(o => o.stop(off + 0.3));
+}
+
+// ---------- transport ----------
+let playing = false, pos = -2, last = 0, nextIdx = 0;   // 2 s lead-in so the first notes fall in
+const live = new Map();                                  // notes held on a real keyboard
+const speed = () => +$("speed").value, fall = () => +$("fall").value;
+function seek(t) { pos = t; nextIdx = view.findIndex(n => n.t >= t); if (nextIdx < 0) nextIdx = view.length; }
+function setPlaying(p) {
+  playing = p; $("play").textContent = p ? "Pause" : "Play";
+  if (p) { if ($("snd").checked) ensureAudio(); last = performance.now(); }
+  showBar();
+}
+$("play").onclick = () => setPlaying(!playing);
+$("restart").onclick = () => { seek(-2); setPlaying(true); };
+$("song").onchange = () => { song = SONGS[$("song").value]; prepare(); seek(-2); };
+$("oor").onchange = () => { prepare(); seek(pos); };
+$("file").onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try { song = parseMidi(await f.arrayBuffer()); $("msg").textContent = f.name; prepare(); seek(-2); setPlaying(true); }
+  catch (x) { $("msg").textContent = x.message; }
+};
+addEventListener("keydown", e => { if (e.code === "Space") { e.preventDefault(); setPlaying(!playing); } });
+
+// auto-hide the toolbar while casting; tap anywhere to bring it back
+let hideT = 0;
+function showBar() { $("bar").classList.remove("hide"); clearTimeout(hideT); if (playing) hideT = setTimeout(() => $("bar").classList.add("hide"), 3000); }
+$("cv").addEventListener("pointerdown", () => $("bar").classList.contains("hide") ? showBar() : (playing && $("bar").classList.add("hide")));
+
+// optional: real MIDI keyboard highlights keys too
+$("mon").onchange = async () => {
+  if (!$("mon").checked) return;
+  if (!navigator.requestMIDIAccess) { $("msg").textContent = "Web MIDI needs Chrome/Edge on the Mac"; $("mon").checked = false; return; }
+  const acc = await navigator.requestMIDIAccess();
+  acc.inputs.forEach(i => i.onmidimessage = m => {
+    const [s, n, v] = m.data, hi = s & 0xf0;
+    if (hi === 0x90 && v > 0) live.set(n, performance.now()); else if (hi === 0x80 || hi === 0x90) live.delete(n);
+  });
+};
+
+// ---------- drawing ----------
+const COL = { w: "#5eead4", b: "#2dd4bf", hit: "#fde68a" };
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = (now - last) / 1000; last = now;
+  if (playing) {
+    pos += dt * speed();
+    if (ctx && $("snd").checked) {
+      while (nextIdx < view.length && view[nextIdx].t <= pos + 0.1) { const n = view[nextIdx++]; voice(n.p, n.vel, ctx.currentTime + Math.max(0, (n.t - pos) / speed()), (n.end - n.t) / speed()); }
+    } else while (nextIdx < view.length && view[nextIdx].t <= pos) nextIdx++;
+    if (pos > song.duration + 1) setPlaying(false);
+  }
+  const g = cv.getContext("2d"), win = fall(), pps = kbTop / win;   // device px per second
+  g.fillStyle = "#0c181b"; g.fillRect(0, 0, W, H);
+  // lane guides: one per white key, exactly the key's width
+  g.fillStyle = "#ffffff08";
+  for (let i = 0; i < 8; i += 2) { const [a, b] = keyX(60 + WHITE_PC[i]); g.fillRect(a - GAP / 2, 0, b - a + GAP, kbTop); }
+  const active = new Set(live.keys());
+  // falling bars (white first, black on top), clipped at the keyboard top
+  g.save(); g.beginPath(); g.rect(0, 0, W, kbTop); g.clip();
+  for (const blk of [false, true]) for (const n of view) {
+    if (isBlack(n.p) !== blk) continue;
+    const y1 = kbTop - (n.t - pos) * pps, y0 = kbTop - (n.end - pos) * pps;
+    if (y1 < 0 || y0 > kbTop) continue;
+    const [x0, x1] = keyX(n.p), top = Math.min(y0, y1 - 6 * dpr);
+    const on = n.t <= pos && n.end >= pos; if (on) active.add(n.p);
+    g.fillStyle = on ? COL.hit : blk ? COL.b : COL.w;
+    g.beginPath(); g.roundRect(x0, top, x1 - x0, y1 - top - GAP, 6 * dpr); g.fill();
+  }
+  g.restore();
+  // keyboard: white keys then black keys, same keyX()
+  const kh = H - kbTop;
+  for (const blk of [false, true]) for (let n = LO; n <= HI; n++) {
+    if (isBlack(n) !== blk) continue;
+    const [x0, x1] = keyX(n), h = blk ? kh * 0.62 : kh, lit = active.has(n);
+    g.fillStyle = lit ? COL.hit : blk ? "#111" : "#f4f4f0";
+    g.beginPath(); g.roundRect(x0, kbTop, x1 - x0, h, [0, 0, 8 * dpr, 8 * dpr]); g.fill();
+    if (blk) { g.strokeStyle = "#000"; g.lineWidth = dpr; g.stroke(); }
+    if (n === 60 || n === 72) { g.fillStyle = "#555"; g.font = `${14 * dpr}px -apple-system,sans-serif`; g.textAlign = "center"; g.fillText(n === 60 ? "C4" : "C5", (x0 + x1) / 2, H - 14 * dpr); }
+  }
+  g.fillStyle = "#b9efdf"; g.fillRect(0, kbTop - 2 * dpr, W, 2 * dpr);   // hit line
+}
+resize(); prepare(); seek(-2); last = performance.now(); requestAnimationFrame(frame); showBar();
+</script></body></html>
