@@ -76,6 +76,61 @@ median, never the printed tempo. The EN-augmented mistake-region annotations did
 WAV timeline well enough to score against (they appear to follow the dataset's MIDI, not the audio),
 so that comparison is inconclusive.
 
+## Real-data results for audio, noise, feedback and live (2026-10-24 evening)
+
+Run with `testing/datasets/audio_eval.py`. Data: six MAESTRO concert recordings pulled with
+`fetch_maestro.py` (real Disklavier audio with the piano's own MIDI), real background noise from DEMAND
+(living room with people talking, café), and seven ABRSM grade 1–2 student performances with every
+mistake hand-labelled (`scoreinformed-midi`: 95 skipped notes, 96 extra notes).
+
+**Audio → MIDI** (`audio_eval.py transcribe`, note F1, onset within 50 ms):
+
+| Noise | Transkun | Basic Pitch | Cleaner, SI-SNR before → after |
+| --- | --- | --- | --- |
+| none | 0.98 | 0.73 | — |
+| 20 dB | 0.98 | 0.72 | 17.7 → 17.6 dB (left alone) |
+| 10 dB | 0.96 | 0.65 | 7.7 → 11.7 dB |
+| 5 dB | 0.90 | 0.53 | 2.7 → 7.1 dB |
+| 0 dB | 0.85 | 0.40 | −2.3 → 1.6 dB |
+
+Transkun: 0.09 s of compute per second of audio. Basic Pitch: 0.007. Cleaner: 0.008. Cleaning gains up to
++0.04 F1 for Basic Pitch in heavy noise and changes nothing for Transkun, so it runs only in front of Basic Pitch.
+
+**Feedback against the score, real student mistakes** (`audio_eval.py real`):
+
+| Input | Mistakes caught | Reported mistakes that are real | Confident findings only |
+| --- | --- | --- | --- |
+| MIDI keyboard | 190/191 (99%) | 99% | same |
+| audio, quiet room | 190/191 (99%) | 98% | 98% |
+| audio, 20 dB conversation | 190/191 (99%) | 95% | 98% |
+| audio, 10 dB conversation | 189/191 (99%) | 65% | 82% (187/191 caught) |
+| audio, 5 dB conversation | 183/191 (96%) | 50% | 73% |
+| audio, 10 dB café | 189/191 (99%) | 96% | — |
+
+Started at 75% caught / 60% real (MIDI). Fixes that got it here: the overtone filter no longer deletes real keys
+for keyboard or Transkun input; runs played a step off are re-read as wrong notes in place (robust two-bar
+timeline, accepted only with a skipped note at one end and an extra at the other); extras far quieter than the
+surrounding playing are treated as room noise; extras that don't fit the music are marked "possibly background
+noise" at low confidence. Background conversation is the remaining weak spot: speech becomes notes in the
+G3–G#4 range. Planted-mistake check on expert ASAP performances: 40/40, no new false alarms.
+
+**Live** (`audio_eval.py live` / `livefeedback`, the browser's own LiveNoteStream and LiveScoreFollower):
+
+- Latency from key press to mark: median 166–190 ms, 90th percentile under 300 ms. Live model call: 12 ms
+  per window (Transkun would take 1.2 s per window, too slow for live, so it runs at Finish).
+- What the practice screen paints on student pieces:
+
+| Input | Correct notes lit | Mistakes flagged as they happen | Live flags that are real |
+| --- | --- | --- | --- |
+| USB keyboard | 98% | 86% | 80% (21 false over 1389 correct notes) |
+| mic, quiet room | 75% | 36% | 63% |
+| mic, 10 dB conversation | 79% | 41% | 80% |
+
+Two follower bugs fixed on the way (both made it fall one chord behind after a mistake; regression tests in
+`live-matcher.test.cjs`); the microphone now looks two onsets ahead instead of five. Live mic marks are limited
+by Basic Pitch (octave errors, missed chord tones); the full review at Finish (Transkun, table above) is the
+authoritative one.
+
 ## Dataset catalog (researched 2026-10-24)
 
 Verified links are ones that answered HTTP 200 during the research pass. NC licences are fine for a

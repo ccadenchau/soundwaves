@@ -1,3 +1,8 @@
+**Evening update (uncommitted, not pushed):** real-data evaluation in `testing/datasets/audio_eval.py` (results in
+`testing/datasets/README.md`); feedback fixes in `pianocoach/report.py` (overtone modes, shifted runs, room-noise
+handling); live follower fixes in `pianocoach-ui/live-matcher.js`; piano mode for `audio_cleaner`; `/convert`
+(audio → MIDI, no sheet music) and `/upload` (sheet music). `./check.sh` passes.
+
 **Testing:** `./run.sh` then open http://127.0.0.1:5001/test, or `./check.sh` for everything. See `TESTING.md`.
 
 # Review of Codex's live practice work + branch push — Claude, 2026-10-24 ~16:00
