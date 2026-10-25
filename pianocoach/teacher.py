@@ -223,7 +223,17 @@ def teacher_feedback(alignment, cache_dir, title='', force=False):
         saved = json.loads(cache.read_text(encoding='utf-8'))
         if saved.get('digest') == digest:
             return dict(saved['feedback'], written_by=saved.get('written_by', model))
-    feedback = _ask_claude(payload, model) if which == 'claude' else _ask(payload, _key(), model)
+    try:
+        feedback = _ask_claude(payload, model) if which == 'claude' else _ask(payload, _key(), model)
+    except FeedbackUnavailable:
+        if which == 'claude' and has_gemini():
+            which, model = 'gemini', (os.environ.get('GEMINI_MODEL') or GEMINI_MODEL)
+            feedback = _ask(payload, _key(), model)
+        elif which == 'gemini' and has_claude():
+            which, model = 'claude', CLAUDE_MODEL
+            feedback = _ask_claude(payload, model)
+        else:
+            raise
     cache.write_text(json.dumps(dict(digest=digest, written_by=model, feedback=feedback), indent=2) + '\n', encoding='utf-8')
     return dict(feedback, written_by=model)
 
@@ -259,8 +269,20 @@ def bar_notes(alignment, cache_dir, title='', force=False):
         saved = json.loads(cache.read_text(encoding='utf-8'))
         if saved.get('digest') == digest:
             return dict(bars=saved['bars'], written_by=saved.get('written_by', model))
-    data = (_ask_claude(payload, model, BAR_SYSTEM, BAR_SCHEMA) if which == 'claude'
-            else _ask(payload, _key(), model, BAR_SYSTEM, BAR_SCHEMA))
+    try:
+        data = (_ask_claude(payload, model, BAR_SYSTEM, BAR_SCHEMA) if which == 'claude'
+                else _ask(payload, _key(), model, BAR_SYSTEM, BAR_SCHEMA))
+    except FeedbackUnavailable:
+        # One model out of quota must not blank the table: the other one writes the lines, and the
+        # caption on the page says which did.
+        if which == 'gemini' and has_claude():
+            which, model = 'claude', CLAUDE_MODEL
+            data = _ask_claude(payload, model, BAR_SYSTEM, BAR_SCHEMA)
+        elif which == 'claude' and has_gemini():
+            which, model = 'gemini', (os.environ.get('GEMINI_MODEL') or GEMINI_MODEL)
+            data = _ask(payload, _key(), model, BAR_SYSTEM, BAR_SCHEMA)
+        else:
+            raise
     bars = {str(int(item['bar'])): str(item['note']).strip() for item in data.get('bars', []) if item.get('note')}
     cache.write_text(json.dumps(dict(digest=digest, written_by=model, bars=bars), indent=2) + '\n', encoding='utf-8')
     return dict(bars=bars, written_by=model)
