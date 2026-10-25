@@ -17,6 +17,9 @@
       const bpm = options.bpm === undefined ? 120 : options.bpm;
       if (!finite(bpm) || bpm <= 0) throw new TypeError('Score tempo must be positive.');
       this.input = options.input || 'midi';
+      // How many onsets ahead a skip may land. Microphone detections include stray notes that can
+      // match a later onset by chance, so the microphone looks less far ahead than a keyboard.
+      this.lookahead = options.lookahead ?? (this.input === 'mic' ? 2 : 5);
       if (!['midi', 'mic'].includes(this.input)) throw new TypeError('Input must be midi or mic.');
       const ids = new Set();
       this.notes = scoreNotes.map(note => {
@@ -90,10 +93,15 @@
       return this.available(index).some(note => pitches.has(note.pitch));
     }
 
+    overlap(attack, index) {
+      const pitches = new Set(attack.map(note => note.pitch));
+      return new Set(this.available(index).filter(note => pitches.has(note.pitch)).map(note => note.pitch)).size;
+    }
+
     findAhead(attack, start) {
       if (!this.groups[start]) return -1;
       const firstBeat = this.groups[start].beat;
-      for (let index = start; index < Math.min(this.groups.length, start + 5); index++) {
+      for (let index = start; index < Math.min(this.groups.length, start + this.lookahead); index++) {
         if (this.groups[index].beat - firstBeat > 8) break;
         if (this.matches(attack, index)) return index;
       }
@@ -102,9 +110,32 @@
 
     process(attack) {
       if (this.cursor >= this.groups.length) return;
+      // A lookahead backed by a chord (two or more matching tones) is strong evidence the student
+      // skipped ahead. A following note that fits right after it confirms the jump, even if the same
+      // pitch also fits the skipped onset; otherwise the follower falls one onset behind for good.
+      if (this.jump && this.jump.strength >= 2 && !this.matches(attack, this.jump.index)) {
+        const next = this.findAhead(attack, this.jump.index + 1);
+        if (next !== -1) {
+          const jump = this.jump;
+          this.jump = null;
+          for (const buffered of jump.attacks) this.commit(buffered, jump.index);
+          this.commit(attack, next);
+          return;
+        }
+      }
       // The next expected onset always wins over an unconfirmed lookahead.
       // C, (inserted F), D must not skip D/E just because F exists later.
       if (this.matches(attack, this.cursor)) {
+        // A chord already partly heard keeps a leftover slot open (a wrong or missed tone). If the new
+        // attack fits the next onset better than that leftover, it is the next chord: giving its
+        // shared pitch to the old slot would leave the follower one chord behind from then on.
+        const partly = this.groups[this.cursor].notes.some(note => this.matched.has(note.id));
+        if (partly && this.cursor + 1 < this.groups.length &&
+            this.overlap(attack, this.cursor + 1) > this.overlap(attack, this.cursor)) {
+          this.jump = null;
+          this.commit(attack, this.cursor + 1);
+          return;
+        }
         this.jump = null;
         this.commit(attack, this.cursor);
         return;
@@ -136,7 +167,7 @@
       }
       const ahead = this.findAhead(attack, this.cursor + 1);
       if (ahead !== -1) {
-        this.jump = {index: ahead, attacks: [attack]};
+        this.jump = {index: ahead, attacks: [attack], strength: this.overlap(attack, ahead)};
         attack.forEach(note => { note.kind = 'pending'; });
       } else {
         this.propose(attack, this.cursor);

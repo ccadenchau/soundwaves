@@ -194,3 +194,32 @@ test('invalid score and event data fail with a useful error', () => {
   assert.throws(() => f.feed([{pitch: 128, time: 0}]), /MIDI pitch/);
   assert.throws(() => f.feed([{pitch: 60, time: -1}]), /nonnegative time/);
 });
+
+test('a wrong chord tone does not leave the follower one chord behind', () => {
+  // Score: [D4 E4 A3] then [A4 A3 E4 C4] then [C5]. The student plays B3 instead of A3 in the first chord.
+  const score = [
+    {id: 'd4', pitch: 62, beat: 0, duration: 1}, {id: 'e4', pitch: 64, beat: 0, duration: 1}, {id: 'a3a', pitch: 57, beat: 0, duration: 1},
+    {id: 'a4', pitch: 69, beat: 1, duration: 1}, {id: 'a3b', pitch: 57, beat: 1, duration: 1}, {id: 'e4b', pitch: 64, beat: 1, duration: 1}, {id: 'c4', pitch: 60, beat: 1, duration: 1},
+    {id: 'c5', pitch: 72, beat: 2, duration: 1}];
+  const f = new LiveScoreFollower(score, {bpm: 60, input: 'midi'});
+  f.feed([{pitch: 62, time: 0}, {pitch: 64, time: 0.01}, {pitch: 59, time: 0.02}]);
+  f.feed([{pitch: 69, time: 1}, {pitch: 57, time: 1.01}, {pitch: 64, time: 1.01}, {pitch: 60, time: 1.02}]);
+  f.feed([{pitch: 72, time: 2}]);
+  for (const id of ['a4', 'a3b', 'e4b', 'c4', 'c5']) assert.equal(f.marks.get(id)?.kind, 'matched', id);
+  assert.equal(f.marks.get('a3a')?.kind, 'pitch');
+});
+
+test('a skipped single note does not pull the follower back after a chord-confirmed jump', () => {
+  // Score: C5 | [D5 A3 D4 E4] | C5 | D5. The student skips the first C5.
+  const score = [
+    {id: 'c5a', pitch: 72, beat: 0, duration: 1},
+    {id: 'd5', pitch: 74, beat: 1, duration: 1}, {id: 'a3', pitch: 57, beat: 1, duration: 1}, {id: 'd4', pitch: 62, beat: 1, duration: 1}, {id: 'e4', pitch: 64, beat: 1, duration: 1},
+    {id: 'c5b', pitch: 72, beat: 2, duration: 1}, {id: 'd5b', pitch: 74, beat: 3, duration: 1}];
+  const f = new LiveScoreFollower(score, {bpm: 60, input: 'midi'});
+  f.feed([{pitch: 74, time: 1}, {pitch: 57, time: 1.01}, {pitch: 62, time: 1.01}, {pitch: 64, time: 1.02}]);
+  f.feed([{pitch: 72, time: 2}]);
+  f.feed([{pitch: 74, time: 3}]);
+  for (const id of ['d5', 'a3', 'd4', 'e4', 'c5b', 'd5b']) assert.equal(f.marks.get(id)?.kind, 'matched', id);
+  assert.equal(f.marks.get('c5a')?.kind, 'missing');
+});
+
