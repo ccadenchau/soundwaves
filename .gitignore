@@ -15,3 +15,4 @@ venv/
 /testing/datasets/results_long/
 /pianocoach/pieces/upload-*
 /testing/datasets/results_audio/
+testing/datasets/results_easy/
