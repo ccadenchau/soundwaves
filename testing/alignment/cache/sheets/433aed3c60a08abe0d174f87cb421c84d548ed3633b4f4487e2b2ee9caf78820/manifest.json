@@ -1,0 +1,10 @@
+{
+  "signature": "20eef2eae0c3505ad0c8f893558e1f04a031ea894c24f8d6ea0698cf6444f1e7",
+  "source_sha256": "2597fe13842b254b32ac89606f0a8190025469a1fc173bb4033f60670882a95b",
+  "hashes": {
+    "converted/reference/reference.mid": "e41872d0ec5f5c1203cdaf37ac319c88ed3672b45b4438b05e708ac64ccc839a",
+    "converted/reference/reference.json": "db9d8ae3e4a61563d9912b84ccfa2ee506c541c4f2b6abbe4fa8e8a4a4d8e7e8",
+    "converted/reference/reference.musicxml": "aa0120621b319d5d6f1c4f6997f22c8018e5d8894b259bb1c01a4e4c90b2a8ad",
+    "converted/reference/repairs.json": "3fadc0c0311ff2bd5ad3faf82aa0cd4c3fb176c590b390499a711d8fdda45da5"
+  }
+}

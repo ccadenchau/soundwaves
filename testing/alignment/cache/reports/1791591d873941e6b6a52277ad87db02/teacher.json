@@ -1,0 +1,43 @@
+{
+  "digest": "3ddddd30bb08cdcc1c2b53c1c03e8086fc73902e656cea6d89f95334479c4f58",
+  "feedback": {
+    "summary": "You started the piece with steady rhythm and very accurate notes through the opening six bars. The take ran into trouble after bar 10 where many notes dropped out, so your main priority next is to secure that transition at a manageable tempo.",
+    "strengths": [
+      "Clean note reading and accuracy across the first six bars.",
+      "A steady, dependable pulse through bars 1 to 4.",
+      "Good control of dynamics with a noticeable decrescendo in bar 8."
+    ],
+    "focus_areas": [
+      {
+        "title": "Rebuilding the transition into the middle section",
+        "bars": "bars 11-13",
+        "what_happened": "Most of the notes dropped out here after a strong start, which usually means the hand shifts or chord patterns are not settled yet.",
+        "tips": [
+          "Practise bar 11 hands separately at a very slow tempo until the new hand shape feels natural.",
+          "Loop the final beat of bar 10 into the first beat of bar 11 four or five times in a row without stopping.",
+          "Say the note names aloud before playing them to give your fingers clear direction."
+        ]
+      },
+      {
+        "title": "Sustaining notes for their full value",
+        "bars": "bars 5-6 and 9-10",
+        "what_happened": "You found all the correct notes, but released them after less than half their written duration, making the phrase sound clipped.",
+        "tips": [
+          "Keep your finger grounded in the key until the exact moment the next note begins.",
+          "Count beats aloud to keep yourself from releasing early.",
+          "Keep your wrist relaxed rather than bouncing away from the keys."
+        ]
+      },
+      {
+        "title": "Smoothing the hesitation and checking pitches",
+        "bars": "bars 7-8",
+        "what_happened": "You dragged the pulse noticeably in bar 7 with a few hesitation notes, and played C instead of B twice in bar 8.",
+        "tips": [
+          "Practise bars 7 and 8 with a metronome clicking on every beat at a slow, comfortable speed.",
+          "Double-check your fingering in bar 8 so your hand naturally sits over the B instead of stretching up to C."
+        ]
+      }
+    ],
+    "practice_plan": "Start your next practice session at bar 10 and work hands separately through bar 12 at half tempo until the notes are reliable. Then, play bars 5 through 8 with a metronome, concentrating on holding every note for its full count and keeping your wrist relaxed."
+  }
+}

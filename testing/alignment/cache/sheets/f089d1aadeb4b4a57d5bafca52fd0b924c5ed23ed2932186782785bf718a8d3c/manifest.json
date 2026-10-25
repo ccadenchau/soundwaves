@@ -1,0 +1,10 @@
+{
+  "signature": "e8456427c2309dbbe62d42733bc727d057eb2a353ba40ccc821545863c1a14c7",
+  "source_sha256": "f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075",
+  "hashes": {
+    "converted/reference/reference.mid": "f779c6c59664c4bbe38abece1f9c112a47bcac021184b8b7d924b25fa380cc67",
+    "converted/reference/reference.json": "07f19cb9d4d5ebd8ed56e1b2f79a71c5763aa03d3b30e33591b1a9a278680391",
+    "converted/reference/reference.musicxml": "8aa76113e9dc146469d139579ac71cd982749e5ec846ee69426ca44ae902d554",
+    "converted/reference/repairs.json": "173d6a72061e0e079be3686b74056763d37e1c386b32f24c841bf1c090dfb00a"
+  }
+}

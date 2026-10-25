@@ -1,0 +1,81 @@
+2026-10-24 20:12:38,886 INFO [score]                 Book.java:560  | 1 sheet in /home/alanlai/Documents/GitHub/soundwaves/pianocoach/sessions/58397eeae0024c0da49dd153129c885b/score.pdf
+2026-10-24 20:12:38,983 INFO []                 Book.java:2565 | Stored /book.xml
+2026-10-24 20:12:38,984 INFO []                 Book.java:2525 | Book stored as /home/alanlai/Documents/GitHub/soundwaves/pianocoach/sessions/58397eeae0024c0da49dd153129c885b/score/recognition/score.omr
+2026-10-24 20:12:38,985 INFO []                 Book.java:1929 | Book reaching PAGE on sheets:[#1]
+2026-10-24 20:12:38,987 INFO [score]       StepMonitoring.java:98   | LOAD
+2026-10-24 20:12:39,222 INFO [score]            SheetStub.java:1278 | Loaded image #1 2479x3508 from /home/alanlai/Documents/GitHub/soundwaves/pianocoach/sessions/58397eeae0024c0da49dd153129c885b/score.pdf
+2026-10-24 20:12:39,225 INFO [score]       StepMonitoring.java:98   | BINARY
+2026-10-24 20:12:39,518 INFO [score]       StepMonitoring.java:98   | SCALE
+2026-10-24 20:12:39,531 INFO [score]         ScaleBuilder.java:254  | Beam  guessed height: 11 -- 0.25 of [9..19] range
+2026-10-24 20:12:39,532 INFO [score]         ScaleBuilder.java:271  | Beam measured height: 10 -- 0.10 of [9..19] range at 652% of needed quorum
+2026-10-24 20:12:39,532 INFO [score]         ScaleBuilder.java:401  | Normalized black jitter: 5.00 %
+2026-10-24 20:12:39,532 INFO [score]            ScaleStep.java:65   | Scale{ interline(19,20,20) line(2,2,3) beam(10)}
+2026-10-24 20:12:39,532 INFO [score]       StepMonitoring.java:98   | GRID
+2026-10-24 20:12:39,829 INFO [score]       LinesRetriever.java:1508 | Global slope: 0.00000
+2026-10-24 20:12:39,854 INFO [score]    ClustersRetriever.java:326  | Retrieved raw line clusters: 12 of sizes [5] with interline(19,20,20)
+2026-10-24 20:12:39,957 INFO [score]            PeakGraph.java:310  | Systems: #1[1, 2] #2[3, 4] #3[5, 6] #4[7, 8] #5[9, 10] #6[11, 12]
+2026-10-24 20:12:40,149 INFO [score]        SystemManager.java:800  | 1 part along 6 systems
+2026-10-24 20:12:40,149 INFO [score]                 Book.java:543  | Created scores: [{Score 1}]
+2026-10-24 20:12:40,150 INFO [score]       StepMonitoring.java:98   | HEADERS
+2026-10-24 20:12:40,569 INFO [score]       StepMonitoring.java:98   | STEM_SEEDS
+2026-10-24 20:12:40,616 INFO [score]        StemSeedsStep.java:86   | stem(2 max:3)
+2026-10-24 20:12:40,645 INFO [score]       StepMonitoring.java:98   | BEAMS
+2026-10-24 20:12:43,246 INFO [score]       StepMonitoring.java:98   | LEDGERS
+2026-10-24 20:12:43,390 INFO [score]       StepMonitoring.java:98   | HEADS
+2026-10-24 20:12:47,095 INFO [score]        HeadSeedTally.java:235  | Scale information: HeadSeeds{NOTEHEAD_BLACK[L:-0.5,R:-0.7]}
+2026-10-24 20:12:47,096 INFO [score]       StepMonitoring.java:98   | STEMS
+2026-10-24 20:12:47,767 INFO [score]       StepMonitoring.java:98   | REDUCTION
+2026-10-24 20:12:47,848 INFO [score]        ReductionStep.java:105  | Stems free length median value: 69 pixels, 3.5 interlines
+2026-10-24 20:12:47,851 INFO [score]       StepMonitoring.java:98   | CUE_BEAMS
+2026-10-24 20:12:47,852 INFO [score]         CueBeamsStep.java:81   | Step CUE_BEAMS is skipped because small heads switch is off
+2026-10-24 20:12:47,852 INFO [score]       StepMonitoring.java:98   | TEXTS
+2026-10-24 20:12:47,943 WARN [score]         TesseractOCR.java:335  | The collection of supported languages is empty
+2026-10-24 20:12:47,944 INFO [score]              OcrUtil.java:106  | Missing support for 'eng' language(s)
+2026-10-24 20:12:47,948 INFO [score]       StepMonitoring.java:98   | MEASURES
+2026-10-24 20:12:47,956 INFO [score]                 Page.java:307  | 26 raw measures: [4 in system#1, 5 in system#2, 5 in system#3, 3 in system#4, 4 in system#5, 5 in system#6]
+2026-10-24 20:12:47,956 INFO [score]       StepMonitoring.java:98   | CHORDS
+2026-10-24 20:12:47,968 INFO [score]       StepMonitoring.java:98   | CURVES
+2026-10-24 20:12:48,526 INFO [score]         SlursBuilder.java:240  | Slurs: 32
+2026-10-24 20:12:48,543 INFO [score]      SegmentsBuilder.java:155  | Segments: 41
+2026-10-24 20:12:48,547 INFO [score]       StepMonitoring.java:98   | SYMBOLS
+2026-10-24 20:12:49,123 INFO [score]       StepMonitoring.java:98   | LINKS
+2026-10-24 20:12:49,140 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10282{(0.200) staff:4 QUINDICESIMA} at java.awt.Point[x=144,y=1352]
+2026-10-24 20:12:49,149 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10415{(0.200) staff:5 QUINDICESIMA} at java.awt.Point[x=144,y=1352]
+2026-10-24 20:12:49,150 INFO [score]             KeyInter.java:1198 | No effective key before AlterInter#10523{(0.140) staff:6 NATURAL pitch:-1.0}
+2026-10-24 20:12:49,160 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10551{(0.719) staff:8 OTTAVA BASSA} at java.awt.Point[x=153,y=2315]
+2026-10-24 20:12:49,160 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10553{(0.341) staff:8 QUINDICESIMA} at java.awt.Point[x=144,y=2315]
+2026-10-24 20:12:49,160 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10566{(0.152) staff:8 OTTAVA BASSA} at java.awt.Point[x=1210,y=2329]
+2026-10-24 20:12:49,160 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10576{(0.126) staff:8 OTTAVA ALTA} at java.awt.Point[x=2061,y=2035]
+2026-10-24 20:12:49,167 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10637{(0.719) staff:9 OTTAVA ALTA} at java.awt.Point[x=153,y=2315]
+2026-10-24 20:12:49,168 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10638{(0.341) staff:9 QUINDICESIMA} at java.awt.Point[x=144,y=2315]
+2026-10-24 20:12:49,168 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10641{(0.312) staff:10 VENTIDUESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 20:12:49,168 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10642{(0.154) staff:10 QUINDICESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 20:12:49,168 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10644{(0.619) staff:10 VENTIDUESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 20:12:49,168 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10648{(0.313) staff:10 VENTIDUESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 20:12:49,168 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10661{(0.227) staff:10 OTTAVA BASSA} at java.awt.Point[x=670,y=2821]
+2026-10-24 20:12:49,176 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10728{(0.312) staff:11 VENTIDUESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 20:12:49,176 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10729{(0.154) staff:11 QUINDICESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 20:12:49,176 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10730{(0.619) staff:11 VENTIDUESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 20:12:49,176 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10731{(0.313) staff:11 VENTIDUESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 20:12:49,177 INFO [score]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10737{(0.143) staff:12 QUINDICESIMA ALTA} at java.awt.Point[x=329,y=2989]
+2026-10-24 20:12:49,177 INFO [score]             KeyInter.java:1198 | No effective key before AlterInter#10775{(0.797) staff:11 NATURAL pitch:-2.0}
+2026-10-24 20:12:49,185 INFO [score]       StepMonitoring.java:98   | RHYTHMS
+2026-10-24 20:12:49,231 INFO [score]                Voice.java:257  | Measure{#20} Voice{#2 excess:1/8} too long
+2026-10-24 20:12:49,232 INFO [score]          StackRhythm.java:224  | S5 MeasureStack#20 no correct rhythm
+2026-10-24 20:12:49,239 INFO [score]                Voice.java:257  | Measure{#23} Voice{#2 excess:1/8} too long
+2026-10-24 20:12:49,239 INFO [score]          StackRhythm.java:224  | S6 MeasureStack#23 no correct rhythm
+2026-10-24 20:12:49,241 INFO [score]       StepMonitoring.java:98   | PAGE
+2026-10-24 20:12:49,246 INFO [score]                Voice.java:257  | Measure{#20} Voice{#2 excess:1/8} too long
+2026-10-24 20:12:49,246 INFO [score]                Voice.java:257  | Measure{#23} Voice{#2 excess:1/8} too long
+2026-10-24 20:12:49,247 INFO [score]                 Book.java:2584 | Book{score} storing
+2026-10-24 20:12:49,311 INFO [score]                 Book.java:2565 | Stored /book.xml
+2026-10-24 20:12:49,417 INFO [score]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2026-10-24 20:12:50,026 INFO [score]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2026-10-24 20:12:50,026 INFO [score]                 Book.java:2525 | Book stored as /home/alanlai/Documents/GitHub/soundwaves/pianocoach/sessions/58397eeae0024c0da49dd153129c885b/score/recognition/score.omr
+2026-10-24 20:12:50,027 INFO [score]            SheetStub.java:1655 | Sheet disposed
+2026-10-24 20:12:50,055 INFO [score]                 Book.java:2050 | End of Stub#1
+2026-10-24 20:12:50,056 INFO [score]                 Book.java:2057 | End of Book{score}
+2026-10-24 20:12:50,315 INFO [score]            SheetStub.java:1000 | Loaded /sheet#1/sheet#1.xml
+2026-10-24 20:12:50,494 INFO [score]      PartwiseBuilder.java:2707 | Exporting sheet(s): [#1]
+2026-10-24 20:12:50,563 INFO [score]        ScoreExporter.java:164  | Score score exported to /home/alanlai/Documents/GitHub/soundwaves/pianocoach/sessions/58397eeae0024c0da49dd153129c885b/score/recognition/score.mxl
+2026-10-24 20:12:50,599 INFO [score]                Score.java:181  | Closing {Score 1}

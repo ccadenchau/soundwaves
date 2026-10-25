@@ -1,0 +1,654 @@
+{
+  "schema_version": 1,
+  "source": "/home/alanlai/Documents/GitHub/soundwaves/testing/alignment/cache/inputs/cbddcddbc90f3de73f6eac1881b9d5150db29728246b11686b7c035ca5f3c1d3.mp3",
+  "source_type": "audio",
+  "source_sha256": "cbddcddbc90f3de73f6eac1881b9d5150db29728246b11686b7c035ca5f3c1d3",
+  "time_unit": "seconds",
+  "duration_seconds": 4.778684807256236,
+  "notes": [
+    {
+      "id": "p000000",
+      "pitch": 33,
+      "onset": 0.05325671657919884,
+      "duration": 0.2667432762682438,
+      "velocity": 51,
+      "model_score": 0.3984375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000001",
+      "pitch": 60,
+      "onset": 0.11101778596639633,
+      "duration": 0.07898221164941788,
+      "velocity": 94,
+      "model_score": 0.7421875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000002",
+      "pitch": 24,
+      "onset": 0.12008591741323471,
+      "duration": 4.6585988898430015,
+      "velocity": 68,
+      "model_score": 0.5390625,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000003",
+      "pitch": 60,
+      "onset": 0.20187674462795258,
+      "duration": 0.8681233078241348,
+      "velocity": 80,
+      "model_score": 0.6328125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000004",
+      "pitch": 33,
+      "onset": 0.3327043652534485,
+      "duration": 1.984282910823822,
+      "velocity": 71,
+      "model_score": 0.5625,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000005",
+      "pitch": 67,
+      "onset": 0.43381527066230774,
+      "duration": 1.3461847007274628,
+      "velocity": 90,
+      "model_score": 0.7109375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000006",
+      "pitch": 79,
+      "onset": 0.4350460469722748,
+      "duration": 0.6449539959430695,
+      "velocity": 86,
+      "model_score": 0.6796875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000007",
+      "pitch": 64,
+      "onset": 0.6847521662712097,
+      "duration": 0.8752477765083313,
+      "velocity": 102,
+      "model_score": 0.8046875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000008",
+      "pitch": 76,
+      "onset": 0.6904270648956299,
+      "duration": 0.409572958946228,
+      "velocity": 85,
+      "model_score": 0.671875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000009",
+      "pitch": 69,
+      "onset": 0.8962634801864624,
+      "duration": 0.44373655319213867,
+      "velocity": 97,
+      "model_score": 0.765625,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000010",
+      "pitch": 93,
+      "onset": 0.9009801745414734,
+      "duration": 1.1590197682380676,
+      "velocity": 97,
+      "model_score": 0.765625,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000011",
+      "pitch": 91,
+      "onset": 0.9034407734870911,
+      "duration": 0.6665592789649963,
+      "velocity": 80,
+      "model_score": 0.6328125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000012",
+      "pitch": 81,
+      "onset": 0.9035666584968567,
+      "duration": 0.4364333748817444,
+      "velocity": 89,
+      "model_score": 0.703125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000013",
+      "pitch": 60,
+      "onset": 1.0761284828186035,
+      "duration": 0.4838714599609375,
+      "velocity": 94,
+      "model_score": 0.7421875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000014",
+      "pitch": 79,
+      "onset": 1.0854448080062866,
+      "duration": 0.4845552444458008,
+      "velocity": 74,
+      "model_score": 0.5859375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000015",
+      "pitch": 76,
+      "onset": 1.1056815385818481,
+      "duration": 2.52431857585907,
+      "velocity": 91,
+      "model_score": 0.71875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000016",
+      "pitch": 81,
+      "onset": 1.347612977027893,
+      "duration": 0.712386965751648,
+      "velocity": 82,
+      "model_score": 0.6484375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000017",
+      "pitch": 69,
+      "onset": 1.347649335861206,
+      "duration": 1.5523507595062256,
+      "velocity": 89,
+      "model_score": 0.703125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000018",
+      "pitch": 64,
+      "onset": 1.5651459693908691,
+      "duration": 2.104854106903076,
+      "velocity": 74,
+      "model_score": 0.5859375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000019",
+      "pitch": 83,
+      "onset": 1.5673625469207764,
+      "duration": 0.5026373863220215,
+      "velocity": 71,
+      "model_score": 0.5625,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000020",
+      "pitch": 88,
+      "onset": 1.5707049369812012,
+      "duration": 2.099295139312744,
+      "velocity": 75,
+      "model_score": 0.59375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000021",
+      "pitch": 60,
+      "onset": 1.5748778581619263,
+      "duration": 1.5651222467422485,
+      "velocity": 74,
+      "model_score": 0.5859375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000022",
+      "pitch": 57,
+      "onset": 1.5758806467056274,
+      "duration": 2.084119439125061,
+      "velocity": 65,
+      "model_score": 0.515625,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000023",
+      "pitch": 91,
+      "onset": 1.5812478065490723,
+      "duration": 0.1887521743774414,
+      "velocity": 78,
+      "model_score": 0.6171875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000024",
+      "pitch": 79,
+      "onset": 1.584656834602356,
+      "duration": 0.19534313678741455,
+      "velocity": 85,
+      "model_score": 0.671875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000025",
+      "pitch": 91,
+      "onset": 1.7837679386138916,
+      "duration": 0.5762319564819336,
+      "velocity": 87,
+      "model_score": 0.6875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000026",
+      "pitch": 86,
+      "onset": 1.7851263284683228,
+      "duration": 0.5748735666275024,
+      "velocity": 85,
+      "model_score": 0.671875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000027",
+      "pitch": 79,
+      "onset": 1.7856078147888184,
+      "duration": 0.5743920803070068,
+      "velocity": 82,
+      "model_score": 0.6484375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000028",
+      "pitch": 67,
+      "onset": 1.7860091924667358,
+      "duration": 0.5839906930923462,
+      "velocity": 92,
+      "model_score": 0.7265625,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000029",
+      "pitch": 62,
+      "onset": 2.065002679824829,
+      "duration": 1.614997386932373,
+      "velocity": 80,
+      "model_score": 0.6328125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000030",
+      "pitch": 81,
+      "onset": 2.066647529602051,
+      "duration": 0.8433525562286377,
+      "velocity": 70,
+      "model_score": 0.5546875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000031",
+      "pitch": 93,
+      "onset": 2.0722784996032715,
+      "duration": 0.2877213954925537,
+      "velocity": 69,
+      "model_score": 0.546875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000032",
+      "pitch": 90,
+      "onset": 2.072828531265259,
+      "duration": 0.2571713924407959,
+      "velocity": 94,
+      "model_score": 0.7421875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000033",
+      "pitch": 71,
+      "onset": 2.075737953186035,
+      "duration": 2.702946854070201,
+      "velocity": 88,
+      "model_score": 0.6953125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000034",
+      "pitch": 83,
+      "onset": 2.0759878158569336,
+      "duration": 1.5640122890472412,
+      "velocity": 80,
+      "model_score": 0.6328125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000035",
+      "pitch": 86,
+      "onset": 2.369396448135376,
+      "duration": 0.6406035423278809,
+      "velocity": 86,
+      "model_score": 0.6796875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000036",
+      "pitch": 91,
+      "onset": 2.37400484085083,
+      "duration": 1.055995225906372,
+      "velocity": 88,
+      "model_score": 0.6953125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000037",
+      "pitch": 79,
+      "onset": 2.374438762664795,
+      "duration": 1.0555613040924072,
+      "velocity": 86,
+      "model_score": 0.6796875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000038",
+      "pitch": 67,
+      "onset": 2.3750269412994385,
+      "duration": 1.0549731254577637,
+      "velocity": 90,
+      "model_score": 0.7109375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000039",
+      "pitch": 65,
+      "onset": 2.6502671241760254,
+      "duration": 2.1097331047058105,
+      "velocity": 90,
+      "model_score": 0.7109375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000040",
+      "pitch": 72,
+      "onset": 2.6539032459259033,
+      "duration": 0.2160966396331787,
+      "velocity": 81,
+      "model_score": 0.640625,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000041",
+      "pitch": 77,
+      "onset": 2.6589903831481934,
+      "duration": 1.1110095977783203,
+      "velocity": 77,
+      "model_score": 0.609375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000042",
+      "pitch": 89,
+      "onset": 2.6617722511291504,
+      "duration": 0.9482276439666748,
+      "velocity": 67,
+      "model_score": 0.53125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000043",
+      "pitch": 87,
+      "onset": 2.7571635246276855,
+      "duration": 0.8928365707397461,
+      "velocity": 70,
+      "model_score": 0.5546875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000044",
+      "pitch": 72,
+      "onset": 2.8793578147888184,
+      "duration": 1.8706421852111816,
+      "velocity": 72,
+      "model_score": 0.5703125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000045",
+      "pitch": 69,
+      "onset": 2.9144887924194336,
+      "duration": 1.8455114364624023,
+      "velocity": 87,
+      "model_score": 0.6875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000046",
+      "pitch": 81,
+      "onset": 2.9163739681243896,
+      "duration": 1.8336260318756104,
+      "velocity": 77,
+      "model_score": 0.609375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000047",
+      "pitch": 74,
+      "onset": 3.015068531036377,
+      "duration": 1.7636162762198593,
+      "velocity": 90,
+      "model_score": 0.7109375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000048",
+      "pitch": 86,
+      "onset": 3.016880512237549,
+      "duration": 0.5564157962799072,
+      "velocity": 77,
+      "model_score": 0.609375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000049",
+      "pitch": 60,
+      "onset": 3.1534931659698486,
+      "duration": 0.5365068912506104,
+      "velocity": 88,
+      "model_score": 0.6953125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000050",
+      "pitch": 91,
+      "onset": 3.436707019805908,
+      "duration": 0.44329309463500977,
+      "velocity": 87,
+      "model_score": 0.6875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000051",
+      "pitch": 67,
+      "onset": 3.441528558731079,
+      "duration": 0.43847155570983887,
+      "velocity": 89,
+      "model_score": 0.703125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000052",
+      "pitch": 79,
+      "onset": 3.44275164604187,
+      "duration": 0.43724846839904785,
+      "velocity": 87,
+      "model_score": 0.6875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000053",
+      "pitch": 76,
+      "onset": 3.66103458404541,
+      "duration": 1.0989656448364258,
+      "velocity": 75,
+      "model_score": 0.59375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000054",
+      "pitch": 64,
+      "onset": 3.682950735092163,
+      "duration": 1.0957340721640731,
+      "velocity": 89,
+      "model_score": 0.703125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000055",
+      "pitch": 88,
+      "onset": 3.6833791732788086,
+      "duration": 1.0953056339774276,
+      "velocity": 79,
+      "model_score": 0.625,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000056",
+      "pitch": 83,
+      "onset": 3.6851089000701904,
+      "duration": 1.0793578624725342,
+      "velocity": 74,
+      "model_score": 0.5859375,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000057",
+      "pitch": 86,
+      "onset": 3.8855695724487305,
+      "duration": 0.8790841102600098,
+      "velocity": 88,
+      "model_score": 0.6953125,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000058",
+      "pitch": 91,
+      "onset": 3.8857433795928955,
+      "duration": 0.878556489944458,
+      "velocity": 84,
+      "model_score": 0.6640625,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000059",
+      "pitch": 79,
+      "onset": 3.8863441944122314,
+      "duration": 0.8784997463226318,
+      "velocity": 86,
+      "model_score": 0.6796875,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000060",
+      "pitch": 67,
+      "onset": 3.889934539794922,
+      "duration": 0.8887502674613144,
+      "velocity": 90,
+      "model_score": 0.7109375,
+      "source": "performance",
+      "confidence": null
+    }
+  ],
+  "model": {
+    "name": "piano-transcription-crnn",
+    "checkpoint": "piano_note_pedal.pth",
+    "decoder": "bytedance-regression-postprocessor",
+    "score_meaning": "Model velocity / 128, not a calibrated correctness probability.",
+    "velocity_meaning": "Model-predicted piano velocity."
+  },
+  "config": {
+    "backend": "piano",
+    "onset_threshold": 0.45,
+    "frame_threshold": 0.3,
+    "minimum_note_length_ms": 80.0,
+    "lowest_pitch": 21,
+    "highest_pitch": 108,
+    "maximum_duration_seconds": 600.0,
+    "save_model_output": false
+  },
+  "audio": {
+    "duration_seconds": 4.778684807256236,
+    "sample_rate": 22050,
+    "channels": 1,
+    "silent": false,
+    "peak_amplitude": 0.37501558661460876,
+    "timing": "Seconds from the beginning of the supplied audio; no silence trimming.",
+    "preprocessing": "Decode, mono downmix, and resample. No denoising or gain normalization."
+  },
+  "cleanup": {
+    "discarded_events": 1,
+    "clipped_events": 6
+  },
+  "warnings": [
+    "Invalid, duplicate, or out-of-range model events were discarded; inspect raw_notes.json."
+  ],
+  "confidence_meaning": "Confidence is null: model_score is not a calibrated error probability."
+}

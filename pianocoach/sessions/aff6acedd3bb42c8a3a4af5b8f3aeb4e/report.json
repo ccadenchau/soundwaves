@@ -1,0 +1,3878 @@
+{
+  "piece": {
+    "title": "Untitled",
+    "catalog": "",
+    "composer": "Unknown",
+    "time_signature": [
+      4,
+      4
+    ],
+    "marked_bpm": 120.0,
+    "measures": 26
+  },
+  "take": {
+    "number": 1,
+    "source": "audio",
+    "bpm": 126.1,
+    "duration_seconds": 25.87
+  },
+  "notes": [
+    [
+      1,
+      1.0,
+      "G5",
+      1.5
+    ],
+    [
+      1,
+      2.5,
+      "E5",
+      0.5
+    ],
+    [
+      1,
+      3.0,
+      "C5",
+      0.5
+    ],
+    [
+      1,
+      3.5,
+      "G4",
+      0.5
+    ],
+    [
+      1,
+      4.0,
+      "G4",
+      0.5
+    ],
+    [
+      1,
+      4.5,
+      "G4",
+      0.5
+    ],
+    [
+      2,
+      1.0,
+      "G5",
+      1.5
+    ],
+    [
+      2,
+      2.5,
+      "E5",
+      0.5
+    ],
+    [
+      2,
+      3.0,
+      "C5",
+      0.25
+    ],
+    [
+      2,
+      3.25,
+      "D5",
+      0.25
+    ],
+    [
+      2,
+      3.5,
+      "E5",
+      0.25
+    ],
+    [
+      2,
+      3.75,
+      "F5",
+      0.25
+    ],
+    [
+      2,
+      4.0,
+      "G5",
+      0.25
+    ],
+    [
+      2,
+      4.25,
+      "A5",
+      0.25
+    ],
+    [
+      2,
+      4.5,
+      "B5",
+      0.25
+    ],
+    [
+      2,
+      4.75,
+      "C6",
+      0.25
+    ],
+    [
+      3,
+      1.0,
+      "B5",
+      0.5
+    ],
+    [
+      3,
+      1.5,
+      "A5",
+      0.5
+    ],
+    [
+      3,
+      2.0,
+      "A5",
+      0.5
+    ],
+    [
+      3,
+      2.5,
+      "A5",
+      0.5
+    ],
+    [
+      3,
+      3.0,
+      "B5",
+      0.25
+    ],
+    [
+      3,
+      3.25,
+      "A5",
+      0.25
+    ],
+    [
+      3,
+      3.5,
+      "G#5",
+      0.25
+    ],
+    [
+      3,
+      3.75,
+      "A5",
+      0.25
+    ],
+    [
+      3,
+      4.0,
+      "C6",
+      0.5
+    ],
+    [
+      3,
+      4.5,
+      "A5",
+      0.5
+    ],
+    [
+      4,
+      1.0,
+      "F#5",
+      0.5
+    ],
+    [
+      4,
+      1.5,
+      "G5",
+      0.5
+    ],
+    [
+      4,
+      2.0,
+      "G5",
+      0.5
+    ],
+    [
+      4,
+      2.5,
+      "G5",
+      0.5
+    ],
+    [
+      4,
+      3.0,
+      "G5",
+      1.0
+    ],
+    [
+      5,
+      1.0,
+      "D5",
+      0.5
+    ],
+    [
+      5,
+      1.0,
+      "F5",
+      0.5
+    ],
+    [
+      5,
+      1.5,
+      "D5",
+      0.5
+    ],
+    [
+      5,
+      1.5,
+      "F5",
+      0.5
+    ],
+    [
+      5,
+      2.0,
+      "C5",
+      0.5
+    ],
+    [
+      5,
+      2.0,
+      "E5",
+      0.5
+    ],
+    [
+      5,
+      2.5,
+      "C5",
+      0.5
+    ],
+    [
+      5,
+      2.5,
+      "E5",
+      0.5
+    ],
+    [
+      5,
+      3.0,
+      "B4",
+      1.0
+    ],
+    [
+      5,
+      3.0,
+      "D5",
+      1.0
+    ],
+    [
+      6,
+      1.0,
+      "E5",
+      0.5
+    ],
+    [
+      6,
+      1.0,
+      "G5",
+      0.5
+    ],
+    [
+      6,
+      1.5,
+      "E5",
+      0.5
+    ],
+    [
+      6,
+      1.5,
+      "G5",
+      0.5
+    ],
+    [
+      6,
+      2.0,
+      "D5",
+      0.5
+    ],
+    [
+      6,
+      2.0,
+      "F5",
+      0.5
+    ],
+    [
+      6,
+      2.5,
+      "D5",
+      0.5
+    ],
+    [
+      6,
+      2.5,
+      "F5",
+      0.5
+    ],
+    [
+      6,
+      3.0,
+      "C5",
+      1.0
+    ],
+    [
+      6,
+      3.0,
+      "E5",
+      1.0
+    ],
+    [
+      7,
+      1.0,
+      "A5",
+      0.25
+    ],
+    [
+      7,
+      1.25,
+      "F5",
+      0.25
+    ],
+    [
+      7,
+      1.5,
+      "E5",
+      0.25
+    ],
+    [
+      7,
+      1.75,
+      "D5",
+      0.25
+    ],
+    [
+      7,
+      2.0,
+      "A5",
+      0.25
+    ],
+    [
+      7,
+      2.25,
+      "F5",
+      0.25
+    ],
+    [
+      7,
+      2.5,
+      "E5",
+      0.25
+    ],
+    [
+      7,
+      2.75,
+      "D5",
+      0.25
+    ],
+    [
+      7,
+      3.0,
+      "E5",
+      0.25
+    ],
+    [
+      7,
+      3.25,
+      "G5",
+      0.25
+    ],
+    [
+      7,
+      3.5,
+      "E5",
+      0.25
+    ],
+    [
+      7,
+      3.75,
+      "C5",
+      0.25
+    ],
+    [
+      7,
+      4.0,
+      "D5",
+      0.25
+    ],
+    [
+      7,
+      4.25,
+      "F5",
+      0.25
+    ],
+    [
+      7,
+      4.5,
+      "D5",
+      0.25
+    ],
+    [
+      7,
+      4.75,
+      "B4",
+      0.25
+    ],
+    [
+      8,
+      1.0,
+      "C5",
+      0.5
+    ],
+    [
+      8,
+      1.5,
+      "C5",
+      0.5
+    ],
+    [
+      8,
+      2.0,
+      "B4",
+      0.5
+    ],
+    [
+      8,
+      2.0,
+      "D5",
+      0.5
+    ],
+    [
+      8,
+      2.5,
+      "B4",
+      0.5
+    ],
+    [
+      8,
+      2.5,
+      "D5",
+      0.5
+    ],
+    [
+      8,
+      3.0,
+      "C5",
+      1.0
+    ],
+    [
+      8,
+      3.0,
+      "E5",
+      1.0
+    ],
+    [
+      9,
+      1.0,
+      "D4",
+      0.5
+    ],
+    [
+      9,
+      1.0,
+      "F4",
+      0.5
+    ],
+    [
+      9,
+      1.5,
+      "D4",
+      0.5
+    ],
+    [
+      9,
+      1.5,
+      "F4",
+      0.5
+    ],
+    [
+      9,
+      2.0,
+      "C4",
+      0.5
+    ],
+    [
+      9,
+      2.0,
+      "E4",
+      0.5
+    ],
+    [
+      9,
+      2.5,
+      "C4",
+      0.5
+    ],
+    [
+      9,
+      2.5,
+      "E4",
+      0.5
+    ],
+    [
+      9,
+      3.0,
+      "B3",
+      1.0
+    ],
+    [
+      9,
+      3.0,
+      "D4",
+      1.0
+    ],
+    [
+      10,
+      1.0,
+      "E4",
+      0.5
+    ],
+    [
+      10,
+      1.0,
+      "G4",
+      0.5
+    ],
+    [
+      10,
+      1.5,
+      "E4",
+      0.5
+    ],
+    [
+      10,
+      1.5,
+      "G4",
+      0.5
+    ],
+    [
+      10,
+      2.0,
+      "F4",
+      0.5
+    ],
+    [
+      10,
+      2.0,
+      "B4",
+      0.5
+    ],
+    [
+      10,
+      2.5,
+      "F4",
+      0.5
+    ],
+    [
+      10,
+      2.5,
+      "B4",
+      0.5
+    ],
+    [
+      10,
+      3.0,
+      "E4",
+      0.5
+    ],
+    [
+      10,
+      3.0,
+      "C5",
+      0.5
+    ],
+    [
+      10,
+      3.5,
+      "E4",
+      0.5
+    ],
+    [
+      10,
+      3.5,
+      "C5",
+      0.5
+    ],
+    [
+      10,
+      4.0,
+      "G4",
+      0.5
+    ],
+    [
+      10,
+      4.0,
+      "C#5",
+      0.5
+    ],
+    [
+      10,
+      4.5,
+      "G4",
+      0.5
+    ],
+    [
+      10,
+      4.5,
+      "C#5",
+      0.5
+    ],
+    [
+      11,
+      1.0,
+      "A4",
+      0.5
+    ],
+    [
+      11,
+      1.0,
+      "D5",
+      0.5
+    ],
+    [
+      11,
+      1.5,
+      "A4",
+      0.5
+    ],
+    [
+      11,
+      1.5,
+      "D5",
+      0.5
+    ],
+    [
+      11,
+      2.0,
+      "D5",
+      0.5
+    ],
+    [
+      11,
+      2.0,
+      "F5",
+      0.5
+    ],
+    [
+      11,
+      2.5,
+      "D5",
+      0.5
+    ],
+    [
+      11,
+      2.5,
+      "F5",
+      0.5
+    ],
+    [
+      11,
+      3.0,
+      "C5",
+      0.5
+    ],
+    [
+      11,
+      3.0,
+      "E5",
+      0.5
+    ],
+    [
+      11,
+      3.5,
+      "C5",
+      0.5
+    ],
+    [
+      11,
+      3.5,
+      "E5",
+      0.5
+    ],
+    [
+      11,
+      4.0,
+      "B4",
+      0.5
+    ],
+    [
+      11,
+      4.0,
+      "D5",
+      0.5
+    ],
+    [
+      11,
+      4.5,
+      "B4",
+      0.5
+    ],
+    [
+      11,
+      4.5,
+      "D5",
+      0.5
+    ],
+    [
+      12,
+      1.0,
+      "C5",
+      1.0
+    ],
+    [
+      12,
+      2.0,
+      "E5",
+      1.0
+    ],
+    [
+      12,
+      2.0,
+      "G5",
+      1.0
+    ],
+    [
+      12,
+      2.0,
+      "C6",
+      1.0
+    ],
+    [
+      12,
+      3.0,
+      "E5",
+      1.0
+    ],
+    [
+      12,
+      3.0,
+      "G5",
+      1.0
+    ],
+    [
+      12,
+      3.0,
+      "C6",
+      1.0
+    ],
+    [
+      13,
+      1.0,
+      "G5",
+      1.0
+    ],
+    [
+      13,
+      2.0,
+      "A5",
+      0.25
+    ],
+    [
+      13,
+      2.25,
+      "G5",
+      0.25
+    ],
+    [
+      13,
+      2.5,
+      "F#5",
+      0.25
+    ],
+    [
+      13,
+      2.75,
+      "E5",
+      0.25
+    ],
+    [
+      13,
+      3.0,
+      "D5",
+      1.0
+    ],
+    [
+      13,
+      4.0,
+      "E5",
+      0.25
+    ],
+    [
+      13,
+      4.25,
+      "D5",
+      0.25
+    ],
+    [
+      13,
+      4.5,
+      "C5",
+      0.25
+    ],
+    [
+      13,
+      4.75,
+      "B4",
+      0.25
+    ],
+    [
+      14,
+      1.0,
+      "A4",
+      0.75
+    ],
+    [
+      14,
+      1.75,
+      "G#4",
+      0.25
+    ],
+    [
+      14,
+      2.0,
+      "A4",
+      0.5
+    ],
+    [
+      14,
+      2.5,
+      "B4",
+      0.5
+    ],
+    [
+      14,
+      2.5,
+      "C5",
+      0.5
+    ],
+    [
+      14,
+      4.0,
+      "C6",
+      0.25
+    ],
+    [
+      14,
+      4.25,
+      "B5",
+      0.25
+    ],
+    [
+      15,
+      1.0,
+      "A5",
+      0.25
+    ],
+    [
+      15,
+      1.25,
+      "B5",
+      0.25
+    ],
+    [
+      15,
+      1.5,
+      "A5",
+      0.25
+    ],
+    [
+      15,
+      1.75,
+      "B5",
+      0.25
+    ],
+    [
+      15,
+      2.0,
+      "C6",
+      0.25
+    ],
+    [
+      15,
+      2.25,
+      "B5",
+      0.25
+    ],
+    [
+      15,
+      2.5,
+      "A5",
+      0.25
+    ],
+    [
+      15,
+      2.75,
+      "B5",
+      0.25
+    ],
+    [
+      15,
+      3.0,
+      "C6",
+      0.25
+    ],
+    [
+      15,
+      3.25,
+      "B5",
+      0.25
+    ],
+    [
+      15,
+      3.5,
+      "A5",
+      0.25
+    ],
+    [
+      15,
+      3.75,
+      "G5",
+      0.25
+    ],
+    [
+      15,
+      4.0,
+      "F#5",
+      0.25
+    ],
+    [
+      15,
+      4.25,
+      "E5",
+      0.25
+    ],
+    [
+      15,
+      4.5,
+      "D5",
+      0.25
+    ],
+    [
+      15,
+      4.75,
+      "C5",
+      0.25
+    ],
+    [
+      16,
+      1.0,
+      "B4",
+      0.5
+    ],
+    [
+      16,
+      2.25,
+      "G4",
+      0.25
+    ],
+    [
+      16,
+      2.5,
+      "A4",
+      0.25
+    ],
+    [
+      16,
+      2.75,
+      "B4",
+      0.25
+    ],
+    [
+      16,
+      3.0,
+      "C5",
+      0.25
+    ],
+    [
+      16,
+      3.25,
+      "D5",
+      0.25
+    ],
+    [
+      16,
+      3.5,
+      "E5",
+      0.25
+    ],
+    [
+      16,
+      3.75,
+      "F#5",
+      0.25
+    ],
+    [
+      16,
+      4.0,
+      "G5",
+      0.25
+    ],
+    [
+      16,
+      4.25,
+      "A5",
+      0.25
+    ],
+    [
+      16,
+      4.5,
+      "B5",
+      0.25
+    ],
+    [
+      16,
+      4.75,
+      "A5",
+      0.25
+    ],
+    [
+      17,
+      1.0,
+      "G5",
+      0.5
+    ],
+    [
+      17,
+      2.25,
+      "G4",
+      0.25
+    ],
+    [
+      17,
+      2.5,
+      "A4",
+      0.25
+    ],
+    [
+      17,
+      2.75,
+      "B4",
+      0.25
+    ],
+    [
+      17,
+      3.0,
+      "C5",
+      0.25
+    ],
+    [
+      17,
+      3.25,
+      "D5",
+      0.25
+    ],
+    [
+      17,
+      3.5,
+      "E5",
+      0.25
+    ],
+    [
+      17,
+      3.75,
+      "F#5",
+      0.25
+    ],
+    [
+      17,
+      4.0,
+      "G5",
+      0.25
+    ],
+    [
+      17,
+      4.25,
+      "A5",
+      0.25
+    ],
+    [
+      17,
+      4.5,
+      "B5",
+      0.25
+    ],
+    [
+      17,
+      4.75,
+      "C6",
+      0.25
+    ],
+    [
+      18,
+      1.0,
+      "D6",
+      0.5
+    ],
+    [
+      18,
+      1.5,
+      "D6",
+      0.5
+    ],
+    [
+      18,
+      2.0,
+      "C6",
+      0.25
+    ],
+    [
+      18,
+      2.25,
+      "B5",
+      0.25
+    ],
+    [
+      18,
+      2.5,
+      "A5",
+      0.25
+    ],
+    [
+      18,
+      2.75,
+      "B5",
+      0.25
+    ],
+    [
+      18,
+      3.0,
+      "G5",
+      0.5
+    ],
+    [
+      18,
+      3.5,
+      "G5",
+      0.5
+    ],
+    [
+      18,
+      4.0,
+      "Eb5",
+      0.5
+    ],
+    [
+      18,
+      4.5,
+      "Eb5",
+      0.5
+    ],
+    [
+      19,
+      1.0,
+      "E5",
+      0.5
+    ],
+    [
+      19,
+      1.5,
+      "E5",
+      0.5
+    ],
+    [
+      19,
+      2.0,
+      "D5",
+      0.25
+    ],
+    [
+      19,
+      2.25,
+      "C5",
+      0.25
+    ],
+    [
+      19,
+      2.5,
+      "B4",
+      0.25
+    ],
+    [
+      19,
+      2.75,
+      "C5",
+      0.25
+    ],
+    [
+      19,
+      3.0,
+      "A4",
+      0.5
+    ],
+    [
+      19,
+      3.5,
+      "A4",
+      0.5
+    ],
+    [
+      19,
+      4.0,
+      "E4",
+      0.5
+    ],
+    [
+      19,
+      4.5,
+      "E4",
+      0.5
+    ],
+    [
+      20,
+      1.0,
+      "D4",
+      0.5
+    ],
+    [
+      20,
+      1.5,
+      "D4",
+      0.5
+    ],
+    [
+      20,
+      2.0,
+      "D5",
+      0.25
+    ],
+    [
+      20,
+      2.25,
+      "B4",
+      0.25
+    ],
+    [
+      20,
+      2.5,
+      "A4",
+      0.25
+    ],
+    [
+      20,
+      2.75,
+      "G4",
+      0.25
+    ],
+    [
+      20,
+      3.0,
+      "A4",
+      2.5
+    ],
+    [
+      21,
+      1.5,
+      "D6",
+      0.5
+    ],
+    [
+      21,
+      2.5,
+      "B5",
+      0.5
+    ],
+    [
+      21,
+      3.5,
+      "G5",
+      0.5
+    ],
+    [
+      21,
+      4.5,
+      "Eb5",
+      0.5
+    ],
+    [
+      22,
+      1.5,
+      "E5",
+      0.25
+    ],
+    [
+      22,
+      1.75,
+      "Eb5",
+      0.25
+    ],
+    [
+      22,
+      2.0,
+      "E5",
+      0.25
+    ],
+    [
+      22,
+      2.25,
+      "F#5",
+      0.25
+    ],
+    [
+      22,
+      2.5,
+      "G5",
+      0.25
+    ],
+    [
+      22,
+      2.75,
+      "F#5",
+      0.25
+    ],
+    [
+      22,
+      3.0,
+      "E5",
+      0.25
+    ],
+    [
+      22,
+      3.25,
+      "D5",
+      0.25
+    ],
+    [
+      22,
+      3.5,
+      "C5",
+      0.25
+    ],
+    [
+      22,
+      3.75,
+      "B4",
+      0.25
+    ],
+    [
+      22,
+      4.0,
+      "A4",
+      0.25
+    ],
+    [
+      22,
+      4.25,
+      "G4",
+      0.25
+    ],
+    [
+      22,
+      4.5,
+      "F#4",
+      0.25
+    ],
+    [
+      22,
+      4.75,
+      "E4",
+      0.25
+    ],
+    [
+      23,
+      1.0,
+      "D4",
+      0.25
+    ],
+    [
+      23,
+      1.25,
+      "G4",
+      0.25
+    ],
+    [
+      23,
+      1.5,
+      "B4",
+      0.25
+    ],
+    [
+      23,
+      1.75,
+      "D5",
+      0.25
+    ],
+    [
+      23,
+      2.0,
+      "C5",
+      0.25
+    ],
+    [
+      23,
+      2.25,
+      "B4",
+      0.25
+    ],
+    [
+      23,
+      2.5,
+      "A4",
+      0.25
+    ],
+    [
+      23,
+      2.75,
+      "G4",
+      0.25
+    ],
+    [
+      23,
+      3.0,
+      "A4",
+      2.5
+    ],
+    [
+      24,
+      1.0,
+      "G4",
+      0.5
+    ],
+    [
+      24,
+      2.0,
+      "D4",
+      0.5
+    ],
+    [
+      24,
+      2.5,
+      "D4",
+      0.5
+    ],
+    [
+      24,
+      3.0,
+      "B3",
+      0.5
+    ],
+    [
+      24,
+      3.0,
+      "G4",
+      0.5
+    ],
+    [
+      24,
+      4.0,
+      "D4",
+      0.5
+    ],
+    [
+      24,
+      4.5,
+      "D4",
+      0.5
+    ],
+    [
+      25,
+      1.0,
+      "C4",
+      0.5
+    ],
+    [
+      25,
+      1.0,
+      "A4",
+      0.5
+    ],
+    [
+      25,
+      2.0,
+      "D4",
+      0.5
+    ],
+    [
+      25,
+      2.5,
+      "D4",
+      0.5
+    ],
+    [
+      25,
+      3.0,
+      "A3",
+      0.5
+    ],
+    [
+      25,
+      3.0,
+      "F#4",
+      0.5
+    ],
+    [
+      25,
+      4.0,
+      "D4",
+      0.5
+    ],
+    [
+      25,
+      4.5,
+      "D4",
+      0.5
+    ],
+    [
+      26,
+      1.0,
+      "B3",
+      1.0
+    ],
+    [
+      26,
+      1.0,
+      "G4",
+      1.0
+    ],
+    [
+      26,
+      2.0,
+      "B3",
+      1.0
+    ],
+    [
+      26,
+      2.0,
+      "G4",
+      1.0
+    ],
+    [
+      26,
+      3.0,
+      "B3",
+      1.0
+    ],
+    [
+      26,
+      3.0,
+      "G4",
+      1.0
+    ]
+  ],
+  "errors": [
+    {
+      "id": "err-1",
+      "category": "extra",
+      "measure": 7,
+      "beat": 1.12,
+      "note_id": null,
+      "expected": null,
+      "actual": "G5",
+      "audio_time": 12.338,
+      "maybe_noise": true,
+      "confidence": 0.4,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A G5 was heard in bar 7, but it doesn't fit the music around it. It may have been background sound rather than a key.",
+      "tip": "If you didn't play a G5 there, mark this as fine. A quieter room makes these go away."
+    },
+    {
+      "id": "err-2",
+      "category": "timing",
+      "measure": 7,
+      "beat": 2.25,
+      "note_id": "n7-6",
+      "expected": "F5",
+      "actual": "F5",
+      "audio_time": 12.883,
+      "delta_ms": -181,
+      "confidence": 0.8,
+      "tier": "confident",
+      "explanation": "The F5 landed 181 ms early against the pace of the rest of bar 7. You were playing this bar at about 88 bpm.",
+      "tip": "Count out loud through bar 7 with a metronome and let the click arrive before the F5."
+    },
+    {
+      "id": "err-3",
+      "category": "timing",
+      "measure": 7,
+      "beat": 2.5,
+      "note_id": "n7-7",
+      "expected": "E5",
+      "actual": "E5",
+      "audio_time": 13.041,
+      "delta_ms": -193,
+      "confidence": 0.8,
+      "tier": "confident",
+      "explanation": "The E5 landed 193 ms early against the pace of the rest of bar 7. You were playing this bar at about 88 bpm.",
+      "tip": "Count out loud through bar 7 with a metronome and let the click arrive before the E5."
+    },
+    {
+      "id": "err-4",
+      "category": "timing",
+      "measure": 7,
+      "beat": 2.75,
+      "note_id": "n7-8",
+      "expected": "D5",
+      "actual": "D5",
+      "audio_time": 13.15,
+      "delta_ms": -254,
+      "confidence": 0.8,
+      "tier": "confident",
+      "explanation": "The D5 landed 254 ms early against the pace of the rest of bar 7. You were playing this bar at about 88 bpm.",
+      "tip": "Count out loud through bar 7 with a metronome and let the click arrive before the D5."
+    },
+    {
+      "id": "err-5",
+      "category": "extra",
+      "measure": 7,
+      "beat": 2.858,
+      "note_id": null,
+      "expected": null,
+      "actual": "G5",
+      "audio_time": 13.417,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a G5 in bar 7 that isn't in the score.",
+      "tip": "Slow bar 7 right down and watch which finger lands on the G5."
+    },
+    {
+      "id": "err-6",
+      "category": "extra",
+      "measure": 7,
+      "beat": 2.873,
+      "note_id": null,
+      "expected": null,
+      "actual": "G4",
+      "audio_time": 13.453,
+      "maybe_noise": true,
+      "confidence": 0.4,
+      "tier": "possible",
+      "explanation": "A G4 was heard in bar 7, but it doesn't fit the music around it. It may have been background sound rather than a key.",
+      "tip": "If you didn't play a G4 there, mark this as fine. A quieter room makes these go away."
+    },
+    {
+      "id": "err-7",
+      "category": "timing",
+      "measure": 7,
+      "beat": 3.0,
+      "note_id": "n7-9",
+      "expected": "E5",
+      "actual": "E5",
+      "audio_time": 13.766,
+      "delta_ms": 193,
+      "confidence": 0.8,
+      "tier": "confident",
+      "explanation": "The E5 landed 193 ms late against the pace of the rest of bar 7. You were playing this bar at about 88 bpm.",
+      "tip": "Count out loud through bar 7 with a metronome and let the click arrive before the E5."
+    },
+    {
+      "id": "err-8",
+      "category": "timing",
+      "measure": 7,
+      "beat": 3.25,
+      "note_id": "n7-10",
+      "expected": "G5",
+      "actual": "G5",
+      "audio_time": 13.903,
+      "delta_ms": 160,
+      "confidence": 0.8,
+      "tier": "confident",
+      "explanation": "The G5 landed 160 ms late against the pace of the rest of bar 7. You were playing this bar at about 88 bpm.",
+      "tip": "Count out loud through bar 7 with a metronome and let the click arrive before the G5."
+    },
+    {
+      "id": "err-9",
+      "category": "wrong_pitch",
+      "measure": 8,
+      "beat": 2.0,
+      "note_id": "n8-3",
+      "expected": "B4",
+      "actual": "C5",
+      "audio_time": 15.454,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 8, beat 2: the score has B4 and you played C5.",
+      "tip": "Play bar 8 slowly and stop on the B4. Say its name before you press it."
+    },
+    {
+      "id": "err-10",
+      "category": "wrong_pitch",
+      "measure": 8,
+      "beat": 2.5,
+      "note_id": "n8-5",
+      "expected": "B4",
+      "actual": "C5",
+      "audio_time": 15.797,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 8, beat 2.5: the score has B4 and you played C5.",
+      "tip": "Play bar 8 slowly and stop on the B4. Say its name before you press it."
+    },
+    {
+      "id": "err-11",
+      "category": "wrong_pitch",
+      "measure": 11,
+      "beat": 1.0,
+      "note_id": "n11-1",
+      "expected": "A4",
+      "actual": "G4",
+      "audio_time": 20.887,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 11, beat 1: the score has A4 and you played G4.",
+      "tip": "Play bar 11 slowly and stop on the A4. Say its name before you press it."
+    },
+    {
+      "id": "err-12",
+      "category": "wrong_pitch",
+      "measure": 11,
+      "beat": 1.5,
+      "note_id": "n11-3",
+      "expected": "A4",
+      "actual": "G4",
+      "audio_time": 21.097,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 11, beat 1.5: the score has A4 and you played G4.",
+      "tip": "Play bar 11 slowly and stop on the A4. Say its name before you press it."
+    },
+    {
+      "id": "err-13",
+      "category": "missing",
+      "measure": 11,
+      "beat": 2.0,
+      "note_id": "n11-5",
+      "expected": "D5",
+      "actual": null,
+      "audio_time": 21.351,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The D5 on beat 2 of bar 11 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 11 on its own and make that D5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-14",
+      "category": "missing",
+      "measure": 11,
+      "beat": 2.0,
+      "note_id": "n11-6",
+      "expected": "F5",
+      "actual": null,
+      "audio_time": 21.351,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The F5 on beat 2 of bar 11 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 11 on its own and make that F5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-15",
+      "category": "missing",
+      "measure": 11,
+      "beat": 2.5,
+      "note_id": "n11-7",
+      "expected": "D5",
+      "actual": null,
+      "audio_time": 21.584,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The D5 on beat 2.5 of bar 11 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 11 on its own and make that D5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-16",
+      "category": "missing",
+      "measure": 11,
+      "beat": 2.5,
+      "note_id": "n11-8",
+      "expected": "F5",
+      "actual": null,
+      "audio_time": 21.584,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The F5 on beat 2.5 of bar 11 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 11 on its own and make that F5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-17",
+      "category": "missing",
+      "measure": 11,
+      "beat": 3.0,
+      "note_id": "n11-9",
+      "expected": "C5",
+      "actual": null,
+      "audio_time": 21.817,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The C5 on beat 3 of bar 11 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 11 on its own and make that C5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-18",
+      "category": "missing",
+      "measure": 11,
+      "beat": 3.0,
+      "note_id": "n11-10",
+      "expected": "E5",
+      "actual": null,
+      "audio_time": 21.817,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The E5 on beat 3 of bar 11 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 11 on its own and make that E5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-19",
+      "category": "missing",
+      "measure": 11,
+      "beat": 3.5,
+      "note_id": "n11-11",
+      "expected": "C5",
+      "actual": null,
+      "audio_time": 22.051,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The C5 on beat 3.5 of bar 11 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 11 on its own and make that C5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-20",
+      "category": "missing",
+      "measure": 11,
+      "beat": 3.5,
+      "note_id": "n11-12",
+      "expected": "E5",
+      "actual": null,
+      "audio_time": 22.051,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The E5 on beat 3.5 of bar 11 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 11 on its own and make that E5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-21",
+      "category": "wrong_pitch",
+      "measure": 11,
+      "beat": 4.0,
+      "note_id": "n11-14",
+      "expected": "D5",
+      "actual": "E5",
+      "audio_time": 22.277,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "Bar 11, beat 4: the score has D5 and you played E5.",
+      "tip": "Play bar 11 slowly and stop on the D5. Say its name before you press it."
+    },
+    {
+      "id": "err-22",
+      "category": "wrong_pitch",
+      "measure": 11,
+      "beat": 4.0,
+      "note_id": "n11-13",
+      "expected": "B4",
+      "actual": "D5",
+      "audio_time": 22.306,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "Bar 11, beat 4: the score has B4 and you played D5.",
+      "tip": "Play bar 11 slowly and stop on the B4. Say its name before you press it."
+    },
+    {
+      "id": "err-23",
+      "category": "missing",
+      "measure": 11,
+      "beat": 4.5,
+      "note_id": "n11-15",
+      "expected": "B4",
+      "actual": null,
+      "audio_time": 22.517,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The B4 on beat 4.5 of bar 11 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 11 on its own and make that B4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-24",
+      "category": "missing",
+      "measure": 11,
+      "beat": 4.5,
+      "note_id": "n11-16",
+      "expected": "D5",
+      "actual": null,
+      "audio_time": 22.517,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The D5 on beat 4.5 of bar 11 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 11 on its own and make that D5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-25",
+      "category": "missing",
+      "measure": 12,
+      "beat": 1.0,
+      "note_id": "n12-1",
+      "expected": "C5",
+      "actual": null,
+      "audio_time": 22.75,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The C5 on beat 1 of bar 12 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 12 on its own and make that C5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-26",
+      "category": "missing",
+      "measure": 12,
+      "beat": 2.0,
+      "note_id": "n12-2",
+      "expected": "E5",
+      "actual": null,
+      "audio_time": 23.216,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The E5 on beat 2 of bar 12 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 12 on its own and make that E5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-27",
+      "category": "missing",
+      "measure": 12,
+      "beat": 2.0,
+      "note_id": "n12-3",
+      "expected": "G5",
+      "actual": null,
+      "audio_time": 23.216,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G5 on beat 2 of bar 12 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 12 on its own and make that G5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-28",
+      "category": "missing",
+      "measure": 12,
+      "beat": 2.0,
+      "note_id": "n12-4",
+      "expected": "C6",
+      "actual": null,
+      "audio_time": 23.216,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The C6 on beat 2 of bar 12 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 12 on its own and make that C6 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-29",
+      "category": "missing",
+      "measure": 12,
+      "beat": 3.0,
+      "note_id": "n12-5",
+      "expected": "E5",
+      "actual": null,
+      "audio_time": 23.683,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The E5 on beat 3 of bar 12 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 12 on its own and make that E5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-30",
+      "category": "missing",
+      "measure": 12,
+      "beat": 3.0,
+      "note_id": "n12-6",
+      "expected": "G5",
+      "actual": null,
+      "audio_time": 23.683,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G5 on beat 3 of bar 12 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 12 on its own and make that G5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-31",
+      "category": "missing",
+      "measure": 12,
+      "beat": 3.0,
+      "note_id": "n12-7",
+      "expected": "C6",
+      "actual": null,
+      "audio_time": 23.683,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The C6 on beat 3 of bar 12 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 12 on its own and make that C6 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-32",
+      "category": "missing",
+      "measure": 13,
+      "beat": 1.0,
+      "note_id": "n13-1",
+      "expected": "G5",
+      "actual": null,
+      "audio_time": 24.615,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G5 on beat 1 of bar 13 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 13 on its own and make that G5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-33",
+      "category": "missing",
+      "measure": 13,
+      "beat": 2.0,
+      "note_id": "n13-2",
+      "expected": "A5",
+      "actual": null,
+      "audio_time": 25.082,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The A5 on beat 2 of bar 13 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 13 on its own and make that A5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-34",
+      "category": "missing",
+      "measure": 13,
+      "beat": 2.25,
+      "note_id": "n13-3",
+      "expected": "G5",
+      "actual": null,
+      "audio_time": 25.198,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G5 on beat 2.25 of bar 13 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 13 on its own and make that G5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-35",
+      "category": "missing",
+      "measure": 13,
+      "beat": 2.5,
+      "note_id": "n13-4",
+      "expected": "F#5",
+      "actual": null,
+      "audio_time": 25.315,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The F#5 on beat 2.5 of bar 13 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 13 on its own and make that F#5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-36",
+      "category": "missing",
+      "measure": 13,
+      "beat": 2.75,
+      "note_id": "n13-5",
+      "expected": "E5",
+      "actual": null,
+      "audio_time": 25.431,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The E5 on beat 2.75 of bar 13 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 13 on its own and make that E5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-37",
+      "category": "extra",
+      "measure": 17,
+      "beat": 3.25,
+      "note_id": null,
+      "expected": null,
+      "actual": "F5",
+      "audio_time": 22.581,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a F5 in bar 17 that isn't in the score.",
+      "tip": "Slow bar 17 right down and watch which finger lands on the F5."
+    },
+    {
+      "id": "err-38",
+      "category": "extra",
+      "measure": 18,
+      "beat": 2.191,
+      "note_id": null,
+      "expected": null,
+      "actual": "F5",
+      "audio_time": 22.83,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a F5 in bar 18 that isn't in the score.",
+      "tip": "Slow bar 18 right down and watch which finger lands on the F5."
+    },
+    {
+      "id": "err-39",
+      "category": "wrong_pitch",
+      "measure": 18,
+      "beat": 4.5,
+      "note_id": "n18-10",
+      "expected": "Eb5",
+      "actual": "D5",
+      "audio_time": 22.83,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 18, beat 4.5: the score has Eb5 and you played D5.",
+      "tip": "Play bar 18 slowly and stop on the Eb5. Say its name before you press it."
+    },
+    {
+      "id": "err-40",
+      "category": "extra",
+      "measure": 19,
+      "beat": 1.038,
+      "note_id": null,
+      "expected": null,
+      "actual": "C5",
+      "audio_time": 23.085,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a C5 in bar 19 that isn't in the score.",
+      "tip": "Slow bar 19 right down and watch which finger lands on the C5."
+    },
+    {
+      "id": "err-41",
+      "category": "extra",
+      "measure": 19,
+      "beat": 1.5,
+      "note_id": null,
+      "expected": null,
+      "actual": "C5",
+      "audio_time": 23.306,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a C5 in bar 19 that isn't in the score.",
+      "tip": "Slow bar 19 right down and watch which finger lands on the C5."
+    },
+    {
+      "id": "err-42",
+      "category": "extra",
+      "measure": 19,
+      "beat": 2.0,
+      "note_id": null,
+      "expected": null,
+      "actual": "B4",
+      "audio_time": 23.529,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a B4 in bar 19 that isn't in the score.",
+      "tip": "Slow bar 19 right down and watch which finger lands on the B4."
+    },
+    {
+      "id": "err-43",
+      "category": "extra",
+      "measure": 19,
+      "beat": 2.508,
+      "note_id": null,
+      "expected": null,
+      "actual": "D5",
+      "audio_time": 23.766,
+      "maybe_noise": true,
+      "confidence": 0.4,
+      "tier": "possible",
+      "explanation": "A D5 was heard in bar 19, but it doesn't fit the music around it. It may have been background sound rather than a key.",
+      "tip": "If you didn't play a D5 there, mark this as fine. A quieter room makes these go away."
+    },
+    {
+      "id": "err-44",
+      "category": "extra",
+      "measure": 19,
+      "beat": 4.0,
+      "note_id": null,
+      "expected": null,
+      "actual": "G5",
+      "audio_time": 24.446,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a G5 in bar 19 that isn't in the score.",
+      "tip": "Slow bar 19 right down and watch which finger lands on the G5."
+    },
+    {
+      "id": "err-45",
+      "category": "extra",
+      "measure": 19,
+      "beat": 4.0,
+      "note_id": null,
+      "expected": null,
+      "actual": "C6",
+      "audio_time": 24.445,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a C6 in bar 19 that isn't in the score.",
+      "tip": "Slow bar 19 right down and watch which finger lands on the C6."
+    },
+    {
+      "id": "err-46",
+      "category": "extra",
+      "measure": 19,
+      "beat": 4.0,
+      "note_id": null,
+      "expected": null,
+      "actual": "E5",
+      "audio_time": 24.445,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a E5 in bar 19 that isn't in the score.",
+      "tip": "Slow bar 19 right down and watch which finger lands on the E5."
+    },
+    {
+      "id": "err-47",
+      "category": "extra",
+      "measure": 20,
+      "beat": 1.0,
+      "note_id": null,
+      "expected": null,
+      "actual": "G5",
+      "audio_time": 24.934,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a G5 in bar 20 that isn't in the score.",
+      "tip": "Slow bar 20 right down and watch which finger lands on the G5."
+    },
+    {
+      "id": "err-48",
+      "category": "extra",
+      "measure": 20,
+      "beat": 1.0,
+      "note_id": null,
+      "expected": null,
+      "actual": "C6",
+      "audio_time": 24.934,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a C6 in bar 20 that isn't in the score.",
+      "tip": "Slow bar 20 right down and watch which finger lands on the C6."
+    },
+    {
+      "id": "err-49",
+      "category": "extra",
+      "measure": 20,
+      "beat": 1.0,
+      "note_id": null,
+      "expected": null,
+      "actual": "E5",
+      "audio_time": 24.941,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a E5 in bar 20 that isn't in the score.",
+      "tip": "Slow bar 20 right down and watch which finger lands on the E5."
+    }
+  ],
+  "dynamics": {
+    "available": true,
+    "baseline": "average matched-note velocity",
+    "score_average_velocity": 65.68,
+    "take_average_velocity": 71.30857142857143,
+    "assessed_notes": 175,
+    "typical_contour_difference": 19.37142857142858,
+    "bars": [
+      {
+        "measure": 1,
+        "occurrence": 0,
+        "relative_level_difference": -28.485714285714284,
+        "median_contour_difference": 25.62857142857142,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 2,
+        "occurrence": 1,
+        "relative_level_difference": -18.452100840336126,
+        "median_contour_difference": 16.62857142857142,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 3,
+        "occurrence": 2,
+        "relative_level_difference": -28.37857142857142,
+        "median_contour_difference": 28.12857142857142,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 4,
+        "occurrence": 3,
+        "relative_level_difference": -24.936263736263733,
+        "median_contour_difference": 29.62857142857142,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 5,
+        "occurrence": 4,
+        "relative_level_difference": 15.171428571428574,
+        "median_contour_difference": 14.37142857142858,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 6,
+        "occurrence": 5,
+        "relative_level_difference": 16.838095238095242,
+        "median_contour_difference": 18.37142857142858,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 7,
+        "occurrence": 6,
+        "relative_level_difference": 20.671428571428578,
+        "median_contour_difference": 23.37142857142858,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 8,
+        "occurrence": 7,
+        "relative_level_difference": 16.28809523809524,
+        "median_contour_difference": 18.37142857142858,
+        "trend": "decrescendo_followed",
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 9,
+        "occurrence": 8,
+        "relative_level_difference": 12.30476190476191,
+        "median_contour_difference": 11.37142857142858,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 10,
+        "occurrence": 9,
+        "relative_level_difference": 16.121428571428577,
+        "median_contour_difference": 16.87142857142858,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 11,
+        "occurrence": 10,
+        "relative_level_difference": -26.87857142857142,
+        "median_contour_difference": 24.62857142857142,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 13,
+        "occurrence": 12,
+        "relative_level_difference": 22.87142857142858,
+        "median_contour_difference": 22.87142857142858,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 16,
+        "occurrence": 15,
+        "relative_level_difference": 7.704761904761914,
+        "median_contour_difference": 7.628571428571419,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 17,
+        "occurrence": 16,
+        "relative_level_difference": 34.87142857142858,
+        "median_contour_difference": 34.87142857142858,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 19,
+        "occurrence": 18,
+        "relative_level_difference": -19.485714285714273,
+        "median_contour_difference": 16.62857142857142,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      }
+    ]
+  },
+  "score_dynamics": {
+    "marks": [
+      {
+        "measure": 1,
+        "beat": 1.0,
+        "label": "f"
+      },
+      {
+        "measure": 5,
+        "beat": 1.0,
+        "label": "p"
+      },
+      {
+        "measure": 9,
+        "beat": 1.0,
+        "label": "p"
+      },
+      {
+        "measure": 11,
+        "beat": 1.0,
+        "label": "f"
+      },
+      {
+        "measure": 13,
+        "beat": 1.0,
+        "label": "p"
+      },
+      {
+        "measure": 17,
+        "beat": 3.0,
+        "label": "pp"
+      },
+      {
+        "measure": 18,
+        "beat": 1.0,
+        "label": "f"
+      },
+      {
+        "measure": 23,
+        "beat": 1.0,
+        "label": "f"
+      },
+      {
+        "measure": 25,
+        "beat": 2.0,
+        "label": "p"
+      },
+      {
+        "measure": 25,
+        "beat": 3.0,
+        "label": "pp"
+      },
+      {
+        "measure": 26,
+        "beat": 1.0,
+        "label": "f"
+      },
+      {
+        "measure": 1,
+        "beat": 105.5,
+        "label": "f"
+      },
+      {
+        "measure": 5,
+        "beat": 105.5,
+        "label": "p"
+      },
+      {
+        "measure": 9,
+        "beat": 105.5,
+        "label": "p"
+      },
+      {
+        "measure": 11,
+        "beat": 105.5,
+        "label": "f"
+      },
+      {
+        "measure": 13,
+        "beat": 105.5,
+        "label": "p"
+      },
+      {
+        "measure": 17,
+        "beat": 107.5,
+        "label": "pp"
+      },
+      {
+        "measure": 18,
+        "beat": 105.5,
+        "label": "f"
+      },
+      {
+        "measure": 23,
+        "beat": 105.5,
+        "label": "f"
+      },
+      {
+        "measure": 25,
+        "beat": 106.5,
+        "label": "p"
+      },
+      {
+        "measure": 25,
+        "beat": 107.5,
+        "label": "pp"
+      },
+      {
+        "measure": 26,
+        "beat": 105.5,
+        "label": "f"
+      },
+      {
+        "measure": 21,
+        "beat": 1.0,
+        "label": "p"
+      },
+      {
+        "measure": 21,
+        "beat": 105.5,
+        "label": "p"
+      }
+    ],
+    "wedges": []
+  },
+  "note_detail": [
+    {
+      "measure": 1,
+      "occurrence": 0,
+      "beat": 1.0,
+      "pitch": "G5",
+      "onset_offset_ms": -13,
+      "duration_ratio": 1.009984924083434,
+      "relative_dynamics_delta": -16.62857142857142
+    },
+    {
+      "measure": 1,
+      "occurrence": 0,
+      "beat": 2.5,
+      "pitch": "E5",
+      "onset_offset_ms": 1,
+      "duration_ratio": 1.1459409684877127,
+      "relative_dynamics_delta": -10.62857142857142
+    },
+    {
+      "measure": 1,
+      "occurrence": 0,
+      "beat": 3.0,
+      "pitch": "C5",
+      "onset_offset_ms": 10,
+      "duration_ratio": 0.9869299825324197,
+      "relative_dynamics_delta": -8.62857142857142
+    },
+    {
+      "measure": 1,
+      "occurrence": 0,
+      "beat": 3.5,
+      "pitch": "G4",
+      "onset_offset_ms": -13,
+      "duration_ratio": 0.2702513930803795,
+      "relative_dynamics_delta": -18.62857142857142
+    },
+    {
+      "measure": 1,
+      "occurrence": 0,
+      "beat": 4.0,
+      "pitch": "G4",
+      "onset_offset_ms": 1,
+      "duration_ratio": 0.21632473590133874,
+      "relative_dynamics_delta": -22.62857142857142
+    },
+    {
+      "measure": 1,
+      "occurrence": 0,
+      "beat": 4.5,
+      "pitch": "G4",
+      "onset_offset_ms": -25,
+      "duration_ratio": 0.3023605669069063,
+      "relative_dynamics_delta": -19.62857142857142
+    },
+    {
+      "measure": 2,
+      "occurrence": 1,
+      "beat": 1.0,
+      "pitch": "G5",
+      "onset_offset_ms": 0,
+      "duration_ratio": 1.0477213028007035,
+      "relative_dynamics_delta": -1.6285714285714192
+    },
+    {
+      "measure": 2,
+      "occurrence": 1,
+      "beat": 2.5,
+      "pitch": "E5",
+      "onset_offset_ms": 35,
+      "duration_ratio": 0.8010401707129412,
+      "relative_dynamics_delta": -10.62857142857142
+    },
+    {
+      "measure": 2,
+      "occurrence": 1,
+      "beat": 3.0,
+      "pitch": "C5",
+      "onset_offset_ms": 14,
+      "duration_ratio": 0.6173300696136083,
+      "relative_dynamics_delta": -16.62857142857142
+    },
+    {
+      "measure": 2,
+      "occurrence": 1,
+      "beat": 3.25,
+      "pitch": "D5",
+      "onset_offset_ms": -3,
+      "duration_ratio": 0.7871437413376299,
+      "relative_dynamics_delta": -15.62857142857142
+    },
+    {
+      "measure": 2,
+      "occurrence": 1,
+      "beat": 3.5,
+      "pitch": "E5",
+      "onset_offset_ms": -22,
+      "duration_ratio": 0.9982448696250269,
+      "relative_dynamics_delta": -13.62857142857142
+    },
+    {
+      "measure": 2,
+      "occurrence": 1,
+      "beat": 3.75,
+      "pitch": "F5",
+      "onset_offset_ms": -19,
+      "duration_ratio": 1.1621619545322242,
+      "relative_dynamics_delta": -8.62857142857142
+    },
+    {
+      "measure": 2,
+      "occurrence": 1,
+      "beat": 4.0,
+      "pitch": "G5",
+      "onset_offset_ms": -1,
+      "duration_ratio": 1.0264058122556492,
+      "relative_dynamics_delta": -8.62857142857142
+    },
+    {
+      "measure": 2,
+      "occurrence": 1,
+      "beat": 4.25,
+      "pitch": "A5",
+      "onset_offset_ms": -14,
+      "duration_ratio": 0.9747714716588178,
+      "relative_dynamics_delta": -10.62857142857142
+    },
+    {
+      "measure": 2,
+      "occurrence": 1,
+      "beat": 4.5,
+      "pitch": "B5",
+      "onset_offset_ms": -3,
+      "duration_ratio": 0.30331684307852974,
+      "relative_dynamics_delta": -17.62857142857142
+    },
+    {
+      "measure": 2,
+      "occurrence": 1,
+      "beat": 4.75,
+      "pitch": "C6",
+      "onset_offset_ms": 30,
+      "duration_ratio": 0.6189165338812764,
+      "relative_dynamics_delta": -16.62857142857142
+    },
+    {
+      "measure": 3,
+      "occurrence": 2,
+      "beat": 1.5,
+      "pitch": "A5",
+      "onset_offset_ms": 10,
+      "duration_ratio": 0.13445389980820505,
+      "relative_dynamics_delta": -15.62857142857142
+    },
+    {
+      "measure": 3,
+      "occurrence": 2,
+      "beat": 2.0,
+      "pitch": "A5",
+      "onset_offset_ms": 4,
+      "duration_ratio": 0.1502857584860325,
+      "relative_dynamics_delta": -16.62857142857142
+    },
+    {
+      "measure": 3,
+      "occurrence": 2,
+      "beat": 2.5,
+      "pitch": "A5",
+      "onset_offset_ms": 0,
+      "duration_ratio": 0.17289926167815903,
+      "relative_dynamics_delta": -18.62857142857142
+    },
+    {
+      "measure": 3,
+      "occurrence": 2,
+      "beat": 3.0,
+      "pitch": "B5",
+      "onset_offset_ms": 21,
+      "duration_ratio": 0.607697469479756,
+      "relative_dynamics_delta": -24.62857142857142
+    },
+    {
+      "measure": 3,
+      "occurrence": 2,
+      "beat": 3.25,
+      "pitch": "A5",
+      "onset_offset_ms": -19,
+      "duration_ratio": 0.7617158319340663,
+      "relative_dynamics_delta": -24.62857142857142
+    },
+    {
+      "measure": 3,
+      "occurrence": 2,
+      "beat": 3.5,
+      "pitch": "G#5",
+      "onset_offset_ms": -27,
+      "duration_ratio": 0.8536413826539416,
+      "relative_dynamics_delta": -17.62857142857142
+    },
+    {
+      "measure": 3,
+      "occurrence": 2,
+      "beat": 3.75,
+      "pitch": "A5",
+      "onset_offset_ms": -37,
+      "duration_ratio": 0.33134781199521707,
+      "relative_dynamics_delta": -12.62857142857142
+    },
+    {
+      "measure": 3,
+      "occurrence": 2,
+      "beat": 4.0,
+      "pitch": "C6",
+      "onset_offset_ms": 25,
+      "duration_ratio": 0.19419537938114176,
+      "relative_dynamics_delta": -25.62857142857142
+    },
+    {
+      "measure": 4,
+      "occurrence": 3,
+      "beat": 1.0,
+      "pitch": "F#5",
+      "onset_offset_ms": 8,
+      "duration_ratio": 0.960065363880086,
+      "relative_dynamics_delta": -13.62857142857142
+    },
+    {
+      "measure": 4,
+      "occurrence": 3,
+      "beat": 1.5,
+      "pitch": "G5",
+      "onset_offset_ms": 0,
+      "duration_ratio": 0.15649664511342704,
+      "relative_dynamics_delta": -16.62857142857142
+    },
+    {
+      "measure": 4,
+      "occurrence": 3,
+      "beat": 2.0,
+      "pitch": "G5",
+      "onset_offset_ms": 11,
+      "duration_ratio": 0.1932290745752253,
+      "relative_dynamics_delta": -12.62857142857142
+    },
+    {
+      "measure": 4,
+      "occurrence": 3,
+      "beat": 2.5,
+      "pitch": "G5",
+      "onset_offset_ms": -12,
+      "duration_ratio": 0.25123128627896824,
+      "relative_dynamics_delta": -11.62857142857142
+    },
+    {
+      "measure": 4,
+      "occurrence": 3,
+      "beat": 3.0,
+      "pitch": "G5",
+      "onset_offset_ms": 2,
+      "duration_ratio": 1.1030203591420789,
+      "relative_dynamics_delta": -4.628571428571419
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 1.0,
+      "pitch": "D5",
+      "onset_offset_ms": -15,
+      "duration_ratio": 0.31469551956264014,
+      "relative_dynamics_delta": 20.37142857142858
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 1.0,
+      "pitch": "F5",
+      "onset_offset_ms": -4,
+      "duration_ratio": 0.19719591501455463,
+      "relative_dynamics_delta": 3.3714285714285808
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 1.5,
+      "pitch": "D5",
+      "onset_offset_ms": 14,
+      "duration_ratio": 0.5768551264528361,
+      "relative_dynamics_delta": 9.37142857142858
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 1.5,
+      "pitch": "F5",
+      "onset_offset_ms": 13,
+      "duration_ratio": 0.5682117884493911,
+      "relative_dynamics_delta": 16.37142857142858
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 2.0,
+      "pitch": "C5",
+      "onset_offset_ms": -13,
+      "duration_ratio": 0.18449428021475164,
+      "relative_dynamics_delta": 22.37142857142858
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 2.0,
+      "pitch": "E5",
+      "onset_offset_ms": -10,
+      "duration_ratio": 0.27535403507862294,
+      "relative_dynamics_delta": 13.37142857142858
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 2.5,
+      "pitch": "C5",
+      "onset_offset_ms": 4,
+      "duration_ratio": 0.47694750167207,
+      "relative_dynamics_delta": 22.37142857142858
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 2.5,
+      "pitch": "E5",
+      "onset_offset_ms": 6,
+      "duration_ratio": 0.9606331646465094,
+      "relative_dynamics_delta": 13.37142857142858
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 3.0,
+      "pitch": "B4",
+      "onset_offset_ms": 2,
+      "duration_ratio": 1.263491640584937,
+      "relative_dynamics_delta": 20.37142857142858
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 3.0,
+      "pitch": "D5",
+      "onset_offset_ms": 11,
+      "duration_ratio": 1.5243367204760392,
+      "relative_dynamics_delta": 23.37142857142858
+    },
+    {
+      "measure": 6,
+      "occurrence": 5,
+      "beat": 1.0,
+      "pitch": "E5",
+      "onset_offset_ms": 4,
+      "duration_ratio": 0.2748085981257977,
+      "relative_dynamics_delta": 18.37142857142858
+    },
+    {
+      "measure": 6,
+      "occurrence": 5,
+      "beat": 1.0,
+      "pitch": "G5",
+      "onset_offset_ms": 3,
+      "duration_ratio": 0.20224536603617585,
+      "relative_dynamics_delta": 18.37142857142858
+    },
+    {
+      "measure": 6,
+      "occurrence": 5,
+      "beat": 1.5,
+      "pitch": "E5",
+      "onset_offset_ms": 2,
+      "duration_ratio": 0.35850612571924906,
+      "relative_dynamics_delta": 16.37142857142858
+    },
+    {
+      "measure": 6,
+      "occurrence": 5,
+      "beat": 1.5,
+      "pitch": "G5",
+      "onset_offset_ms": 11,
+      "duration_ratio": 0.7071695366816209,
+      "relative_dynamics_delta": 15.37142857142858
+    },
+    {
+      "measure": 6,
+      "occurrence": 5,
+      "beat": 2.0,
+      "pitch": "D5",
+      "onset_offset_ms": -26,
+      "duration_ratio": 0.24388966042844196,
+      "relative_dynamics_delta": 12.37142857142858
+    },
+    {
+      "measure": 6,
+      "occurrence": 5,
+      "beat": 2.0,
+      "pitch": "F5",
+      "onset_offset_ms": -28,
+      "duration_ratio": 0.2873469540217892,
+      "relative_dynamics_delta": 16.37142857142858
+    },
+    {
+      "measure": 6,
+      "occurrence": 5,
+      "beat": 2.5,
+      "pitch": "D5",
+      "onset_offset_ms": 9,
+      "duration_ratio": 0.3748930663546271,
+      "relative_dynamics_delta": 19.37142857142858
+    },
+    {
+      "measure": 6,
+      "occurrence": 5,
+      "beat": 2.5,
+      "pitch": "F5",
+      "onset_offset_ms": 2,
+      "duration_ratio": 1.3741180540944276,
+      "relative_dynamics_delta": 13.37142857142858
+    },
+    {
+      "measure": 6,
+      "occurrence": 5,
+      "beat": 3.0,
+      "pitch": "C5",
+      "onset_offset_ms": 15,
+      "duration_ratio": 1.17536699461753,
+      "relative_dynamics_delta": 23.37142857142858
+    },
+    {
+      "measure": 6,
+      "occurrence": 5,
+      "beat": 3.0,
+      "pitch": "E5",
+      "onset_offset_ms": 13,
+      "duration_ratio": 1.8628909048534434,
+      "relative_dynamics_delta": 21.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 1.0,
+      "pitch": "A5",
+      "onset_offset_ms": 97,
+      "duration_ratio": 0.3012263994025056,
+      "relative_dynamics_delta": -11.62857142857142
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 1.25,
+      "pitch": "F5",
+      "onset_offset_ms": 18,
+      "duration_ratio": 1.249180310755266,
+      "relative_dynamics_delta": 23.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 1.5,
+      "pitch": "E5",
+      "onset_offset_ms": -23,
+      "duration_ratio": 0.7904657980541852,
+      "relative_dynamics_delta": 26.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 1.75,
+      "pitch": "D5",
+      "onset_offset_ms": -91,
+      "duration_ratio": 0.860990490377866,
+      "relative_dynamics_delta": 26.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 2.0,
+      "pitch": "A5",
+      "onset_offset_ms": -114,
+      "duration_ratio": 0.6827433856038435,
+      "relative_dynamics_delta": 23.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 2.25,
+      "pitch": "F5",
+      "onset_offset_ms": -181,
+      "duration_ratio": 1.322765931114634,
+      "relative_dynamics_delta": 30.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 2.5,
+      "pitch": "E5",
+      "onset_offset_ms": -193,
+      "duration_ratio": 0.6673482564168963,
+      "relative_dynamics_delta": 23.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 2.75,
+      "pitch": "D5",
+      "onset_offset_ms": -254,
+      "duration_ratio": 1.7991833659623615,
+      "relative_dynamics_delta": 22.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 3.0,
+      "pitch": "E5",
+      "onset_offset_ms": 193,
+      "duration_ratio": 0.7509536077690637,
+      "relative_dynamics_delta": 34.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 3.25,
+      "pitch": "G5",
+      "onset_offset_ms": 160,
+      "duration_ratio": 1.0651224270895512,
+      "relative_dynamics_delta": 31.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 3.5,
+      "pitch": "E5",
+      "onset_offset_ms": 119,
+      "duration_ratio": 0.7149001715045153,
+      "relative_dynamics_delta": 23.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 3.75,
+      "pitch": "C5",
+      "onset_offset_ms": 68,
+      "duration_ratio": 1.2393938746372941,
+      "relative_dynamics_delta": 25.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 4.0,
+      "pitch": "D5",
+      "onset_offset_ms": 93,
+      "duration_ratio": 0.8926496588833083,
+      "relative_dynamics_delta": 28.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 4.25,
+      "pitch": "F5",
+      "onset_offset_ms": 71,
+      "duration_ratio": 0.8822397630180713,
+      "relative_dynamics_delta": 26.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 4.5,
+      "pitch": "D5",
+      "onset_offset_ms": 0,
+      "duration_ratio": 0.9789421049839195,
+      "relative_dynamics_delta": 26.37142857142858
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 4.75,
+      "pitch": "B4",
+      "onset_offset_ms": -31,
+      "duration_ratio": 1.1194103520588738,
+      "relative_dynamics_delta": 23.37142857142858
+    },
+    {
+      "measure": 8,
+      "occurrence": 7,
+      "beat": 1.0,
+      "pitch": "C5",
+      "onset_offset_ms": 0,
+      "duration_ratio": 0.2531210244741103,
+      "relative_dynamics_delta": 24.37142857142858
+    },
+    {
+      "measure": 8,
+      "occurrence": 7,
+      "beat": 1.5,
+      "pitch": "C5",
+      "onset_offset_ms": -17,
+      "duration_ratio": 0.26502439903400254,
+      "relative_dynamics_delta": 26.37142857142858
+    },
+    {
+      "measure": 8,
+      "occurrence": 7,
+      "beat": 2.0,
+      "pitch": "D5",
+      "onset_offset_ms": -25,
+      "duration_ratio": 0.3233881520900476,
+      "relative_dynamics_delta": 19.37142857142858
+    },
+    {
+      "measure": 8,
+      "occurrence": 7,
+      "beat": 2.5,
+      "pitch": "D5",
+      "onset_offset_ms": 31,
+      "duration_ratio": 0.3422385315407486,
+      "relative_dynamics_delta": 23.37142857142858
+    },
+    {
+      "measure": 8,
+      "occurrence": 7,
+      "beat": 3.0,
+      "pitch": "C5",
+      "onset_offset_ms": 81,
+      "duration_ratio": 0.8305832091100009,
+      "relative_dynamics_delta": 17.37142857142858
+    },
+    {
+      "measure": 8,
+      "occurrence": 7,
+      "beat": 3.0,
+      "pitch": "E5",
+      "onset_offset_ms": 77,
+      "duration_ratio": 0.7469688669001475,
+      "relative_dynamics_delta": 19.37142857142858
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 1.0,
+      "pitch": "D4",
+      "onset_offset_ms": 1,
+      "duration_ratio": 0.288730555980622,
+      "relative_dynamics_delta": 8.37142857142858
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 1.0,
+      "pitch": "F4",
+      "onset_offset_ms": 0,
+      "duration_ratio": 0.2862702517617608,
+      "relative_dynamics_delta": 5.371428571428581
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 1.5,
+      "pitch": "D4",
+      "onset_offset_ms": 7,
+      "duration_ratio": 0.3963462404411661,
+      "relative_dynamics_delta": 9.37142857142858
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 1.5,
+      "pitch": "F4",
+      "onset_offset_ms": -4,
+      "duration_ratio": 0.4266743770578448,
+      "relative_dynamics_delta": 3.3714285714285808
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 2.0,
+      "pitch": "C4",
+      "onset_offset_ms": 1,
+      "duration_ratio": 0.29286744112055524,
+      "relative_dynamics_delta": 19.37142857142858
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 2.0,
+      "pitch": "E4",
+      "onset_offset_ms": 22,
+      "duration_ratio": 0.20118202700843538,
+      "relative_dynamics_delta": 10.37142857142858
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 2.5,
+      "pitch": "C4",
+      "onset_offset_ms": 9,
+      "duration_ratio": 1.1718814312841659,
+      "relative_dynamics_delta": 16.37142857142858
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 2.5,
+      "pitch": "E4",
+      "onset_offset_ms": 9,
+      "duration_ratio": 1.6499893300282593,
+      "relative_dynamics_delta": 15.37142857142858
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 3.0,
+      "pitch": "B3",
+      "onset_offset_ms": 26,
+      "duration_ratio": 0.9640012983484085,
+      "relative_dynamics_delta": 11.37142857142858
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 3.0,
+      "pitch": "D4",
+      "onset_offset_ms": 25,
+      "duration_ratio": 1.061670336372531,
+      "relative_dynamics_delta": 21.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 1.0,
+      "pitch": "E4",
+      "onset_offset_ms": 2,
+      "duration_ratio": 0.21672509524661537,
+      "relative_dynamics_delta": 7.371428571428581
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 1.0,
+      "pitch": "G4",
+      "onset_offset_ms": 1,
+      "duration_ratio": 0.23429540594205286,
+      "relative_dynamics_delta": 2.3714285714285808
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 1.5,
+      "pitch": "E4",
+      "onset_offset_ms": -45,
+      "duration_ratio": 0.25173009418508185,
+      "relative_dynamics_delta": 13.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 1.5,
+      "pitch": "G4",
+      "onset_offset_ms": -44,
+      "duration_ratio": 0.3270865607045253,
+      "relative_dynamics_delta": 17.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 2.0,
+      "pitch": "F4",
+      "onset_offset_ms": 10,
+      "duration_ratio": 0.29664402153916447,
+      "relative_dynamics_delta": 20.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 2.0,
+      "pitch": "B4",
+      "onset_offset_ms": 15,
+      "duration_ratio": 0.4457736543073635,
+      "relative_dynamics_delta": 17.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 2.5,
+      "pitch": "F4",
+      "onset_offset_ms": 4,
+      "duration_ratio": 0.20192895511244371,
+      "relative_dynamics_delta": 11.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 2.5,
+      "pitch": "B4",
+      "onset_offset_ms": 9,
+      "duration_ratio": 0.2830277518863035,
+      "relative_dynamics_delta": 16.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 3.0,
+      "pitch": "E4",
+      "onset_offset_ms": 21,
+      "duration_ratio": 0.23469250430670613,
+      "relative_dynamics_delta": 20.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 3.0,
+      "pitch": "C5",
+      "onset_offset_ms": 22,
+      "duration_ratio": 0.4099344996717737,
+      "relative_dynamics_delta": 19.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 3.5,
+      "pitch": "E4",
+      "onset_offset_ms": 1,
+      "duration_ratio": 0.32524759709264156,
+      "relative_dynamics_delta": 16.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 3.5,
+      "pitch": "C5",
+      "onset_offset_ms": 1,
+      "duration_ratio": 0.8182376402741164,
+      "relative_dynamics_delta": 22.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 4.0,
+      "pitch": "G4",
+      "onset_offset_ms": 32,
+      "duration_ratio": 0.25582193790436664,
+      "relative_dynamics_delta": 10.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 4.0,
+      "pitch": "C#5",
+      "onset_offset_ms": 18,
+      "duration_ratio": 0.32111253473556084,
+      "relative_dynamics_delta": 23.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 4.5,
+      "pitch": "G4",
+      "onset_offset_ms": -19,
+      "duration_ratio": 0.2705959285330242,
+      "relative_dynamics_delta": 8.37142857142858
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 4.5,
+      "pitch": "C#5",
+      "onset_offset_ms": -13,
+      "duration_ratio": 0.46754046987518644,
+      "relative_dynamics_delta": 22.37142857142858
+    },
+    {
+      "measure": 11,
+      "occurrence": 10,
+      "beat": 1.0,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -21.62857142857142
+    },
+    {
+      "measure": 11,
+      "occurrence": 10,
+      "beat": 1.5,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -23.62857142857142
+    },
+    {
+      "measure": 13,
+      "occurrence": 12,
+      "beat": 3.0,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 25.37142857142858
+    },
+    {
+      "measure": 16,
+      "occurrence": 15,
+      "beat": 2.25,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 2.3714285714285808
+    },
+    {
+      "measure": 16,
+      "occurrence": 15,
+      "beat": 3.25,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -7.628571428571419
+    },
+    {
+      "measure": 16,
+      "occurrence": 15,
+      "beat": 3.5,
+      "pitch": "E5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 28.37142857142858
+    },
+    {
+      "measure": 17,
+      "occurrence": 16,
+      "beat": 3.0,
+      "pitch": "C5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 26.37142857142858
+    },
+    {
+      "measure": 17,
+      "occurrence": 16,
+      "beat": 3.25,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 43.37142857142858
+    },
+    {
+      "measure": 19,
+      "occurrence": 18,
+      "beat": 1.0,
+      "pitch": "E5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -30.62857142857142
+    },
+    {
+      "measure": 19,
+      "occurrence": 18,
+      "beat": 1.5,
+      "pitch": "E5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -26.62857142857142
+    },
+    {
+      "measure": 19,
+      "occurrence": 18,
+      "beat": 2.0,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -16.62857142857142
+    },
+    {
+      "measure": 19,
+      "occurrence": 18,
+      "beat": 2.5,
+      "pitch": "B4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -16.62857142857142
+    },
+    {
+      "measure": 19,
+      "occurrence": 18,
+      "beat": 2.75,
+      "pitch": "C5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -0.6285714285714192
+    }
+  ],
+  "musicality": {
+    "dynamics_notes": 175,
+    "median_absolute_onset_offset_ms": 13.0,
+    "timed_notes": 97,
+    "median_played_to_score_duration": 0.47694750167207,
+    "duration_notes": 97,
+    "limits": [
+      "Tone color, arm weight, and the acoustic decay of a piano note are not reliably inferred from this transcription.",
+      "Pedal use and harmonic clarity require listening to the recording; this analysis does not detect pedal changes."
+    ]
+  },
+  "bars": [
+    {
+      "measure": 1,
+      "printed": 1,
+      "occurrence": 0,
+      "tempo_status": "on_target",
+      "tempo_ratio": 1.058367824019819,
+      "performed_bpm": 127.00413888237829,
+      "pitch_recall": 1.0,
+      "pace_ratio": 1.0068933511239493,
+      "pace": "steady",
+      "start_seconds": 0.9348501416976531,
+      "end_seconds": 2.8245523365392717
+    },
+    {
+      "measure": 2,
+      "printed": 2,
+      "occurrence": 1,
+      "tempo_status": "on_target",
+      "tempo_ratio": 1.098891888423005,
+      "performed_bpm": 131.8670266107606,
+      "pitch_recall": 0.9444444444444444,
+      "pace_ratio": 1.0454464987934524,
+      "pace": "steady",
+      "start_seconds": 2.8245523365392717,
+      "end_seconds": 4.644567591060947
+    },
+    {
+      "measure": 3,
+      "printed": 3,
+      "occurrence": 2,
+      "tempo_status": "on_target",
+      "tempo_ratio": 1.0837152153572034,
+      "performed_bpm": 130.04582584286442,
+      "pitch_recall": 0.8888888888888888,
+      "pace_ratio": 1.031007954031106,
+      "pace": "steady",
+      "start_seconds": 4.684550008745999,
+      "end_seconds": 6.530053303023159
+    },
+    {
+      "measure": 4,
+      "printed": 4,
+      "occurrence": 3,
+      "tempo_status": "on_target",
+      "tempo_ratio": 1.042743155262446,
+      "performed_bpm": 125.12917863149352,
+      "pitch_recall": 1.0,
+      "pace_ratio": 0.9920285992595556,
+      "pace": "steady",
+      "start_seconds": 6.532302401968681,
+      "end_seconds": 8.45032026658523
+    },
+    {
+      "measure": 5,
+      "printed": 5,
+      "occurrence": 4,
+      "tempo_status": "on_target",
+      "tempo_ratio": 1.0561548825892542,
+      "performed_bpm": 126.7385859107105,
+      "pitch_recall": 1.0,
+      "pace_ratio": 1.0047880376759275,
+      "pace": "steady",
+      "start_seconds": 8.471207272326016,
+      "end_seconds": 10.364868924579923
+    },
+    {
+      "measure": 6,
+      "printed": 6,
+      "occurrence": 5,
+      "tempo_status": "on_target",
+      "tempo_ratio": 1.0460892584380175,
+      "performed_bpm": 125.53071101256211,
+      "pitch_recall": 1.0,
+      "pace_ratio": 0.9952119623240724,
+      "pace": "steady",
+      "start_seconds": 10.364868924579923,
+      "end_seconds": 12.276751666771853
+    },
+    {
+      "measure": 7,
+      "printed": 7,
+      "occurrence": 6,
+      "tempo_status": "too_slow",
+      "tempo_ratio": 0.7363620067024339,
+      "performed_bpm": 88.36344080429207,
+      "pitch_recall": 1.0,
+      "pace_ratio": 0.7005485160658905,
+      "pace": "dragged",
+      "start_seconds": 12.21540516900651,
+      "end_seconds": 14.931460562679485
+    },
+    {
+      "measure": 8,
+      "printed": 8,
+      "occurrence": 7,
+      "tempo_status": "on_target",
+      "tempo_ratio": 0.9312530229675545,
+      "performed_bpm": 111.75036275610654,
+      "pitch_recall": 0.8571428571428571,
+      "pace_ratio": 0.8859608689526357,
+      "pace": "steady",
+      "start_seconds": 14.92012243742305,
+      "end_seconds": 17.06776647258199
+    },
+    {
+      "measure": 9,
+      "printed": 9,
+      "occurrence": 8,
+      "tempo_status": "on_target",
+      "tempo_ratio": 1.0317534411136011,
+      "performed_bpm": 123.81041293363214,
+      "pitch_recall": 1.0,
+      "pace_ratio": 0.9815733776852672,
+      "pace": "steady",
+      "start_seconds": 17.05684076149177,
+      "end_seconds": 18.995288379210734
+    },
+    {
+      "measure": 10,
+      "printed": 10,
+      "occurrence": 9,
+      "tempo_status": "on_target",
+      "tempo_ratio": 1.0722620835340864,
+      "performed_bpm": 128.67145002409035,
+      "pitch_recall": 1.0,
+      "pace_ratio": 1.0201118534311815,
+      "pace": "steady",
+      "start_seconds": 19.019656912990346,
+      "end_seconds": 20.884872545168786
+    },
+    {
+      "measure": 11,
+      "printed": 11,
+      "occurrence": 10,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.16666666666666666,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 12,
+      "printed": 12,
+      "occurrence": 11,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.0,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 13,
+      "printed": 13,
+      "occurrence": 12,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.125,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 14,
+      "printed": 14,
+      "occurrence": 13,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.0,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 15,
+      "printed": 15,
+      "occurrence": 14,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.0,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 16,
+      "printed": 16,
+      "occurrence": 15,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.2,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 17,
+      "printed": 17,
+      "occurrence": 16,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.13333333333333333,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 18,
+      "printed": 18,
+      "occurrence": 17,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.0,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 19,
+      "printed": 19,
+      "occurrence": 18,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.3888888888888889,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 20,
+      "printed": 20,
+      "occurrence": 19,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.0,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    }
+  ],
+  "pace": {
+    "median_bpm": 126.1,
+    "marked_bpm": 120.0,
+    "rushed_bars": [],
+    "dragged_bars": [
+      7
+    ]
+  },
+  "meta": {
+    "alignment_status": "aligned",
+    "pitch_precision": 0.8215962441314554,
+    "pitch_recall": 0.5287009063444109,
+    "hands": "right",
+    "dropped_harmonics": 1,
+    "omitted_findings": 27,
+    "reconciled_pairs": 3,
+    "octave_pairs": 0,
+    "shifted_run_notes": 2,
+    "quiet_noise_dropped": 1,
+    "ornament_like": 2,
+    "placed_extras": 0,
+    "played_bars": [
+      1,
+      13
+    ],
+    "coverage": 0.25,
+    "warnings": [
+      "Alignment is monotone and heuristic. Repeated identical passages, skipped/replayed bars, and partial takes can be ambiguous; inspect matches before grading.",
+      "Audio detections have uncalibrated confidence; discrepancies may come from transcription rather than playing."
+    ],
+    "explanations": "fallback"
+  },
+  "coach": "You played bars 1 to 13, so only those bars are marked."
+}

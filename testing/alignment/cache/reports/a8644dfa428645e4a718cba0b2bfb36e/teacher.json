@@ -1,0 +1,42 @@
+{
+  "digest": "cb051ff64301ff486c9ee6f53977af119a5a92124b13cbe59688d25f20737505",
+  "feedback": {
+    "summary": "You played the opening ten bars with strong pitch accuracy and a steady pulse before the piece lost momentum in the second half. The single best step forward is to secure the transition into bar 11 and give your notes their full time value.",
+    "strengths": [
+      "You played bars 1 through 6 and bars 9 to 10 with very high note accuracy.",
+      "Your tempo stayed remarkably steady across the first six bars.",
+      "You followed the decrescendo, gradually getting softer as marked, in bar 8."
+    ],
+    "focus_areas": [
+      {
+        "title": "Rebuilding the second half",
+        "bars": "bars 11-20",
+        "what_happened": "Most notes dropped away after bar 10, with several bars missing or only partially played. Because this was recorded via microphone, some dropped notes might just be quiet audio that was not picked up clearly, but the flow clearly broke down.",
+        "tips": [
+          "Practise bars 11 through 14 hands separately at half speed before putting them together.",
+          "Loop the transition from bar 10 into bar 11 four or five times until your hand position changes feel automatic.",
+          "For your next recording, place your phone close to the piano in a quiet room so every note registers clearly."
+        ]
+      },
+      {
+        "title": "Holding notes for their full value",
+        "bars": "bars 5-6 and 9-10",
+        "what_happened": "You released many notes far too early, cutting them down to less than half their written length, which makes the music sound clipped rather than smooth.",
+        "tips": [
+          "Keep each key pressed down until the exact moment the next note sounds, aiming for a smooth legato touch.",
+          "Count the beats out loud slowly so you physically feel how long each note ought to ring."
+        ]
+      },
+      {
+        "title": "Smoothing out the hesitation",
+        "bars": "bars 7-8",
+        "what_happened": "You dragged the tempo significantly in bar 7, slowing down by about a quarter of your speed, and hit C instead of B in bar 8.",
+        "tips": [
+          "Set a metronome to a comfortable, slow tempo and play through bars 6 to 8 without letting the pulse sag.",
+          "Check your right-hand fingering in bar 8 to make sure you land cleanly on B rather than drifting up to C."
+        ]
+      }
+    ],
+    "practice_plan": "Start your next practice session by playing bars 11 through 14 hands separately with a metronome at a slow tempo. Then, loop bars 7 through 10, focusing on holding each note its full length without slowing down. Finish by linking bars 1 to 12 in one continuous, gentle run-through."
+  }
+}

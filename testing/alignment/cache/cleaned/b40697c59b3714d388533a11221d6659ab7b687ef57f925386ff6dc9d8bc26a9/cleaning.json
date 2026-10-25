@@ -1,0 +1,12 @@
+{
+  "method": "reference_spectral_subtraction",
+  "noise_profile": "uploaded_noise_sample",
+  "timing_preserved": true,
+  "input_duration_seconds": 4.778684807256236,
+  "output_duration_seconds": 4.778684807256236,
+  "lead_rms": 0.059314556928867314,
+  "active_rms_p90": 0.09803150955018775,
+  "applied": true,
+  "reason": "Uploaded noise-only sample used as the noise profile.",
+  "minimum_gain_db": -13.15
+}
