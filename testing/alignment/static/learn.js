@@ -13,7 +13,7 @@ const WIN = {first: .2, cadence: .1, context: 1.5};
 const S = {phase: 'idle', score: null, steps: [], idx: 0, remaining: [], firstTry: true, ok: 0, wrong: 0, streak: 0, tries: 0,
   elements: new Map(), locations: {}, stream: null, ctx: null, worklet: null, source: null, pcm: [], origin: 0, rate: 44100,
   busy: false, last: 0, noteStream: null, token: 0, lastHit: {pitch: null, time: -9}, lastMiss: {pitch: null, time: -9},
-  buffers: new Map(), hearing: false, file: null, keyLow: 60, keyHigh: 84};
+  buffers: new Map(), hearing: false, file: null, keyLow: 60, keyHigh: 84, log: [], recent: [], hitVel: []};
 
 const message = text => { $('#message').textContent = text || ''; $('#message').hidden = !text; };
 const overlay = text => { $('#overlay').hidden = !text; if (text) $('#overlay').innerHTML = `<span class="spin"></span>${text}`; };
@@ -99,7 +99,7 @@ function flash(p, cls) { const k = keyEl(p); if (!k) return; k.classList.add(cls
 /* ---------- the lesson ---------- */
 function reset() {
   S.idx = 0; S.ok = S.wrong = S.streak = S.tries = 0; S.firstTry = true;
-  S.lastHit = {pitch: null, time: -9}; S.lastMiss = {pitch: null, time: -9};
+  S.lastHit = {pitch: null, time: -9}; S.lastMiss = {pitch: null, time: -9}; S.recent = []; S.hitVel = [];
   for (const el of S.elements.values()) el.classList?.remove('done', 'now', 'hard');
   $('#kb').querySelectorAll('.k').forEach(k => k.classList.remove('next', 'hit', 'miss'));
   $('#finish').classList.remove('show'); $('#n-total').textContent = S.steps.length;
@@ -129,17 +129,29 @@ function direction(got, want) {
   const n = Math.abs(d);
   return `You want ${pitchName(want)}, ${n === 1 ? 'the next white key' : `${n} white keys`} to the ${d > 0 ? 'right' : 'left'}.`;
 }
-function onEvent(pitch, time, velocity) {
+function onEvent(pitch, time, velocity, duration) {
   if (S.phase !== 'live' || S.idx >= S.steps.length) return;
+  S.log.push({pitch, dt: +(time - S.lastHit.time).toFixed(2), velocity, duration, want: S.remaining.slice(), lastHit: S.lastHit.pitch});
   const want = S.remaining;
-  // The transcriber hears a key's ring and overtones for a moment after the hit. Those echoes are
-  // ignored unless the tune really does want that key again next.
-  if (!want.includes(pitch) && time - S.lastHit.time < 0.3 && S.lastHit.pitch !== null && (pitch - S.lastHit.pitch) % 12 === 0) return;
+  // What the quick transcriber hears besides the key that was pressed, and how it is told apart
+  // (rules checked on a replay of a correctly played tune: 9 false "wrong key" calls to 0):
+  // 1. far outside the tune's range: a sub-harmonic of a low string.
+  if (pitch < S.keyLow - 12 || pitch > S.keyHigh + 12) return;
+  // 2. a quieter note at the same instant as a louder one: a ringing key re-triggered by the new attack.
+  if (S.recent.some(r => r.pitch !== pitch && Math.abs(r.time - time) <= 0.03 && velocity < 0.75 * r.velocity)) { S.recent.push({pitch, time, velocity}); return; }
+  // 3. the same key heard again within a second, much quieter: the ring, not a new press. Stricter when
+  //    the tune wants that key next, so a quiet real repeat still counts.
+  const ringLimit = want.includes(pitch) ? 0.6 : 0.8;
+  if (S.recent.some(r => r.pitch === pitch && time - r.time >= 0 && time - r.time <= 1.0 && velocity < ringLimit * r.velocity)) { S.recent.push({pitch, time, velocity}); return; }
+  // 4. a wrong note much softer than the player's recent correct ones: an overtone.
+  const hits = S.hitVel.slice(-3).sort((a, b) => a - b);
+  if (!want.includes(pitch) && hits.length && velocity < 0.6 * hits[hits.length >> 1]) { S.recent.push({pitch, time, velocity}); return; }
+  S.recent.push({pitch, time, velocity}); if (S.recent.length > 12) S.recent.shift();
   if (time - S.lastMiss.time < 0.4 && pitch === S.lastMiss.pitch) return;
   const octave = want.find(p => p !== pitch && (p - pitch) % 12 === 0);
   if (want.includes(pitch) || octave !== undefined) {
     const hit = want.includes(pitch) ? pitch : octave;
-    S.remaining = want.filter(p => p !== hit); S.lastHit = {pitch, time};
+    S.remaining = want.filter(p => p !== hit); S.lastHit = {pitch, time}; S.hitVel.push(velocity);
     flash(hit, 'hit');
     if (octave !== undefined && !want.includes(pitch)) $('#sub').textContent = direction(pitch, octave);
     if (S.remaining.length) { $('#say').textContent = `Good, now add ${S.remaining.map(pitchName).join(' and ')}.`; return; }
@@ -222,7 +234,7 @@ async function sendWindow() {
     if (res.status === 503) return;
     const data = await res.json(); if (!res.ok) throw Error(data.error);
     if (token !== S.token || S.phase !== 'live') return;
-    for (const e of S.noteStream.ingest(data.notes, {start, end}).events) onEvent(e.pitch, e.time, e.velocity);
+    for (const e of S.noteStream.ingest(data.notes, {start, end}).events) onEvent(e.pitch, e.time, e.velocity, e.duration);
   } catch {} finally { if (token === S.token) { S.busy = false; void sendWindow(); } }
 }
 async function capture(node) {
@@ -286,7 +298,7 @@ $('#piece').addEventListener('change', () => { history.replaceState(null, '', `?
 $('#mode').addEventListener('change', () => { $('#file-wrap').hidden = $('#mode').value !== 'file'; $('#file-spacer').hidden = $('#mode').value === 'file'; setPhase(S.phase); });
 $('#file').addEventListener('change', () => setPhase(S.phase));
 window.addEventListener('pagehide', () => { S.phase = 'idle'; void stop(false); });
-window.learnDebug = {onEvent: (p, v = 90) => onEvent(p, performance.now() / 1000, v), state: () => ({idx: S.idx, ok: S.ok, wrong: S.wrong, steps: S.steps.length, phase: S.phase})};
+window.learnDebug = {onEvent: (p, v = 90) => onEvent(p, performance.now() / 1000, v, 0.3), state: () => ({idx: S.idx, ok: S.ok, wrong: S.wrong, steps: S.steps.length, phase: S.phase}), log: () => S.log};
 (async () => {
   try {
     const pieces = await (await fetch('/api/pieces')).json();

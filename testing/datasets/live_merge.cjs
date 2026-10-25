@@ -6,7 +6,7 @@ process.stdin.on('data', d => input += d).on('end', () => {
   const windows = JSON.parse(input), stream = new LiveNoteStream(), out = [];
   for (const w of windows) {
     const batch = stream.ingest(w.notes, {start: w.start, end: w.end});
-    for (const e of batch.events) out.push({pitch: e.pitch, time: e.time, emitted: w.received});
+    for (const e of batch.events) out.push({pitch: e.pitch, time: e.time, emitted: w.received, duration: e.duration, velocity: e.velocity});
   }
   process.stdout.write(JSON.stringify(out));
 });
