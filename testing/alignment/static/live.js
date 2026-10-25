@@ -237,7 +237,9 @@ function renderBars(bars) {
   for (const b of bars) {
     if (S.barsSeen.has(b.occurrence) || b.occurrence === newest) continue;
     S.barsSeen.add(b.occurrence);  // tempo is only worth saying once a bar is finished
-    if ((b.tempo_status === 'too_fast' || b.tempo_status === 'too_slow') && b.tempo_ratio)
+    // A bar's tempo fit is only worth a sentence once most of its notes are in and the ratio is sane.
+    if ((b.tempo_status === 'too_fast' || b.tempo_status === 'too_slow') && b.tempo_ratio
+        && b.tempo_ratio > 0.5 && b.tempo_ratio < 2 && b.expected && b.correct >= 0.6 * b.expected)
       S.tempoItems.push({id: `tempo-${b.occurrence}`, kind: 'tempo', bar: b.number, time: S.ctx ? S.ctx.currentTime - S.origin : 0,
         text: `About ${Math.round(Math.abs(b.tempo_ratio - 1) * 100)}% ${b.tempo_status === 'too_fast' ? 'faster' : 'slower'} than written.`});
   }
