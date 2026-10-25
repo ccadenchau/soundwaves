@@ -136,10 +136,22 @@ def _ask(payload, key, model):
         f'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent',
         data=json.dumps(body).encode(), method='POST',
         headers={'Content-Type': 'application/json', 'x-goog-api-key': key})  # header, not URL: keys in URLs get logged
-    try:
-        with urllib.request.urlopen(request, timeout=120) as response:
-            result = json.load(response)
-    except urllib.error.HTTPError as error:
+    import time
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(request, timeout=120) as response:
+                result = json.load(response)
+            break
+        except urllib.error.HTTPError as error:
+            if error.code in (429, 500, 503) and attempt < 2:  # Google's "high demand" spikes pass quickly
+                time.sleep(3 * (attempt + 1))
+                continue
+            result = error
+            break
+        except (urllib.error.URLError, TimeoutError) as error:
+            raise FeedbackUnavailable(f'Could not reach Gemini: {error}'[:300]) from None
+    if isinstance(result, urllib.error.HTTPError):
+        error = result
         detail = ''
         try:
             detail = json.load(error).get('error', {}).get('message', '')
@@ -149,8 +161,6 @@ def _ask(payload, key, model):
             raise FeedbackUnavailable('Google rejected the API key in .env. Check that it is a valid '
                                       'Google AI Studio key.') from None
         raise FeedbackUnavailable(f'Gemini request failed ({error.code}). {detail[:200]}'.strip()) from None
-    except (urllib.error.URLError, TimeoutError) as error:
-        raise FeedbackUnavailable(f'Could not reach Gemini: {error}'[:300]) from None
     try:
         parts = result['candidates'][0]['content']['parts']
         return json.loads(''.join(p.get('text', '') for p in parts))

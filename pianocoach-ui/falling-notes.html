@@ -18,11 +18,12 @@ input[type=range]{accent-color:var(--accent)}
 #stage{position:relative;flex:1;min-height:0}
 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 #drop{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink-2);pointer-events:none;padding:24px}
+#drop[hidden]{display:none}
 #drop.over{background:#b9efdf18;color:var(--ink)}
 select{background:#ffffff14;border:1px solid #ffffff22;color:var(--ink);padding:5px 8px;border-radius:12px;font:inherit;max-width:180px}
 option{color:#000}
 .sw{display:inline-block;width:10px;height:10px;border-radius:2px}
-body.embed #open,body.embed #compare,body.embed h1,body.embed #fbtn{display:none}
+body.embed label.ctl:has(#look),body.embed #open,body.embed #compare,body.embed h1,body.embed #fbtn{display:none}
 body.embed header{padding:6px 12px}
 #fb{position:absolute;z-index:5;top:0;right:0;bottom:0;width:min(380px,100%);overflow:auto;background:#142428f2;border-left:1px solid #ffffff22;padding:16px 18px;font-size:14px}
 #fb h3{margin:16px 0 6px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
@@ -288,7 +289,7 @@ addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) f.arra
 addEventListener("resize", resize);
 // optional: ?src=path/to/file.mid
 // ---------- Backend (served by pianocoach.app) ----------
-const EMBED = new URLSearchParams(location.search).has("embed");
+const qs0 = new URLSearchParams(location.search), EMBED = qs0.has("embed");
 if (EMBED) document.body.classList.add("embed");
 let feedbackUrl = null;
 function loadReport(id, url = "/api/falling/" + id) {
@@ -304,6 +305,7 @@ function loadReport(id, url = "/api/falling/" + id) {
       $("score").textContent = `· ${d.matched}/${notes.length} played notes match` + (d.missing ? `, ${d.missing} score notes missed` : "");
       if (!EMBED) history.replaceState(null, "", "?report=" + d.id);
       feedbackUrl = EMBED ? null : "/api/feedback/" + d.id; $("fb").hidden = true; $("fb").textContent = ""; $("fbtn").hidden = !feedbackUrl;
+      const t0 = +qs0.get("t"); if (t0 > 0) seekTo(t0); // ?t=12.5 starts there
       updateTime();
     }).catch(e => $("msg").textContent = e.message);
 }

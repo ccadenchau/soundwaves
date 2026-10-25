@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 MODEL = 'claude-opus-5-5'
-GEMINI_MODEL = 'gemini-2.5-flash'
+GEMINI_MODEL = 'gemini-3.8-flash'
 CACHE = Path(__file__).with_name('cache') / 'explanations'
 ENV_FILE = Path(__file__).resolve().parents[1] / '.env'
 
