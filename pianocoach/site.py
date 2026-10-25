@@ -1,6 +1,6 @@
 """One header and footer for every PianoCoach page, so the site reads as one thing."""
 
-NAV = (('live', '/live', 'Play live'), ('check', '/check', 'Check a recording'), ('add', '/upload', 'Add a piece'))
+NAV = (('live', '/live', 'Play live'), ('check', '/check', 'Check a recording'), ('add', '/upload', 'Add a piece'), ('easy', '/easy', 'Make it easy'))
 
 
 def header(active=''):
