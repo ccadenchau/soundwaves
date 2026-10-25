@@ -217,3 +217,45 @@ class PartialTakeTests(unittest.TestCase):
             self.assertTrue(all(e['measure'] <= 2 for e in report['errors']), report['errors'])
             self.assertIn(('wrong_pitch', 2, 'G#5'), [(e['category'], e['measure'], e['actual']) for e in report['errors']])
             self.assertIn('bars 1 to 2', report['coach'])
+
+
+class ShiftedRunTests(unittest.TestCase):
+    def test_run_played_a_step_low_is_four_wrong_notes(self):
+        self._check(slice(8, 12), ['B4', 'A4', 'G4', 'F4'],
+                    [('wrong_pitch', 3, 1.0, 'C5', 'B4'), ('wrong_pitch', 3, 2.0, 'B4', 'A4'),
+                     ('wrong_pitch', 3, 3.0, 'A4', 'G4'), ('wrong_pitch', 3, 4.0, 'G4', 'F4')])
+
+    def test_part_of_a_bar_played_a_step_low(self):
+        self._check(slice(9, 12), ['A4', 'G4', 'F4'],
+                    [('wrong_pitch', 3, 2.0, 'B4', 'A4'), ('wrong_pitch', 3, 3.0, 'A4', 'G4'), ('wrong_pitch', 3, 4.0, 'G4', 'F4')])
+
+    def _check(self, where, shifted, expected):
+        from music21 import meter, note, stream, tempo
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            part = stream.Part(id='RH')
+            bars = (('E5', 'D5', 'C5', 'B4'), ('A4', 'G4', 'F4', 'E4'), ('C5', 'B4', 'A4', 'G4'), ('E5', 'D5', 'C5', 'B4'), ('A4', 'G4', 'F4', 'E4'))
+            for number, pitches in enumerate(bars, 1):
+                measure = stream.Measure(number=number)
+                if number == 1:
+                    measure.append(meter.TimeSignature('4/4'))
+                    measure.append(tempo.MetronomeMark(number=120))
+                for name in pitches:
+                    measure.append(note.Note(name, quarterLength=1.0))
+                part.append(measure)
+            score = stream.Score()
+            score.insert(0, part)
+            source = root / 'score.musicxml'
+            score.write('musicxml', fp=source)
+            build_reference(source, root / 'ref', render_audio=False)
+            reference = root / 'ref' / 'reference.json'
+            from music21 import pitch as m21pitch
+            played_names = [n for bar in bars for n in bar]
+            played_names[where] = shifted                            # played a step low, in time
+            played = [dict(id=f'p{i}', onset=1.0 + i * 0.5, duration=0.45, pitch=m21pitch.Pitch(n).midi,
+                           velocity=80, model_score=0.9) for i, n in enumerate(played_names)]
+            alignment = align_performance(reference, played)
+            report = build_ui_report(reference, alignment, performance_notes=played,
+                                     piece=dict(title='t', composer='t'), audio_duration=12.0)
+            findings = sorted((e['category'], e['measure'], e['beat'], e['expected'], e['actual']) for e in report['errors'])
+            self.assertEqual(findings, sorted(expected), findings)

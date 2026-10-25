@@ -54,7 +54,7 @@ def score_metadata(musicxml):
     if md is not None:
         if md.title:
             meta['title'] = str(md.title)
-        if md.composer:
+        if md.composer and str(md.composer).strip().lower() != 'music21':  # music21's stand-in when a score has none
             meta['composer'] = str(md.composer)
     ts = score.recurse().getElementsByClass(meter.TimeSignature).first()
     if ts is not None:
@@ -200,6 +200,17 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
             return float(np.interp(audio_time, anchor_times, anchor_beats))
         return None
 
+    def robust_time(score_beat, window=8.0):
+        """When a score beat was due, from a median-based tempo line over about two bars around it.
+        A few misplaced notes cannot bend it, unlike a single bar's own fit."""
+        pts = [(b, t) for b, t in zip(anchor_beats, anchor_times) if abs(b - score_beat) <= window]
+        if len(pts) < 4:
+            return time_at_beat(score_beat, None)
+        slopes = [(t2 - t1) / (b2 - b1) for i, (b1, t1) in enumerate(pts) for b2, t2 in pts[i + 1:] if b2 - b1 > 1e-6]
+        slope = float(median(slopes)) if slopes else 0.5
+        intercept = float(median([t - slope * b for b, t in pts]))
+        return intercept + slope * score_beat
+
     bars = {(b['number'], b['occurrence']): b for b in alignment['measures']}
     source = alignment.get('performance_source', 'audio')
     matched_played = [m for m in alignment['matches']
@@ -209,6 +220,11 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
         """Overtone above a note that was really played, or a false fundamental an
         octave below one (a known Basic Pitch failure on bass notes)."""
         for m in matched_played:
+            if drop_harmonics == 'octave':
+                # Transkun: only an exact octave above a played note, at the same instant.
+                if abs(m['audio_time'] - err['audio_time']) <= 0.03 and err['actual_pitch'] - m['actual_pitch'] == 12:
+                    return True
+                continue
             if abs(m['audio_time'] - err['audio_time']) <= 0.06:
                 interval = err['actual_pitch'] - m['actual_pitch']
                 if interval in HARMONIC_INTERVALS or interval == -12:
@@ -234,8 +250,41 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
         edge = first if (not anchor_times or audio_time <= anchor_times[0]) else last
         return edge['number'], edge['occurrence']
 
+    # Notes the aligner matched by pitch but that sit a full step off the robust timeline may belong
+    # to a run played a step away. They are offered to the shifted-run repair and dropped again if
+    # it does not use them, so on their own they never become findings.
+    pseudo = []
+    already_timed = {(e['score_note_id'], e['performance_note_id']) for e in alignment['errors'] if e['category'] == 'timing'}
+    for m in alignment['matches']:
+        if (m['category'] == 'correct' and m['score_beat'] is not None and m['audio_time'] is not None
+                and (m['score_note_id'], m['performance_note_id']) not in already_timed):
+            residual = m['audio_time'] - robust_time(m['score_beat'])
+            if abs(residual) >= 0.15:
+                pseudo.append(dict(m, category='timing', onset_error_seconds=residual, _pseudo=True))
+
+    # Room noise (above all, people talking) makes the transcriber invent notes. They come out far
+    # quieter than the playing around them; a wrong key the student really pressed does not.
+    # Measured on real student mistakes under real living-room noise: a cutoff of 0.6 x the local
+    # loudness removed about half of the noise notes and none of the real extra notes.
+    import bisect
+    by_time = sorted((float(n['onset']), float(n.get('velocity') or 0)) for n in played.values())
+    times = [t for t, _ in by_time]
+
+    def quieter_than_neighbours(note, window=2.0, ratio=0.6):
+        lo, hi = bisect.bisect_left(times, note['onset'] - window), bisect.bisect_right(times, note['onset'] + window)
+        near = sorted(v for t, v in by_time[lo:hi] if abs(t - note['onset']) > 1e-6)
+        if len(near) < 4 or not note.get('velocity'):
+            return False
+        return note['velocity'] < ratio * near[len(near) // 2]
+
+    quiet_noise = 0
+    # Score notes on the recording's timeline, for the "does this extra fit the music" test.
+    score_onsets, score_pitches = [], []
+    for n in sorted(reference['notes'], key=lambda n: n['onset']):
+        score_onsets.append(time_at_beat(n['onset'], None) if anchor_beats else 0.0)
+        score_pitches.append(int(n['pitch']))
     errors, dropped, omitted, placed = [], 0, 0, 0
-    for err in alignment['errors']:
+    for err in list(alignment['errors']) + pseudo:
         category = err['category']
         if category not in CATEGORY_ORDER:
             omitted += 1
@@ -261,6 +310,14 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
         if category == 'extra' and drop_harmonics and harmonic_of_matched(err):
             dropped += 1
             continue
+        maybe_noise = False
+        if category == 'extra' and source != 'midi':
+            heard = played.get(err['performance_note_id']) if err['performance_note_id'] else None
+            if heard is not None and quieter_than_neighbours(heard):
+                quiet_noise += 1
+                continue
+            if heard is not None:
+                maybe_noise = _sounds_like_room(heard, score_onsets, score_pitches, by_time, times)
         if err['score_beat'] is not None:
             beat = beat_in_bar(err['score_beat'], chunk)
             audio_time = err['audio_time'] if err['audio_time'] is not None else time_at_beat(err['score_beat'], bar)
@@ -296,11 +353,15 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
             if entry['delta_ms'] == 0:
                 omitted += 1
                 continue
+        if maybe_noise:
+            entry['maybe_noise'] = True
+            confidence = min(confidence, 0.4)
         confidence = float(min(0.99, max(0.05, confidence)))
         entry['confidence'] = _round(confidence, 2)
         entry['tier'] = tier_of(confidence)
         entry['_score_beat'] = err['score_beat']
         entry['_left_hand'] = left_hand
+        entry['_pseudo'] = bool(err.get('_pseudo'))
         entry['_occurrence'] = err['measure_occurrence']
         errors.append(entry)
 
@@ -324,6 +385,8 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
         errors = [e for e in errors if e['category'] != 'missing']
     errors = _repair_same_pitch(errors, bars, ui_measure, occurrence_chunk, time_at_beat, unit)
     errors, reconciled = _reconcile_missing_extra(errors, bars, ui_measure, time_at_beat, unit)
+    errors, shifted = _repair_shifted_runs(errors, robust_time)
+    errors = [e for e in errors if not e.get('_pseudo')]
     errors, octaves = _reconcile_octaves(errors, bars, ui_measure, time_at_beat)
     ornaments = _tag_ornaments(errors, matched_played)
     if hands == 'right':
@@ -333,6 +396,7 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
         e.pop('_score_beat', None)
         e.pop('_left_hand', None)
         e.pop('_occurrence', None)
+        e.pop('_pseudo', None)
     errors = _merge_repeat_occurrences(errors)
     if played_span:
         first_bar = ui_measure[occurrence_chunk[played_span[0]]['measures'][0]]
@@ -390,7 +454,8 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
                   pitch_precision=alignment['metrics']['pitch_precision'],
                   pitch_recall=alignment['metrics']['pitch_recall'],
                   hands=hands, dropped_harmonics=dropped, omitted_findings=omitted,
-                  reconciled_pairs=reconciled, octave_pairs=octaves, ornament_like=ornaments, placed_extras=placed,
+                  reconciled_pairs=reconciled, octave_pairs=octaves, shifted_run_notes=shifted, quiet_noise_dropped=quiet_noise,
+                  ornament_like=ornaments, placed_extras=placed,
                   played_bars=played_bars, coverage=_round(coverage, 2),
                   warnings=list(alignment.get('warnings', [])),
                   explanations='fallback'),
@@ -435,6 +500,25 @@ def _played_span(alignment, chunks):
     return first, last
 
 
+def _sounds_like_room(note, score_onsets, score_pitches, by_time, times):
+    """An audio extra that does not fit the music: no score note near it in time, or far from every
+    nearby score note in pitch and no louder than its neighbours, or a short blip that is no louder.
+    Real wrong keys are pressed at normal strength and near the intended notes; room sound
+    (speech, clatter) is neither. These are kept but marked as possible background noise."""
+    import bisect
+    t, pitch = float(note['onset']), int(note['pitch'])
+    lo, hi = bisect.bisect_left(score_onsets, t - 0.4), bisect.bisect_right(score_onsets, t + 0.4)
+    nearby = score_pitches[lo:hi]
+    if not nearby:
+        return True
+    a, b = bisect.bisect_left(times, t - 2.0), bisect.bisect_right(times, t + 2.0)
+    neighbours = sorted(v for tt, v in by_time[a:b] if abs(tt - t) > 1e-6)
+    louder = bool(neighbours) and (note.get('velocity') or 0) >= neighbours[len(neighbours) // 2]
+    far = min(abs(p - pitch) for p in nearby) > 7
+    blip = float(note.get('duration') or 1.0) < 0.1
+    return (far or blip) and not louder
+
+
 def _bar_for(e, bars, ui_measure):
     for (printed, occurrence), bar in bars.items():
         if ui_measure.get(printed) == e['measure']:
@@ -455,7 +539,7 @@ def _repair_same_pitch(errors, bars, ui_measure, occurrence_chunk, time_at_beat,
     for measure, group in by_bar.items():
         drop = set()
         missing = [e for e in group if e['category'] == 'missing']
-        timing = [e for e in group if e['category'] == 'timing' and e['_score_beat'] is not None]
+        timing = [e for e in group if e['category'] == 'timing' and e['_score_beat'] is not None and not e.get('_pseudo')]
         for t in timing:
             for m in missing:
                 if m['expected'] != t['expected'] or id(m) in drop or id(t) in drop or m['_score_beat'] is None:
@@ -512,6 +596,94 @@ def _reconcile_missing_extra(errors, bars, ui_measure, time_at_beat, unit):
             m['confidence'] = _round(min(0.99, x['confidence']), 2)
             m['tier'] = 'confident' if m['confidence'] >= 0.8 else 'likely' if m['confidence'] >= 0.65 else 'possible'
     return [e for e in errors if id(e) not in drop], reconciled
+
+
+def _repair_shifted_runs(errors, due_at, *, tolerance=0.08, min_shift=0.15, max_step=3):
+    """A run played a step or two off ("C5 B4 A4 G4" played as "B4 A4 G4 F4") is matched by the
+    pitch-sequence aligner as a skipped note, notes far early or late (or "correct" notes in the
+    wrong place), and an extra at the end. When each of those played notes instead lands within
+    `tolerance` seconds of when a score note a small step away was due, that time-based reading
+    is the true one: wrong notes in place. `due_at(score_beat)` is a robust timeline."""
+    def pitch_of(name):
+        return m21pitch.Pitch(name).midi if name else None
+
+    def off_time(e):
+        return abs(e['audio_time'] - due_at(e['_score_beat'])) >= min_shift
+
+    timing = [e for e in errors if e['category'] == 'timing' and e.get('_score_beat') is not None and off_time(e)]
+    if not timing:
+        return errors, 0
+    slots = [e for e in errors if e.get('_score_beat') is not None and (e['category'] == 'missing' or e in timing)]
+    played = [e for e in errors if e['category'] == 'extra'] + timing
+    due = {id(s): due_at(s['_score_beat']) for s in slots}
+    candidates = []
+    for p in played:
+        for s in slots:
+            if p is s:
+                continue
+            gap = abs(due[id(s)] - p['audio_time'])
+            step = abs(pitch_of(p['actual']) - pitch_of(s['expected']))
+            if gap <= tolerance and step <= max_step:
+                candidates.append((gap, step, id(p), id(s), p, s))
+    candidates.sort(key=lambda c: (c[0], c[1]))
+    used_p, used_s, pairs = set(), set(), []
+    for gap, step, ip, is_, p, s in candidates:
+        if ip in used_p or is_ in used_s:
+            continue
+        used_p.add(ip); used_s.add(is_); pairs.append((p, s))
+    if not pairs:
+        return errors, 0
+    # Accept only chains that look like a shifted run: a skipped note at one end, an extra at the
+    # other, and every note moved the same way. Rubato or ornaments in correct playing never make
+    # that shape, so correct notes are not turned into wrong ones.
+    parent = {}
+
+    def find(x):
+        while parent.get(x, x) != x:
+            x = parent[x]
+        return x
+
+    for p, s in pairs:
+        parent[find(id(p))] = find(id(s))
+    chains = {}
+    for p, s in pairs:
+        chains.setdefault(find(id(p)), []).append((p, s))
+    accepted = []
+    for chain in chains.values():
+        has_missing = any(s['category'] == 'missing' for _, s in chain)
+        has_extra = any(p['category'] == 'extra' for p, _ in chain)
+        directions = {np.sign(pitch_of(p['actual']) - pitch_of(s['expected'])) for p, s in chain
+                      if pitch_of(p['actual']) != pitch_of(s['expected'])}
+        if has_missing and has_extra and len(directions) <= 1:
+            accepted.extend(chain)
+    if not accepted:
+        return errors, 0
+    pairs = accepted
+    used_s = {id(s) for _, s in pairs}
+    drop, added = set(), []
+    for p, s in pairs:
+        drop.add(id(p))
+        drop.add(id(s))
+        if pitch_of(p['actual']) != pitch_of(s['expected']):
+            entry = dict(s, category='wrong_pitch', actual=p['actual'], audio_time=p['audio_time'], _pseudo=False)
+            entry.pop('delta_ms', None)
+            entry['confidence'] = _round(max(s['confidence'], p['confidence']), 2)
+            entry['tier'] = 'confident' if entry['confidence'] >= 0.8 else 'likely' if entry['confidence'] >= 0.65 else 'possible'
+            added.append(entry)
+    # A note whose own score slot gave its sound away and received nothing back was skipped.
+    for p, _ in pairs:
+        if p['category'] == 'timing' and id(p) not in used_s:
+            missing = dict(p, category='missing', actual=None, _pseudo=False,
+                           audio_time=_round(max(0.0, due_at(p['_score_beat'])), 3))
+            missing.pop('delta_ms', None)
+            added.append(missing)
+    # In the bars of an accepted run, an early/late flag that the robust timeline explains came
+    # from the bar's own tempo fit being bent by the misplaced notes. Drop it.
+    run_bars = {s['measure'] for _, s in pairs}
+    kept = [e for e in errors if id(e) not in drop and not (
+        e['category'] == 'timing' and not e.get('_pseudo') and e['measure'] in run_bars
+        and abs(e['audio_time'] - due_at(e['_score_beat'])) < 0.1)]
+    return kept + added, len(pairs)
 
 
 def _reconcile_octaves(errors, bars, ui_measure, time_at_beat):
@@ -619,6 +791,9 @@ def _fallback_body(e, bar, m, beat_text):
         return (f"The {e['expected']} on beat {beat_text} of bar {m} didn't come through. It may have been too soft, or skipped.",
                 f"Play bar {m} on its own and make that {e['expected']} the loudest note in the bar until it stops disappearing.")
     if e['category'] == 'extra':
+        if e.get('maybe_noise'):
+            return (f"A {e['actual']} was heard in bar {m}, but it doesn't fit the music around it. It may have been background sound rather than a key.",
+                    f"If you didn't play a {e['actual']} there, mark this as fine. A quieter room makes these go away.")
         if e.get('maybe_ornament'):
             return (f"A {e['actual']} sounded in bar {m} right next to a correct note. That could be a brushed key, or an ornament, or the recording.",
                     f"Play bar {m} slowly once and listen for the {e['actual']}. If it isn't there, mark this as fine.")

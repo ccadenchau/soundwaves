@@ -45,6 +45,22 @@ def transcriber(choice=None):
     return None
 
 
+def prepare_for_transcription(audio, workdir, backend):
+    """Piano-safe cleanup before transcription. Returns (path_to_transcribe, cleaning_used).
+
+    PIANOCOACH_CLEAN=auto|on|off (default auto: clean only in front of Basic Pitch, which picks up
+    room noise as notes; Transkun does as well on the raw recording). The cleaner keeps the full
+    piano range and the exact timeline, and leaves already-quiet recordings untouched."""
+    import os
+    mode = os.environ.get('PIANOCOACH_CLEAN', 'auto').lower()
+    if mode == 'off' or (mode == 'auto' and backend is not None):
+        return Path(audio), 'none'
+    from audio_cleaner.clean_audio import clean_audio
+    target = Path(workdir) / 'cleaned_for_transcription.wav'
+    clean_audio(audio, target, mode='piano')
+    return target, 'piano'
+
+
 AUDIO_SUFFIXES = {'.wav', '.mp3', '.m4a', '.aac', '.ogg', '.oga', '.webm', '.flac', '.aiff', '.aif', '.mp4', '.caf'}
 MIDI_SUFFIXES = {'.mid', '.midi'}
 
@@ -173,12 +189,15 @@ def align_windowed(reference, performance, *, config=None):
 
 
 def align_clean(reference, performance, *, performance_notes=None, musicxml=None, piece=None,
-                take_number=1, audio_duration=None, hands='right', config=None):
+                take_number=1, audio_duration=None, hands='right', config=None, drop_harmonics=False):
     """Prepare the score, locate a partial take, align, build the page report.
     Returns (alignment, ui_report)."""
     alignment, prepared = align_windowed(reference, performance, config=config)
+    # Only Basic Pitch reports overtones as notes. A keyboard or Transkun note an octave above
+    # another is a key the student really pressed, so it must not be filtered out.
     report = build_ui_report(prepared, alignment, performance_notes=performance_notes, musicxml=musicxml,
-                             piece=piece, take_number=take_number, audio_duration=audio_duration, hands=hands)
+                             piece=piece, take_number=take_number, audio_duration=audio_duration, hands=hands,
+                             drop_harmonics=drop_harmonics)
     return alignment, report
 
 
@@ -209,11 +228,13 @@ def analyze(score, performance, out_dir, *, bpm=120, take_number=1, piece=None, 
         if take_dir.exists():
             shutil.rmtree(take_dir)
         backend = transcriber()
-        take = transcribe_recording(performance, take_dir, backend=backend)
+        source, audio_cleaning = prepare_for_transcription(performance, out, backend)
+        take = transcribe_recording(source, take_dir, backend=backend)
         duration = take.duration_seconds
         kept, cleaning = clean_notes(take.notes, harmonics=backend is None)
         _check_enough(len(kept), audio=True)
         cleaning['transcriber'] = backend.name if backend is not None else 'basic-pitch'
+        cleaning['audio_cleaning'] = audio_cleaning
         if backend is not None:
             for n in kept:  # Transkun gives velocity, not confidence; treat its notes as sure
                 n['model_score'] = 0.9
@@ -225,7 +246,9 @@ def analyze(score, performance, out_dir, *, bpm=120, take_number=1, piece=None, 
 
     alignment, report = align_clean(score_paths['notes'], played, performance_notes=performance_notes,
                                     musicxml=score_paths['musicxml'], piece=piece, take_number=take_number,
-                                    audio_duration=duration, hands=hands)
+                                    audio_duration=duration, hands=hands,
+                                    drop_harmonics=(False if suffix in MIDI_SUFFIXES
+                                                    else True if cleaning.get('transcriber') == 'basic-pitch' else 'octave'))
     alignment['preprocessing'].update(cleaning)
     alignment.setdefault('warnings', []).extend(warnings)
     if explain:

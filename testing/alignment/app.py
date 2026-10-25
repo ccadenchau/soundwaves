@@ -52,7 +52,7 @@ small{font-weight:400}ul{padding-left:21px}li{margin:7px 0}.seek{padding:6px 9px
 @media(max-width:650px){form{grid-template-columns:1fr}.wide{grid-column:auto}.card{padding:15px}}
 </style>
 <main><h1>Performance alignment</h1><p class="muted">Compare sheet music with your piano recording. See correct pitches and tempo separately, bar by bar.</p>
-<p class="muted" style="margin-top:-6px"><strong>New on this server:</strong> <a href="/test">Run the one-click checks</a> · <a href="/practice">Live practice screen</a> · <a href="/record">Record a take</a>. This page now uses the better transcriber, note cleaning and partial-take detection too.</p>
+<p class="muted" style="margin-top:-6px"><strong>New on this server:</strong> <a href="/test">Run the one-click checks</a> · <a href="/practice">Live practice screen</a> · <a href="/record">Record a take</a> · <a href="/upload">Add sheet music for live practice</a> · <a href="/convert">Audio to MIDI only (no sheet music)</a>. This page now uses the better transcriber, note cleaning and partial-take detection too.</p>
 <section class="card"><form method="post" action="{{ url_for('index') }}" enctype="multipart/form-data" id="upload">
 <label>Sheet music <small>PDF, MusicXML, XML, MXL · up to 20 MB</small>
 <input type="file" name="sheet" accept=".pdf,.musicxml,.xml,.mxl"></label>
@@ -61,7 +61,7 @@ small{font-weight:400}ul{padding-left:21px}li{margin:7px 0}.seek{padding:6px 9px
 <label>Or a direct sheet download URL<input type="url" name="sheet_url" placeholder="https://example.com/score.pdf"></label>
 <label>Fallback score tempo (BPM)<input type="number" name="bpm" min="20" max="400" step="any" value="120" required></label>
 <div class="wide"><button type="submit" id="submit">Compare performance</button>
-<p class="muted" id="status">The original recording is transcribed without audio cleaning. Use the same passage in both files. First-time conversion may take several minutes; later comparisons reuse the cache.</p></div>
+<p class="muted" id="status">With the basic transcriber, recordings first go through the piano-safe cleaner (full keyboard range kept, nothing trimmed, quiet rooms left untouched); with Transkun the original recording is used. Use the same passage in both files. First-time conversion may take several minutes; later comparisons reuse the cache.</p></div>
 </form></section>
 {% if error %}<section class="card error" role="alert">{{ error }}</section>{% endif %}
 {% if result %}{% set report = result.report %}{% set metrics = report.metrics %}

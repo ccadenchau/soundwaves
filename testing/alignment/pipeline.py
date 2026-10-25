@@ -160,7 +160,7 @@ def compare_files(sheet, recording, *, bpm=120):
     from transcribe_recording import transcribe_recording
     from transcribe_recording.models import TranscriptionConfig
     from pianocoach.clean import clean_notes
-    from pianocoach.pipeline import align_windowed, transcriber
+    from pianocoach.pipeline import align_windowed, prepare_for_transcription, transcriber
     from testing.alignment.playback import render_midi
 
     sheet_signature = _signature('sheet_downloader', dict(bpm=bpm, measures_per_chunk=1,
@@ -172,16 +172,24 @@ def compare_files(sheet, recording, *, bpm=120):
     # Transkun when its environment exists (best accuracy), else the bundled Basic Pitch.
     backend = transcriber()
     transcriber_name = backend.name if backend is not None else 'basic-pitch'
+    clean_mode = os.environ.get('PIANOCOACH_CLEAN', 'auto').lower()
+    audio_cleaning = 'none' if clean_mode == 'off' or (clean_mode == 'auto' and backend is not None) else 'piano'
+    cleaner_version = _hash(ROOT / 'audio_cleaner' / 'clean_audio.py') if audio_cleaning == 'piano' else None
     recording_signature = _signature('transcribe_recording', dict(
-        config=asdict(TranscriptionConfig()), audio_cleaning=False, input_audio='original', transcriber=transcriber_name))
-    take, recording_hit = _cached('recordings', audio_path, recording_signature,
-        lambda stage: transcribe_recording(audio_path, stage / 'converted', backend=backend),
+        config=asdict(TranscriptionConfig()), audio_cleaning=audio_cleaning, cleaner=cleaner_version,
+        input_audio='original', transcriber=transcriber_name))
+
+    def transcribe(stage):
+        source, _ = prepare_for_transcription(audio_path, stage, backend) if audio_cleaning == 'piano' else (audio_path, 'none')
+        return transcribe_recording(source, stage / 'converted', backend=backend)
+
+    take, recording_hit = _cached('recordings', audio_path, recording_signature, transcribe,
         dict(midi='converted/performance.mid', notes='converted/notes.json'))
     # Clean the detections, merge unison score notes, and pin a short take to the bars it covers.
     heard = json.loads(Path(take['notes']).read_text(encoding='utf-8'))['notes']
     kept, cleaning = clean_notes(heard, harmonics=backend is None)
     report, _ = align_windowed(score['notes'], kept)
-    report['preprocessing'] = dict(report.get('preprocessing', {}), audio_cleaning=False,
+    report['preprocessing'] = dict(report.get('preprocessing', {}), audio_cleaning=audio_cleaning,
                                    timestamp_origin='original_audio', transcriber=transcriber_name, **cleaning)
 
     playback_signature = _signature('sheet_downloader', dict(
