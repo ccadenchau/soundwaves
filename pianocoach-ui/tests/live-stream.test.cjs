@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const LiveNoteStream = require('./live-stream.js');
+const LiveNoteStream = require('../practice/live-stream.js');
 const note = (pitch, onset, duration = .12) => ({pitch, onset, duration, velocity: 80});
 
 test('overlapping windows and onset drift emit one physical attack', () => {
@@ -108,7 +108,7 @@ test('onset-only detector results have a short duration and usable velocity', ()
 
 test('exports work in browser and Node; malformed input is rejected', () => {
   const context = vm.createContext({});
-  vm.runInContext(fs.readFileSync(require.resolve('./live-stream.js'), 'utf8'), context);
+  vm.runInContext(fs.readFileSync(require.resolve('../practice/live-stream.js'), 'utf8'), context);
   assert.equal(typeof context.LiveNoteStream, 'function');
   assert.throws(() => new LiveNoteStream({edgeHold: -1}), /tolerances/);
   const stream = new LiveNoteStream();

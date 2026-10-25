@@ -7,7 +7,7 @@ from pathlib import Path
 from alignment import align_performance  # noqa: F401 - re-exported for callers
 from sheet_downloader import convert_score
 
-from .clean import clean_notes
+from .clean import clean_notes, write_performance_midi
 from .report import build_ui_report
 from .scoreprep import prepare_reference
 
@@ -240,7 +240,9 @@ def analyze(score, performance, out_dir, *, bpm=120, take_number=1, piece=None, 
                 n['model_score'] = 0.9
         warnings = list(take.warnings)
         played, performance_notes = kept, kept
-        take_paths = dict(midi=take.midi_path, notes=take.notes_path)
+        cleaned_midi = out / 'performance.mid'
+        write_performance_midi(kept, cleaned_midi)
+        take_paths = dict(midi=cleaned_midi, raw_midi=take.midi_path, notes=take.notes_path)
     else:
         raise ValueError(f'Unsupported performance file: {performance.name}')
 
@@ -261,31 +263,8 @@ def analyze(score, performance, out_dir, *, bpm=120, take_number=1, piece=None, 
     return report, paths
 
 
-def main(argv):
-    import argparse
-    import json as _json
-    parser = argparse.ArgumentParser(description='Score + recording (or MIDI) -> report.json for the practice page.')
-    parser.add_argument('score', help='PDF, MusicXML, XML or MXL')
-    parser.add_argument('performance', help='WAV/MP3/M4A/WebM audio, or a .mid file')
-    parser.add_argument('out_dir')
-    parser.add_argument('--bpm', type=float, default=120, help='fallback tempo when the score has none')
-    parser.add_argument('--title'); parser.add_argument('--composer'); parser.add_argument('--catalog')
-    parser.add_argument('--hands', choices=('right', 'both'), default='right')
-    parser.add_argument('--no-explain', action='store_true', help='skip the Claude explanations')
-    args = parser.parse_args(argv[1:])
-    piece = {k: v for k, v in dict(title=args.title, composer=args.composer, catalog=args.catalog).items() if v}
-    report, paths = analyze(args.score, args.performance, args.out_dir, bpm=args.bpm, piece=piece,
-                            hands=args.hands, explain=not args.no_explain)
-    print(f"{paths['report']}  findings={len(report['errors'])}  explanations={report['meta']['explanations']}")
-    for e in report['errors']:
-        extra = f" {e['delta_ms']:+d} ms" if 'delta_ms' in e else ''
-        print(f"  bar {e['measure']:>3} beat {e['beat']:<4} {e['category']:<12} {e.get('expected') or ''}->{e.get('actual') or ''}{extra}  {e['tier']}")
-    return 0
 
 
-if __name__ == '__main__':
-    import sys
-    sys.exit(main(sys.argv))
 
 
 def trim_to_played(alignment):

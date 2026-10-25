@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const LiveScoreFollower = require('./live-matcher.js');
+const LiveScoreFollower = require('../practice/live-matcher.js');
 
 const score = (pitches, beats = pitches.map((_, i) => i)) => pitches.map((pitch, i) => ({
   id: `n${i}`, pitch, beat: beats[i], duration: 1, measure: Math.floor(beats[i] / 4) + 1,
@@ -181,7 +181,7 @@ test('each skipped gap needs its own two following anchors', () => {
 
 test('browser global and CommonJS exports both expose the constructor', () => {
   const context = vm.createContext({});
-  vm.runInContext(fs.readFileSync(require.resolve('./live-matcher.js'), 'utf8'), context);
+  vm.runInContext(fs.readFileSync(require.resolve('../practice/live-matcher.js'), 'utf8'), context);
   assert.equal(typeof context.LiveScoreFollower, 'function');
   assert.equal(typeof LiveScoreFollower, 'function');
 });

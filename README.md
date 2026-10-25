@@ -19,6 +19,8 @@ Sheet music goes through Audiveris (optical music recognition) into MusicXML, th
 
 Your playing goes through Transkun v2 (a piano transcription model, PyTorch on Apple silicon) into notes with onsets, lengths and velocities. Basic Pitch is the fallback when Transkun's environment isn't installed, and the quick layer that moves the cursor live.
 
+Before Basic Pitch transcription, the piano cleaner reduces short broadband key clicks separately from steady room noise. It preserves the recording timeline and protects sustained pitch components. This is conservative attenuation, not guaranteed separation of keyboard mechanics from piano attacks. Transkun still uses the original audio by default; `PIANOCOACH_CLEAN=on` enables cleaning for it too.
+
 The two note lists are lined up by a monotone sequence alignment, then repaired by rules we wrote from watching real takes fail: same-pitch re-pairing, split chord notes, runs played a step off, right note in the wrong octave, quiet background noise, grace notes, partial takes and where a take actually ends. Each bar gets a robust tempo fit, so timing is judged against your own pace in that bar, not a metronome.
 
 Live mode streams the take to a rolling session on the server that re-transcribes the last six seconds and re-aligns the take so far about every 1.3 s. A mistake is shown only when two passes agree on it, and a mark that has settled stays put, so nothing flickers. The player's position is tracked from timing, so the aligner can't pin a stray note three bars ahead.
@@ -43,17 +45,17 @@ The self-checks at `/test` run five end-to-end cases (planted mistakes, a clean 
 
 ## Run it
 
+Use Python 3.14. The launcher installs requirements into the existing `venv/`, or creates `.venv/`. Open the URL below after starting it.
+
 ```sh
-python3.14 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-cp .env.example .env            # add ANTHROPIC_API_KEY and/or GEMINI_API_KEY
-./run.sh                        # http://127.0.0.1:5001
-./check.sh                      # unit tests, browser tests, end-to-end cases
+cp .env.example .env            # optional: add AI feedback keys
+python3 run.py                        # http://127.0.0.1:5001
+python3 check.py                      # unit tests, browser tests, end-to-end cases
 ```
 
 Optional but recommended:
 
-- **Transkun** for accurate transcription: a Python 3.12 environment at `.venv-transkun` with `transkun` and PyTorch installed. Without it the bundled Basic Pitch model is used.
+- **Transkun** for piano-specific transcription: a Python 3.12 environment at `.venv-transkun` with `transkun` and PyTorch installed. Without it the bundled Basic Pitch model is used. The review page names the active transcriber. MIDI playback and downloads use the same cleaned detections as the comparison.
 - **Audiveris** for PDF scores: install the app (macOS: `/Applications/Audiveris.app`) or set `AUDIVERIS_PATH`. MusicXML and MXL work without it.
 
 Pages: `/` home, `/live` play live, `/check` check a recording, `/upload` add a piece, `/test` self-checks, `/convert` audio to MIDI without a score.
@@ -64,7 +66,8 @@ Pages: `/` home, `/live` play live, `/check` check a recording, `/upload` add a 
 - `transcribe_recording/`, `pianocoach/transkun_*` audio to notes
 - `alignment/` the aligner and per-bar analysis
 - `pianocoach/` report adapter, repairs, teacher notes, pages
-- `testing/alignment/` the Flask server, review page, live page, Verovio notation
+- `pianocoach/web/` the main Flask app, report/playback routes, score rendering, and comparison cache
+- `testing/` test cases, demo audio generation, and dataset evaluation tools
 - `pianocoach-ui/` browser code: live note stream, score follower, falling keys, shared theme
 - `testing/datasets/` real-data evaluation scripts and results
 

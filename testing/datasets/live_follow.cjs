@@ -1,8 +1,8 @@
 // Run the browser's LiveNoteStream + LiveScoreFollower exactly as practice.js does for the microphone.
 // stdin: {score:[{id,pitch,beat,duration}], bpm, input, windows:[{start,end,received,notes:[...]}]}
 // stdout: {marks:{id:{kind,actual}}, timeline:[{received, id, kind}]}
-const LiveNoteStream = require('../../pianocoach-ui/live-stream.js');
-const LiveScoreFollower = require('../../pianocoach-ui/live-matcher.js');
+const LiveNoteStream = require('../../pianocoach-ui/practice/live-stream.js');
+const LiveScoreFollower = require('../../pianocoach-ui/practice/live-matcher.js');
 let input = '';
 process.stdin.on('data', d => input += d).on('end', () => {
   const job = JSON.parse(input);

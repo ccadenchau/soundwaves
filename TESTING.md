@@ -3,16 +3,16 @@
 Two commands. Both work from a fresh clone of this branch.
 
 ```sh
-./run.sh            # sets everything up, starts the app, opens the test page
-./check.sh          # runs every test and prints ALL CHECKS PASSED or what failed
+python3 run.py            # sets everything up, starts the app
+python3 check.py          # runs all checks; exits nonzero if any fail
 ```
 
-Prerequisites: [uv](https://docs.astral.sh/uv/) (`brew install uv`). Node is optional (browser logic tests).
-`./run.sh --fast` skips Transkun (a 1 GB install) and uses the bundled Basic Pitch model instead.
+Prerequisite: Python 3.14 with venv/pip support and internet access for first-time setup. The launcher uses the existing `venv/` environment when present, otherwise `.venv/`, and installs the requirements there. Node is optional (browser logic tests).
+Transkun is used when `.venv-transkun` is installed; otherwise the bundled Basic Pitch model is used.
 
 ## The test page
 
-`./run.sh` opens the original upload page at **http://127.0.0.1:5001** (it now has the new transcriber, cleaning and partial-take detection). The
+`python3 run.py` serves the app at **http://127.0.0.1:5001** (it now has the new transcriber, cleaning and partial-take detection). The
 new pages are on the same server: **http://127.0.0.1:5001/test**. Click **Run all checks**. Each card renders a piano
 recording of the Minuet in G with mistakes planted at known places, runs the real converters, and tells you
 whether what came out matches what went in:
@@ -33,8 +33,7 @@ The top of the page shows which transcriber is active and whether a microphone o
 
 Open **http://127.0.0.1:5001/convert** and drop in any piano recording (an iPhone voice memo `.m4a` works). You get
 the original and cleaned audio side by side, a piano roll of the notes found, the MIDI played back on a sampled
-piano so you can hear what the converter heard, the MIDI file to download, and what the cleaner changed. Or from the
-terminal: `.venv/bin/python -m pianocoach.convert ~/Downloads/take.m4a` (prints the notes and a link to the page).
+piano so you can hear what the converter heard, the MIDI file to download, and what the cleaner changed. 
 
 ## Try it by hand
 

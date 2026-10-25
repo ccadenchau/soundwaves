@@ -5,6 +5,62 @@ async function displayNotation() {
   const container = document.getElementById('notation');
   const status = document.getElementById('notation-status');
   const audio = document.getElementById('audio');
+  const mode = document.getElementById('playback-mode');
+  const play = document.getElementById('score-play');
+  const speed = document.getElementById('playback-speed');
+  let sourceVersion = 0;
+  const startPlayback = () => audio.play().catch(() => {
+    status.textContent = 'Could not play this audio. Try another playback mode.';
+  });
+  play.disabled = false;
+  play.addEventListener('click', () => audio.paused ? startPlayback() : audio.pause());
+  const updateButton = () => { play.textContent = audio.paused ? 'Play' : 'Pause'; };
+  ['play', 'pause', 'ended'].forEach(name => audio.addEventListener(name, updateButton));
+  speed.addEventListener('change', () => { audio.playbackRate = Number(speed.value); });
+  mode.addEventListener('change', () => {
+    const position = audio.currentTime;
+    const resume = !audio.paused;
+    const version = ++sourceVersion;
+    audio.pause();
+    audio.src = mode.value;
+    audio.addEventListener('loadedmetadata', () => {
+      if (version !== sourceVersion) return;
+      audio.currentTime = Math.min(position, Number.isFinite(audio.duration) ? audio.duration : position);
+      audio.playbackRate = Number(speed.value);
+      if (resume) startPlayback();
+    }, {once: true});
+    audio.load();
+  });
+  const cleanedButton = document.getElementById('play-cleaned');
+  cleanedButton.addEventListener('click', () => {
+    const cleanedSource = [...mode.options].find(option => option.textContent === 'Cleaned audio').value;
+    if (mode.value === cleanedSource && audio.readyState >= 1) {
+      startPlayback();
+      return;
+    }
+    mode.value = cleanedSource;
+    cleanedButton.disabled = true;
+    cleanedButton.textContent = 'Preparing cleaned audio…';
+    mode.dispatchEvent(new Event('change'));
+    const version = sourceVersion;
+    const reset = () => {
+      cleanedButton.disabled = false;
+      cleanedButton.textContent = 'Play cleaned audio';
+      audio.removeEventListener('loadedmetadata', ready);
+      audio.removeEventListener('error', reset);
+      mode.removeEventListener('change', reset);
+    };
+    const ready = () => {
+      reset();
+      if (sourceVersion === version) startPlayback();
+    };
+    audio.addEventListener('loadedmetadata', ready);
+    audio.addEventListener('error', reset);
+    mode.addEventListener('change', reset);
+  });
+  audio.addEventListener('error', () => {
+    status.textContent = 'Could not load playback. Try another playback mode.';
+  });
   const ns = 'http://www.w3.org/2000/svg';
   try {
     const response = await fetch(section.dataset.url);
@@ -30,7 +86,7 @@ async function displayNotation() {
     const seek = time => {
       if (time === null || !Number.isFinite(time)) return;
       audio.currentTime = Math.max(0, time);
-      audio.play().catch(() => {});
+      startPlayback();
     };
     const describe = item => `${item.category.replaceAll('_', ' ')}: expected ${item.expected_name || 'no note'}, played ${item.actual_name || 'no note'}${item.audio_time === null ? '' : ` at ${item.audio_time.toFixed(2)}s`}`;
     const interactive = (el, item) => {
@@ -174,24 +230,41 @@ async function displayNotation() {
         svg.style.minWidth = `${zoom * 900}px`;
       });
     });
-    let lastMeasure, frame;
-    const update = () => {
-      container.querySelectorAll('.active-note').forEach(el => el.classList.remove('active-note'));
-      const current = timed.filter(({item}) => audio.currentTime >= item.audio_time && audio.currentTime < item.audio_time + item.duration && plausible(item));
-      current.forEach(({target}) => target.classList.add('active-note'));
+    const playbackNotes = timed.filter(({item}) => plausible(item))
+      .sort((a, b) => a.item.audio_time - b.item.audio_time);
+    let lastSystem, frame;
+    let highlighted = new Set();
+    const update = (follow = !audio.paused) => {
+      const current = playbackNotes.filter(({item}) => audio.currentTime >= item.audio_time
+        && audio.currentTime < item.audio_time + item.duration);
+      const next = new Set(current.map(({target}) => target));
+      for (const target of highlighted) if (!next.has(target)) target.classList.remove('active-note');
+      for (const target of next) if (!highlighted.has(target)) target.classList.add('active-note');
+      highlighted = next;
       const caption = current.length ? `Playing: ${[...new Set(current.map(({item}) => item.actual_name))].join(', ')}` : 'Between detected notes';
       const label = document.getElementById('playing-notes');
       if (label.textContent !== caption) label.textContent = caption;
-      const measure = current[0]?.note.closest('.measure');
-      if (measure && measure !== lastMeasure && document.getElementById('follow-score').checked) {
-        const offset = measure.getBoundingClientRect().top - container.getBoundingClientRect().top;
-        if (offset < 0 || offset > container.clientHeight - 120) container.scrollTo({top:container.scrollTop + offset - 60, behavior:'smooth'});
-        lastMeasure = measure;
+      // Follow the newest attack, rather than a bass note still ringing on a previous line.
+      // Keep that position through rests, and move only when entering another system.
+      const latest = playbackNotes.findLast(({item}) => item.audio_time <= audio.currentTime);
+      const system = latest?.note.closest('.system') || latest?.note.closest('.measure');
+      if (follow && system && system !== lastSystem && document.getElementById('follow-score').checked) {
+        const bounds = container.getBoundingClientRect();
+        const line = system.getBoundingClientRect();
+        const top = line.top - bounds.top - container.clientTop;
+        const bottom = line.bottom - bounds.top - container.clientTop;
+        if (top < 16 || bottom > container.clientHeight - 16) {
+          container.scrollTo({top: Math.max(0, container.scrollTop + top - 32), behavior: 'instant'});
+        }
+        lastSystem = system;
       }
     };
     const tick = () => { update(); if (!audio.paused) frame = requestAnimationFrame(tick); };
     audio.addEventListener('play', () => { cancelAnimationFrame(frame); tick(); });
-    ['timeupdate', 'seeked', 'pause', 'ended'].forEach(name => audio.addEventListener(name, update));
+    ['timeupdate', 'pause', 'ended'].forEach(name => audio.addEventListener(name, () => update()));
+    audio.addEventListener('seeked', () => { lastSystem = null; update(true); });
+    document.getElementById('follow-score').addEventListener('change', () => { lastSystem = null; update(true); });
+    document.getElementById('score-zoom').addEventListener('change', () => { lastSystem = null; update(true); });
     status.textContent = `${data.annotations.length} note comparisons shown${data.unplaced.length ? `; ${data.unplaced.length} without a score location` : ''}.`;
     if (!audio.paused) tick();
   } catch (error) {

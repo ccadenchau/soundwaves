@@ -15,7 +15,7 @@ from flask import Blueprint, abort, jsonify, request, send_file, url_for
 
 from pianocoach.live import SCORE_CACHE, _piece
 from pianocoach.pipeline import convert_once
-from testing.alignment.pipeline import CACHE, compare_files
+from pianocoach.web.pipeline import CACHE, compare_files
 
 live_demo = Blueprint('live_demo', __name__)
 PAGE = Path(__file__).with_name('static') / 'live.html'
@@ -44,7 +44,7 @@ def live_notation(piece_id):
     with _lock:
         if key not in _notation_cache:
             try:
-                from testing.alignment.notation import render_score
+                from pianocoach.web.notation import render_score
                 paths = convert_once(source, SCORE_CACHE / piece_id, bpm=metadata.get('bpm', 120))
                 notes = json.loads(Path(paths['notes']).read_text(encoding='utf-8'))['notes']
                 toolkit, locations = render_score(paths['musicxml'], notes)
@@ -311,7 +311,7 @@ class LiveSession:
 
 
 def _plain(bar):
-    from testing.alignment.wording import plain_feedback
+    from pianocoach.web.wording import plain_feedback
     return plain_feedback(bar)
 
 

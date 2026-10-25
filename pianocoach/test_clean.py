@@ -54,3 +54,27 @@ class DuplicateTests(unittest.TestCase):
         self.assertEqual([n['id'] for n in dropped], ['a'])
         self.assertEqual([n['id'] for n in kept], ['a2', 'b'])
         self.assertAlmostEqual(kept[0]['duration'], 2.512 + 0.35 - 2.512, places=3)
+
+
+class MidiExportTests(unittest.TestCase):
+    def test_export_uses_cleaned_notes_and_preserves_real_repeats(self):
+        import tempfile
+        from pathlib import Path
+        import pretty_midi
+        from pianocoach.clean import clean_notes, write_performance_midi
+
+        notes = [
+            dict(id='a', onset=1.0, duration=.5, pitch=60, velocity=90, model_score=.8),
+            dict(id='ghost', onset=1.0, duration=.1, pitch=72, velocity=35, model_score=.3),
+            dict(id='repeat', onset=1.6, duration=.3, pitch=60, velocity=85, model_score=.7),
+        ]
+        kept, _ = clean_notes(notes)
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'performance.mid'
+            write_performance_midi(kept, path)
+            decoded = pretty_midi.PrettyMIDI(str(path)).instruments[0].notes
+        self.assertEqual([n.pitch for n in decoded], [60, 60])
+        for actual, expected in zip(decoded, kept):
+            self.assertAlmostEqual(actual.start, expected['onset'], delta=.002)
+            self.assertAlmostEqual(actual.end, expected['onset'] + expected['duration'], delta=.002)
+            self.assertEqual(actual.velocity, expected['velocity'])

@@ -1,14 +1,9 @@
-"""Audio in, MIDI out. No sheet music: test the cleaner and the transcriber on any recording.
+"""Audio-to-MIDI conversion for the /convert page.
 
-    .venv/bin/python -m pianocoach.convert ~/Downloads/take.m4a          # prints a summary and a link
-    .venv/bin/python -m pianocoach.convert take.wav --no-compare --strength 0.5
-
-Each run transcribes the cleaned audio and, unless --no-compare, the original as well, so the
-effect of cleaning is visible. Outputs (cleaned audio, MIDI files, MIDI rendered with the sampled
-piano) go to pianocoach/sessions/convert/<id>/ and open at http://127.0.0.1:5001/convert?id=<id>.
+Transcribes cleaned audio and optionally the original for comparison.
+Outputs are saved under pianocoach/sessions/convert/<id>/.
 """
 
-import argparse
 import json
 import shutil
 import sys
@@ -121,31 +116,3 @@ def convert_audio(audio, out_dir=None, *, compare=True, strength=0.7):
     result['seconds'] = round(time.time() - started, 1)
     (out / 'result.json').write_text(json.dumps(result, indent=1), encoding='utf-8')
     return result
-
-
-def main(argv):
-    parser = argparse.ArgumentParser(description='Clean a recording and convert it to MIDI, without sheet music.')
-    parser.add_argument('audio', type=Path)
-    parser.add_argument('--strength', type=float, default=0.7, help='piano cleaner strength 0-1 (default 0.7)')
-    parser.add_argument('--no-compare', action='store_true', help='only transcribe the cleaned audio')
-    parser.add_argument('--port', type=int, default=5001, help='port of the running app, for the link')
-    args = parser.parse_args(argv[1:])
-    r = convert_audio(args.audio, compare=not args.no_compare, strength=args.strength)
-    room = r['room']
-    print(f"{r['file']}  ·  transcriber: {r['engine']}  ·  {r['seconds']} s")
-    print(f"loud-to-quiet spread: {room['before_db']} dB"
-          + (' (very quiet room, cleaner left it alone)' if room['cleaner_skipped'] else f" -> {room['after_db']} dB after cleaning"))
-    for key, v in r['versions'].items():
-        s = v['stats']
-        print(f"\n{key:>8}: {s['notes']} notes, {s['chords']} chords (biggest {s['biggest_chord']}), range {s['lowest']} to {s['highest']}")
-        print('          ' + ' '.join(f"{n['name']}@{n['t']:.2f}" for n in v['notes'][:24]) + (' …' if len(v['notes']) > 24 else ''))
-    if 'difference' in r:
-        d = r['difference']
-        print(f"\ncleaning added {len(d['only_after_cleaning'])} notes, removed {len(d['lost_by_cleaning'])}: "
-              + ', '.join([f"+{n['name']}@{n['t']:.2f}" for n in d['only_after_cleaning']] + [f"-{n['name']}@{n['t']:.2f}" for n in d['lost_by_cleaning']])[:300])
-    print(f"\nfiles: {CONVERT / r['id']}\nopen:  http://127.0.0.1:{args.port}/convert?id={r['id']}")
-    return 0
-
-
-if __name__ == '__main__':
-    sys.exit(main(sys.argv))

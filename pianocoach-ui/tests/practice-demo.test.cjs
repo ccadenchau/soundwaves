@@ -3,8 +3,8 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const PracticeDemo = require('./practice-demo.js');
-const LiveScoreFollower = require('./live-matcher.js');
+const PracticeDemo = require('../practice/practice-demo.js');
+const LiveScoreFollower = require('../practice/live-matcher.js');
 
 // First eight bars from the project's converted minuet_in_g score endpoint.
 // Embedded here so the real-score regression does not require a running server.
@@ -95,7 +95,7 @@ test('malformed and empty scores fail clearly', () => {
 });
 
 test('browser UMD and Node expose the same build API', () => {
-  const context=vm.createContext({});vm.runInContext(fs.readFileSync(require.resolve('./practice-demo.js'),'utf8'),context);
+  const context=vm.createContext({});vm.runInContext(fs.readFileSync(require.resolve('../practice/practice-demo.js'),'utf8'),context);
   assert.equal(typeof context.PracticeDemo.build,'function');
   assert.equal(typeof PracticeDemo.build,'function');
 });

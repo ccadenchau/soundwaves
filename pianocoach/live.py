@@ -33,7 +33,7 @@ from .report import score_metadata
 from .scoreprep import prepare_reference
 
 ROOT = Path(__file__).resolve().parents[1]
-UI = ROOT / 'pianocoach-ui'
+UI = ROOT / 'pianocoach-ui' / 'practice'
 PIECES = Path(__file__).with_name('pieces')
 SCORE_CACHE = Path(__file__).with_name('sessions') / 'scores'
 SESSIONS = Path(__file__).with_name('sessions')
@@ -63,7 +63,7 @@ def no_cache(response):
 
 @practice.get('/practice')
 def practice_page():
-    return send_file(UI / 'practice.html', mimetype='text/html')
+    return send_file(UI / 'index.html', mimetype='text/html')
 
 
 @practice.get('/practice-assets/<filename>')

@@ -35,23 +35,17 @@ Open **http://127.0.0.1:5002/practice** for the score beside a live view of play
 - Partial summaries use a bounded prefix alignment so untouched later bars are not called missing. They summarize pitch findings; completed takes retain final timing and coaching. The original report is unchanged and its review link is shown only for complete takes.
 - If final analysis fails or times out, the captured take remains available to download. Recordings are not saved across page reloads.
 
-Frontend files: `pianocoach-ui/practice.html`, `practice.css`, `practice.js`, `live-audio-worklet.js`, `live-matcher.js`, `live-stream.js`, and `practice-demo.js`. API routes and provisional audio detection live in `pianocoach/live.py`.
+Frontend files (scripts and CSS are also in `pianocoach-ui/practice/`): `pianocoach-ui/practice/index.html`, `practice.css`, `practice.js`, `live-audio-worklet.js`, `live-matcher.js`, `live-stream.js`, and `practice-demo.js`. API routes and provisional audio detection live in `pianocoach/live.py`.
 
 ```sh
 .venv/bin/python -m unittest pianocoach.test_live
-node --test pianocoach-ui/*.test.cjs
+node --test pianocoach-ui/tests/*.test.cjs
 .venv/bin/python -m pianocoach.benchmark_live --runs 3
 ```
 
 - `/record` picks a piece, records from the microphone (or takes a WAV/MP3/M4A/WebM/MIDI upload), posts it, and opens the result.
 - `/?report=<id>` opens a saved take. `/?report=latest` opens the newest one.
 - `POST /api/analyze` with form fields `piece` (a stem from `pieces/`) or `score` (file), `performance` (audio or MIDI), optional `take`, `hands` (`right` or `both`), `explain` (`0` to skip Claude).
-
-From the command line:
-
-```sh
-.venv/bin/python -m pianocoach.pipeline score.musicxml take.wav out/take-1 --bpm 108 --title 'Minuet in G major' --composer 'Christian Petzold'
-```
 
 From Python:
 

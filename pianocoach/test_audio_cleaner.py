@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 import soundfile as sf
 
-from audio_cleaner.clean_audio import CleanConfig, clean_audio
+from audio_cleaner.clean_audio import CleanConfig, clean_audio, reduce_key_clicks
 
 
 def tone(freq, seconds, sr, amp):
@@ -59,6 +59,36 @@ class PianoCleanerTests(unittest.TestCase):
                 sf.write(src, x, rate)
                 y, sr = sf.read(clean_audio(src, Path(self.folder.name) / f'r{rate}-out.wav'))
                 self.assertEqual((sr, len(y)), (rate, len(x)))
+
+    def test_clicks_drop_without_removing_sustained_pitch(self):
+        sr = self.sr
+        rng = np.random.default_rng(4)
+        x = np.zeros(sr * 2)
+        t = np.arange(sr) / sr
+        x[sr // 2:sr // 2 + sr] = 0.12 * np.sin(2 * np.pi * 440 * t)
+        click = rng.normal(0, 0.25, 160) * np.hanning(160)
+        x[3200:3360] += click
+        x[16000:16160] += click  # A click during the note, too.
+        y = reduce_key_clicks(x, sr, 0.65)
+        rms = lambda a: np.sqrt(np.mean(a ** 2))
+        self.assertEqual(len(y), len(x))
+        self.assertLess(rms(y[3200:3360]), rms(x[3200:3360]) * 0.5)
+        self.assertLess(rms(y[16000:16160]), rms(x[16000:16160]) * 0.7)
+        self.assertGreater(rms(y[10000:12000]), rms(x[10000:12000]) * 0.95)
+        np.testing.assert_array_equal(reduce_key_clicks(x, sr, 0), x)
+
+    def test_fast_repeats_and_block_boundaries_keep_their_timing(self):
+        sr = self.sr
+        x = np.zeros(sr * 9)
+        starts = [sr // 2 + i * 1600 for i in range(8)] + [sr * 8 - 400]
+        for start in starts:
+            x[start:start + 640] += tone(440, 0.04, sr, 0.2) * np.hanning(640)
+        y = reduce_key_clicks(x, sr, 0.65)
+        for start in starts:
+            before, after = x[start:start + 640], y[start:start + 640]
+            self.assertGreater(np.linalg.norm(after), np.linalg.norm(before) * 0.8)
+            self.assertLessEqual(abs(int(np.argmax(np.abs(after))) - int(np.argmax(np.abs(before)))), 8)
+        self.assertEqual(len(y), len(x))
 
     def test_piano_is_the_default_and_rejects_bass_cutting_filters(self):
         self.assertEqual(CleanConfig().mode, 'piano')

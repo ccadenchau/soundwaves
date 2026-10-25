@@ -159,9 +159,9 @@ def compare_files(sheet, recording, *, bpm=120, title=None, piece_id=None):
     from sheet_downloader import convert_score
     from transcribe_recording import transcribe_recording
     from transcribe_recording.models import TranscriptionConfig
-    from pianocoach.clean import clean_notes
+    from pianocoach.clean import clean_notes, write_performance_midi
     from pianocoach.pipeline import align_windowed, prepare_for_transcription, transcriber, trim_to_played
-    from testing.alignment.playback import render_midi
+    from pianocoach.web.playback import render_midi
 
     sheet_signature = _signature('sheet_downloader', dict(bpm=bpm, measures_per_chunk=1,
                                                         audiveris_path=os.environ.get('AUDIVERIS_PATH')))
@@ -188,6 +188,18 @@ def compare_files(sheet, recording, *, bpm=120, title=None, piece_id=None):
     # Clean the detections, merge unison score notes, and pin a short take to the bars it covers.
     heard = json.loads(Path(take['notes']).read_text(encoding='utf-8'))['notes']
     kept, cleaning = clean_notes(heard, harmonics=backend is None)
+    # Playback and downloads must contain exactly the detections we grade, not
+    # overtone ghosts and duplicate attacks removed before alignment.
+    cleaned_signature = json.dumps(dict(cleaner=_hash(ROOT / 'pianocoach' / 'clean.py'),
+                                        harmonics=backend is None), sort_keys=True)
+    def export_cleaned(stage):
+        write_performance_midi(kept, stage / 'performance.mid')
+        data = json.loads(Path(take['notes']).read_text(encoding='utf-8'))
+        data['notes'] = kept
+        data['note_cleanup'] = cleaning
+        _write_json(stage / 'notes.json', data)
+    graded, _ = _cached('performance-midi', Path(take['notes']), cleaned_signature,
+                       export_cleaned, dict(midi='performance.mid', notes='notes.json'))
     report, _ = align_windowed(score['notes'], kept)
     trim_to_played(report)  # only the bars the student played: no "missed" notes past the end of a short take
     report['preprocessing'] = dict(report.get('preprocessing', {}), audio_cleaning=audio_cleaning,
@@ -196,7 +208,7 @@ def compare_files(sheet, recording, *, bpm=120, title=None, piece_id=None):
     playback_signature = _signature('sheet_downloader', dict(
         renderer_sha256=_hash(Path(__file__).with_name('playback.py')), sample_rate=16000))
     previews = {}
-    for name, midi in (('sheet_midi_audio', score['midi']), ('recording_midi_audio', take['midi'])):
+    for name, midi in (('sheet_midi_audio', score['midi']), ('recording_midi_audio', graded['midi'])):
         preview, _ = _cached('playback', midi, playback_signature,
                              lambda stage, midi=midi: render_midi(midi, stage / 'preview.wav'),
                              dict(audio='preview.wav'))
@@ -206,8 +218,8 @@ def compare_files(sheet, recording, *, bpm=120, title=None, piece_id=None):
     directory.mkdir(parents=True)
     report_path = directory / 'report.json'
     _write_json(report_path, report)
-    artifacts = dict(report=report_path, sheet_midi=score['midi'], recording_midi=take['midi'],
-                     sheet_notes=score['notes'], recording_notes=take['notes'],
+    artifacts = dict(report=report_path, sheet_midi=score['midi'], recording_midi=graded['midi'], raw_recording_midi=take['midi'],
+                     sheet_notes=score['notes'], recording_notes=graded['notes'],
                      musicxml=score['musicxml'], repairs=score['repairs'],
                      audio=audio_path, original_audio=audio_path, sheet=sheet_path,
                      **previews)

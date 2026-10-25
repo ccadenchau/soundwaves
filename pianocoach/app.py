@@ -174,7 +174,7 @@ async function midiSetup() {
       inputs.forEach(i => i.onmidimessage = onMidiMessage);
     };
     midiAccess.onstatechange = refresh; refresh();
-  } catch (error) { console.log('[pianocoach] MIDI unavailable:', error.message); }
+  } catch (error) {}
 }
 async function midiToggle() {
   if (!midiOn) {
@@ -273,7 +273,7 @@ drop.addEventListener('drop',e=>e.dataTransfer.files[0]&&send(e.dataTransfer.fil
 
 @coach.get('/site.css')
 def site_css():
-    return _no_cache(send_file(ROOT / 'pianocoach-ui' / 'site.css', mimetype='text/css'))
+    return _no_cache(send_file(ROOT / 'pianocoach-ui' / 'shared' / 'site.css', mimetype='text/css'))
 
 
 @coach.get('/upload')
@@ -374,7 +374,7 @@ function roll(notes,dur,marks){
 }
 function show(r){
   const f=n=>`/api/convert/${r.id}/${n}`,room=r.room;
-  let html=`<div class="card"><h2>${esc(r.file)}</h2><p class="dim">Transcriber: <b>${esc(r.engine)}</b> · cleaner strength ${r.strength} · ${r.seconds} s. Loud-to-quiet spread ${room.before_db} dB${room.cleaner_skipped?' (very quiet room, the cleaner left it alone)':' → '+room.after_db+' dB after cleaning'}.</p>
+  let html=`<div class="card"><h2>${esc(r.file)}</h2><p class="dim">Transcriber: <b>${esc(r.engine)}</b> · cleaner strength ${r.strength} · ${r.seconds} s. Loud-to-quiet spread ${room.before_db} dB${room.cleaner_skipped?' (quiet room: room denoising skipped; key-click reduction still applied)':' → '+room.after_db+' dB after cleaning'}.</p>
   <div class="grid" style="margin-top:12px"><div><p class="dim">Original</p><audio controls preload="metadata" src="${f('original')}"></audio></div><div><p class="dim">Cleaned</p><audio controls preload="metadata" src="${f('cleaned.wav')}"></audio></div></div></div>`;
   const marks=new Map();if(r.difference){for(const n of r.difference.only_after_cleaning)marks.set(n.t.toFixed(2)+':'+n.p,'add');for(const n of r.difference.lost_by_cleaning)marks.set(n.t.toFixed(2)+':'+n.p,'lost');}
   if(r.difference){const d=r.difference;html+=`<div class="card"><h2>What cleaning changed</h2><p>${d.only_after_cleaning.length||d.lost_by_cleaning.length?`Cleaning found <b>${d.only_after_cleaning.length}</b> note${d.only_after_cleaning.length===1?'':'s'} the raw audio missed and lost <b>${d.lost_by_cleaning.length}</b>.`:'Nothing. Both versions give the same notes.'}</p>${[...d.only_after_cleaning.map(n=>'+ '+n.name+' at '+n.t.toFixed(2)+' s'),...d.lost_by_cleaning.map(n=>'− '+n.name+' at '+n.t.toFixed(2)+' s')].slice(0,30).map(x=>`<span class="dim" style="margin-right:12px">${x}</span>`).join('')}</div>`;}
@@ -534,7 +534,7 @@ def report(report_id):
     return _no_cache(jsonify(data))
 
 
-FALLING_UI = ROOT / 'pianocoach-ui' / 'falling-notes.html'
+FALLING_UI = ROOT / 'pianocoach-ui' / 'replay' / 'falling-notes.html'
 
 
 @coach.get('/falling')
@@ -636,11 +636,8 @@ def warm_transcriber():
 
     def warm():
         backend = transcriber()
-        if backend is None:
-            print('[pianocoach] transcriber: Basic Pitch (bundled)', flush=True)
-            return
-        info = backend.start()
-        print(f"[pianocoach] transcriber: Transkun on {info.get('device')} (loaded in {info.get('load_seconds')} s)", flush=True)
+        if backend is not None:
+            backend.start()
 
     Thread(target=warm, daemon=True).start()
 

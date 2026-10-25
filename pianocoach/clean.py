@@ -110,3 +110,11 @@ def clean_notes(notes, *, harmonics=True):
     harmonics = dropped
     return kept, dict(duplicates_merged=len(duplicates), harmonics_removed=len(harmonics),
                       reonsets_merged=len(reonsets), notes_kept=len(kept))
+
+
+def write_performance_midi(notes, destination):
+    """Export the same cleaned detections used by alignment and score overlays."""
+    from types import SimpleNamespace
+    from transcribe_recording.export import write_midi
+
+    write_midi(destination, [SimpleNamespace(**_as_dict(note)) for note in notes])

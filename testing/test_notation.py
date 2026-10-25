@@ -8,7 +8,7 @@ from xml.etree import ElementTree
 from music21 import bar, chord, note, stream
 
 from sheet_downloader.reference import build_reference
-from testing.alignment.notation import _extra_anchor, build_notation
+from pianocoach.web.notation import _extra_anchor, build_notation
 
 
 class NotationTests(unittest.TestCase):
@@ -62,7 +62,7 @@ class NotationTests(unittest.TestCase):
             self.assertEqual(wrong['duration'], .4)
 
             # Existing reports gain the overlay lazily, without reconverting audio.
-            from testing.alignment import app as web, pipeline
+            from pianocoach.web import app as web, pipeline
             report_id = 'a' * 32
             directory = root / 'reports' / report_id
             directory.mkdir(parents=True)
@@ -74,7 +74,7 @@ class NotationTests(unittest.TestCase):
                 client = web.app.test_client()
                 first = client.get(f'/report/{report_id}/notation')
                 self.assertEqual(first.status_code, 200)
-                with patch('testing.alignment.notation.build_notation', side_effect=AssertionError('Cache was not reused')):
+                with patch('pianocoach.web.notation.build_notation', side_effect=AssertionError('Cache was not reused')):
                     second = client.get(f'/report/{report_id}/notation')
                     self.assertEqual(second.status_code, 200)
                     self.assertEqual(first.json, second.json)

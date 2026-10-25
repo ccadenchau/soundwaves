@@ -5,8 +5,8 @@ main/
 instance/
 venv/
 /temp_files/
-/testing/alignment/cache/*
-!/testing/alignment/cache/.gitkeep
+/pianocoach/web/cache/*
+!/pianocoach/web/cache/.gitkeep
 /pianocoach/sessions/
 /pianocoach/cache/
 /.venv-transkun/
@@ -15,3 +15,5 @@ venv/
 /testing/datasets/results_long/
 /pianocoach/pieces/upload-*
 /testing/datasets/results_audio/
+
+/.python-transkun/

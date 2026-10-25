@@ -1,4 +1,4 @@
-"""Single-file local Flask preview. Run: python testing/alignment/app.py."""
+"""Main PianoCoach Flask app. Run from the repository root with python3 run.py."""
 
 import json
 import re
@@ -10,8 +10,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from flask import Flask, abort, jsonify, redirect, render_template_string, request, send_file, url_for
 from werkzeug.exceptions import RequestEntityTooLarge
 
-from testing.alignment.pipeline import CACHE, compare_files, store_upload, wait_for_feedback
-from testing.alignment.wording import plain_feedback as _plain_feedback
+from pianocoach.web.pipeline import CACHE, compare_files, store_upload, wait_for_feedback
+from pianocoach.web.wording import plain_feedback as _plain_feedback
 
 app = Flask(__name__)
 ROOT_DIR = Path(__file__).resolve().parents[2]
@@ -22,7 +22,7 @@ app.config['MAX_CONTENT_LENGTH'] = 102 * 1024 * 1024
 from pianocoach.app import coach, report_page  # noqa: E402
 from pianocoach.live import practice  # noqa: E402
 from pianocoach.selftest import selftest  # noqa: E402
-from testing.alignment.live_demo import live_demo  # noqa: E402
+from pianocoach.web.live_demo import live_demo  # noqa: E402
 
 for _blueprint in (coach, practice, selftest, live_demo):
     app.register_blueprint(_blueprint)
@@ -67,10 +67,13 @@ REPORT = '''<!doctype html>
 <title>{{ summary.title }} · PianoCoach</title>{{ site_head|safe }}
 <style>
 .notation{height:620px}.notation .note{cursor:pointer}
-.notation .active-note{filter:drop-shadow(0 0 35px var(--here));stroke:var(--here);stroke-width:14}
+.notation .active-note{color:var(--here)!important;fill:var(--here)!important}
 .notation .played-marker{cursor:pointer}
 .notation .dynamic-wedge{fill:none;stroke:#58677c;stroke-width:5;stroke-linecap:round}.notation .dynamic-wedge.good{stroke:var(--matched)}.notation .dynamic-wedge.wrong{stroke:var(--wrong)}
 .score-tools{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.score-tools label{display:flex;align-items:center;gap:7px;font-weight:400}.score-tools select{width:auto;margin:0}
+#score-play{min-width:5.5rem;text-align:center}
+#playing-notes{display:block;height:1.5em;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:10px 0}
+#notation{overflow-anchor:none;overscroll-behavior:contain;scrollbar-gutter:stable}
 .notation.hide-overlays .played-marker{display:none}.notation.hide-overlays .note{color:black;fill:black}
 .links{display:flex;gap:15px;flex-wrap:wrap}.kicker{color:var(--muted);font-weight:600;font-size:14px;letter-spacing:.04em;text-transform:uppercase;margin:0}
 #teacher-body .focus{border-left:4px solid var(--accent);padding:2px 14px;margin:14px 0}
@@ -93,8 +96,9 @@ td .barnote{font-weight:600;margin-bottom:4px}
 <div class="metric extra"><strong>{{ summary.extra }}</strong>Extra notes</div>
 <div class="metric"><strong>{{ summary.tempo }}</strong>Your tempo (score {{ summary.score_bpm }})</div>
 </div>
+<p class="muted">Transcription: {{ 'Transkun' if report.preprocessing.transcriber == 'transkun' else 'Basic Pitch' }}.</p>
 <audio controls preload="metadata" id="audio" src="{{ url_for('artifact', report_id=result.report_id, kind='audio') }}"></audio>
-<div class="links"><a class="btn" href="/live{% if summary.piece_id %}?piece={{ summary.piece_id|urlencode }}{% endif %}">Play it again live</a><a class="btn ghost" href="{{ url_for('check') }}">Check another recording</a></div>
+<div class="links"><button type="button" id="play-cleaned">Play cleaned audio</button><a class="btn" href="/live{% if summary.piece_id %}?piece={{ summary.piece_id|urlencode }}{% endif %}">Play it again live</a><a class="btn ghost" href="{{ url_for('check') }}">Check another recording</a></div>
 </section>
 
 <section class="card" id="teacher" data-url="{{ url_for('report_feedback', report_id=result.report_id) }}" data-piece="{{ summary.piece_id or '' }}">
@@ -107,9 +111,13 @@ td .barnote{font-weight:600;margin-bottom:4px}
 
 <section class="card" id="score-view" data-url="{{ url_for('notation', report_id=result.report_id) }}">
 <h2>Your playing on the score</h2>
-<p class="muted">Play the recording to follow along. Click any coloured note to hear that moment. Purple shows the note you actually played.</p>
+<p class="muted">Choose Detected MIDI to hear the notes the app detected while they light up on your sheet music. Switch to Recorded audio to compare at the same moment. Click a coloured note to replay it; purple marks detected wrong or extra notes.</p>
 <div class="legend"><span style="color:var(--matched)">● Right</span><span style="color:var(--missed)">● Skipped</span><span style="color:var(--wrong)">● Wrong key (the written note)</span><span style="color:var(--extra)">● What you played / extra</span><span class="muted">Hairpins: green followed, red needs more shape</span></div>
-<div class="score-tools"><label><input type="checkbox" id="show-overlays" checked>Show my notes</label><label><input type="checkbox" id="follow-score" checked>Follow playback</label><label>Zoom <select id="score-zoom"><option value="1">100%</option><option value="1.25">125%</option><option value="1.5">150%</option><option value="2">200%</option></select></label><span id="playing-notes" aria-live="polite" class="muted">Ready to play</span></div>
+<div class="score-tools">
+<label>Playback <select id="playback-mode"><option value="{{ url_for('artifact', report_id=result.report_id, kind='audio') }}">Recorded audio</option><option value="{{ url_for('artifact', report_id=result.report_id, kind='cleaned_audio') }}">Cleaned audio</option>{% if result.midi_playback %}<option value="{{ url_for('artifact', report_id=result.report_id, kind='recording_midi_audio') }}">Detected MIDI</option>{% endif %}</select></label>
+<button type="button" id="score-play" disabled>Play</button>
+<label>Speed <select id="playback-speed"><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option></select></label>
+<label><input type="checkbox" id="show-overlays" checked>Show my notes</label><label><input type="checkbox" id="follow-score" checked>Follow playback</label><label>Zoom <select id="score-zoom"><option value="1">100%</option><option value="1.25">125%</option><option value="1.5">150%</option><option value="2">200%</option></select></label></div><p id="playing-notes" aria-live="polite" class="muted">Ready to play</p>
 <p id="notation-status" role="status" class="muted">Drawing the score…</p>
 <div class="notation" id="notation" aria-label="Sheet music with your notes"></div>
 <details id="unplaced-notes" hidden><summary>Notes without a clear place in the score</summary><div></div></details>
@@ -365,11 +373,25 @@ def report_ask(report_id):
 def artifact(report_id, kind):
     directory = _report_directory(report_id)
     manifest = json.loads((directory / 'artifacts.json').read_text(encoding='utf-8'))
-    if kind not in manifest:
+    source_kind = 'audio' if kind == 'cleaned_audio' and kind not in manifest else kind
+    if source_kind not in manifest:
         abort(404)
-    path = (CACHE / manifest[kind]).resolve()
+    path = (CACHE / manifest[source_kind]).resolve()
     if not path.is_relative_to(CACHE.resolve()) or not path.is_file():
         abort(404)
+    if kind == 'cleaned_audio' and source_kind == 'audio':
+        from audio_cleaner.clean_audio import clean_audio
+        from pianocoach.web.pipeline import _cached, _hash
+
+        signature = _hash(ROOT_DIR / 'audio_cleaner' / 'clean_audio.py')
+        try:
+            cleaned, _ = _cached('cleaned-audio', path, signature,
+                lambda stage: clean_audio(path, stage / 'cleaned.wav', mode='piano'),
+                dict(audio='cleaned.wav'))
+            path = cleaned['audio']
+        except Exception:
+            app.logger.exception('Audio cleanup failed')
+            return jsonify(error='Could not clean this recording. Original audio is still available.'), 422
     inline_audio = kind in {'audio', 'cleaned_audio', 'original_audio', 'sheet_midi_audio', 'recording_midi_audio'}
     mimetype = {'.mp3': 'audio/mpeg', '.wav': 'audio/wav'}.get(path.suffix.lower()) if inline_audio else None
     return send_file(path, as_attachment=not inline_audio or request.args.get('download') == '1',
@@ -378,8 +400,8 @@ def artifact(report_id, kind):
 
 @app.get('/report/<report_id>/notation')
 def notation(report_id):
-    from testing.alignment.notation import build_notation
-    from testing.alignment.pipeline import _cached, _hash, _write_json
+    from pianocoach.web.notation import build_notation
+    from pianocoach.web.pipeline import _cached, _hash, _write_json
     from importlib.metadata import version
 
     directory = _report_directory(report_id)
@@ -417,9 +439,6 @@ def too_large(error):
 
 def run_server(port=5001):
     from pianocoach.app import warm_transcriber
-    print(f'Open http://127.0.0.1:{port} to upload your sheet music and recording.', flush=True)
-    print(f'  one-click checks: http://127.0.0.1:{port}/test   live practice: http://127.0.0.1:{port}/practice', flush=True)
-    print('Press Ctrl+C to stop the server.', flush=True)
     warm_transcriber()
     app.run(host='127.0.0.1', port=port, debug=False, use_reloader=False, threaded=True)
 

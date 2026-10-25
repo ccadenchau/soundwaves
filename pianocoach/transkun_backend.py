@@ -91,4 +91,7 @@ class TranskunBackend:
                 self._process.wait(timeout=5)
             except Exception:  # noqa: BLE001
                 self._process.kill()
+                self._process.wait()
+            self._process.stdin.close()
+            self._process.stdout.close()
             self._process = None
