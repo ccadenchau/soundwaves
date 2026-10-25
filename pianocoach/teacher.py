@@ -14,7 +14,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-from .explain import GEMINI_MODEL, MODEL as CLAUDE_MODEL, load_env, provider
+from .explain import GEMINI_MODEL, MODEL as CLAUDE_MODEL, has_claude, has_gemini, load_env, provider
 
 PLACEHOLDER_KEY = 'YOUR_GEMINI_API_KEY_HERE'
 NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
@@ -127,15 +127,15 @@ def _key():
     return key
 
 
-def _ask_claude(payload, model):
+def _ask_claude(payload, model, system=None, schema=None):
     """Claude writes the notes; the same system prompt and JSON schema as the Gemini path."""
     import anthropic
     try:
         client = anthropic.Anthropic()
         response = client.messages.create(
-            model=model, max_tokens=3000, system=SYSTEM,
+            model=model, max_tokens=3000, system=system or SYSTEM,
             messages=[{'role': 'user', 'content': json.dumps(payload)}],
-            output_config={'format': {'type': 'json_schema', 'schema': _strict(SCHEMA)}})
+            output_config={'format': {'type': 'json_schema', 'schema': _strict(schema or SCHEMA)}})
     except anthropic.AuthenticationError:
         raise FeedbackUnavailable('Anthropic rejected the API key in .env.') from None
     except anthropic.APIConnectionError as error:
@@ -168,11 +168,11 @@ def _strict(schema):
     return out
 
 
-def _ask(payload, key, model):
+def _ask(payload, key, model, system=None, schema=None):
     body = dict(
-        systemInstruction=dict(parts=[dict(text=SYSTEM)]),
+        systemInstruction=dict(parts=[dict(text=system or SYSTEM)]),
         contents=[dict(role='user', parts=[dict(text=json.dumps(payload))])],
-        generationConfig=dict(responseMimeType='application/json', responseSchema=SCHEMA, temperature=0.6))
+        generationConfig=dict(responseMimeType='application/json', responseSchema=schema or SCHEMA, temperature=0.6))
     request = urllib.request.Request(
         f'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent',
         data=json.dumps(body).encode(), method='POST',
@@ -213,8 +213,8 @@ def teacher_feedback(alignment, cache_dir, title='', force=False):
     """Piano-teacher feedback for one comparison; cached in cache_dir/teacher.json."""
     load_env()
     payload = feedback_payload(alignment, title)
-    which = provider()
-    if which == 'claude' and not (os.environ.get('ANTHROPIC_API_KEY') or os.environ.get('ANTHROPIC_AUTH_TOKEN')):
+    which = provider(role='teacher')
+    if which == 'claude' and not has_claude():
         which = 'gemini'  # no Anthropic credential: fall back rather than fail
     model = CLAUDE_MODEL if which == 'claude' else (os.environ.get('GEMINI_MODEL') or GEMINI_MODEL)
     digest = hashlib.sha256((model + SYSTEM + json.dumps(payload, sort_keys=True)).encode()).hexdigest()
@@ -226,3 +226,94 @@ def teacher_feedback(alignment, cache_dir, title='', force=False):
     feedback = _ask_claude(payload, model) if which == 'claude' else _ask(payload, _key(), model)
     cache.write_text(json.dumps(dict(digest=digest, written_by=model, feedback=feedback), indent=2) + '\n', encoding='utf-8')
     return dict(feedback, written_by=model)
+
+
+# ---------------------------------------------------------------------------------------------
+# One short line per bar, written by Gemini from the measured facts. Shown in the bar table.
+# ---------------------------------------------------------------------------------------------
+BAR_SYSTEM = """You write one short sentence per bar for a piano student's practice review, from facts a program measured against the sheet music. Each sentence is at most 18 words, specific to that bar, in plain words a teenager would use: name the notes when they are given, say rushed or dragged when speed_vs_score is far from 1, say which hand when it is obvious from the notes. A bar with everything right gets a short plain sentence such as "Every note right, a touch fast." No exclamation marks, no mention of software or AI. Return JSON only."""
+
+BAR_SCHEMA = {
+    'type': 'object',
+    'properties': {'bars': {'type': 'array', 'items': {
+        'type': 'object',
+        'properties': {'bar': {'type': 'integer'}, 'note': {'type': 'string'}},
+        'required': ['bar', 'note']}}},
+    'required': ['bars'],
+}
+
+
+def bar_notes(alignment, cache_dir, title='', force=False):
+    """{bar number: one sentence} for the bars that were played; cached in cache_dir/bar_notes.json."""
+    load_env()
+    payload = feedback_payload(alignment, title)
+    which = provider(role='explainer')
+    if which == 'gemini' and not has_gemini():
+        which = 'claude'
+    if which == 'claude' and not has_claude():
+        raise FeedbackUnavailable('Bar notes need a GEMINI_API_KEY or ANTHROPIC_API_KEY in .env.')
+    model = CLAUDE_MODEL if which == 'claude' else (os.environ.get('GEMINI_MODEL') or GEMINI_MODEL)
+    digest = hashlib.sha256((model + BAR_SYSTEM + json.dumps(payload, sort_keys=True)).encode()).hexdigest()
+    cache = Path(cache_dir) / 'bar_notes.json'
+    if cache.is_file() and not force:
+        saved = json.loads(cache.read_text(encoding='utf-8'))
+        if saved.get('digest') == digest:
+            return dict(bars=saved['bars'], written_by=saved.get('written_by', model))
+    data = (_ask_claude(payload, model, BAR_SYSTEM, BAR_SCHEMA) if which == 'claude'
+            else _ask(payload, _key(), model, BAR_SYSTEM, BAR_SCHEMA))
+    bars = {str(int(item['bar'])): str(item['note']).strip() for item in data.get('bars', []) if item.get('note')}
+    cache.write_text(json.dumps(dict(digest=digest, written_by=model, bars=bars), indent=2) + '\n', encoding='utf-8')
+    return dict(bars=bars, written_by=model)
+
+
+# ---------------------------------------------------------------------------------------------
+# Questions about the review, answered by Claude from the same comparison and the notes it wrote.
+# ---------------------------------------------------------------------------------------------
+ASK_SYSTEM = """You are the same kind, experienced piano teacher. The student recorded a practice take, a program compared it with the sheet music (the comparison JSON below), and you already gave them written notes (also below). Now they are asking you questions about it, at the piano, so answer the way you would speak: two to four sentences, plain words, naming bars and notes when it helps, with one concrete thing to try when they ask what to do. Every claim comes from the comparison; if it does not say, say that you cannot tell from this take. No exclamation marks, no bullet lists, no mention of software, AI or JSON."""
+
+
+def answer_question(alignment, cache_dir, title, question, history):
+    """One answer to one question. `history` is earlier turns as [{'role': 'user'|'assistant', 'content': str}]."""
+    load_env()
+    question = (question or '').strip()[:500]
+    if not question:
+        raise FeedbackUnavailable('Ask something first.')
+    notes_file = Path(cache_dir) / 'teacher.json'
+    notes = json.loads(notes_file.read_text(encoding='utf-8')).get('feedback') if notes_file.is_file() else None
+    context = json.dumps(dict(comparison=feedback_payload(alignment, title), your_notes=notes))
+    system = ASK_SYSTEM + '\n\nThe comparison and your notes:\n' + context
+    turns = [dict(role=h['role'], content=str(h['content'])[:1500]) for h in (history or [])[-8:]
+             if isinstance(h, dict) and h.get('role') in ('user', 'assistant') and h.get('content')]
+    turns.append(dict(role='user', content=question))
+    which = provider(role='teacher')
+    if which == 'claude' and not has_claude():
+        which = 'gemini'
+    if which == 'claude':
+        import anthropic
+        try:
+            response = anthropic.Anthropic().messages.create(model=CLAUDE_MODEL, max_tokens=400, system=system, messages=turns)
+        except anthropic.APIConnectionError as error:
+            raise FeedbackUnavailable(f'Could not reach Claude: {error}'[:200]) from None
+        except anthropic.APIStatusError as error:
+            raise FeedbackUnavailable(f'Claude request failed ({error.status_code}).') from None
+        if response.stop_reason == 'refusal':
+            raise FeedbackUnavailable('Claude declined that question.')
+        text = ''.join(b.text for b in response.content if b.type == 'text').strip()
+        return dict(answer=text, written_by=CLAUDE_MODEL)
+    if not has_gemini():
+        raise FeedbackUnavailable('Questions need an ANTHROPIC_API_KEY or GEMINI_API_KEY in .env.')
+    model = os.environ.get('GEMINI_MODEL') or GEMINI_MODEL
+    body = dict(systemInstruction=dict(parts=[dict(text=system)]),
+                contents=[dict(role='model' if t['role'] == 'assistant' else 'user', parts=[dict(text=t['content'])]) for t in turns],
+                generationConfig=dict(temperature=0.6, maxOutputTokens=400))
+    request = urllib.request.Request(
+        f'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent',
+        data=json.dumps(body).encode(), method='POST',
+        headers={'Content-Type': 'application/json', 'x-goog-api-key': _key()})
+    try:
+        with urllib.request.urlopen(request, timeout=60) as response:
+            result = json.load(response)
+        text = ''.join(p.get('text', '') for p in result['candidates'][0]['content']['parts']).strip()
+    except (urllib.error.URLError, TimeoutError, KeyError, IndexError, ValueError) as error:
+        raise FeedbackUnavailable(f'Gemini could not answer: {type(error).__name__}') from None
+    return dict(answer=text, written_by=model)

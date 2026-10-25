@@ -29,19 +29,35 @@ def load_env(path=ENV_FILE):
         os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
 
 
-def provider(choice=None):
-    """Which model writes the explanations. PIANOCOACH_EXPLAINER=claude|gemini|auto.
-    auto: Claude when an Anthropic credential is set, else Gemini when GEMINI_API_KEY or
-    GOOGLE_API_KEY is set, else none (the plain fallback wording stays)."""
+def has_claude():
     import os
     load_env()
-    choice = (choice or os.environ.get('PIANOCOACH_EXPLAINER', 'auto')).lower()
+    return bool(os.environ.get('ANTHROPIC_API_KEY') or os.environ.get('ANTHROPIC_AUTH_TOKEN'))
+
+
+def has_gemini():
+    import os
+    load_env()
+    key = os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY') or ''
+    return bool(key) and key != 'YOUR_GEMINI_API_KEY_HERE'
+
+
+def provider(choice=None, role='explainer'):
+    """Which model does a job. Two roles, so each model has real work when both keys are set:
+    - 'explainer' (per-note explanations, per-bar wording): Gemini first, Claude if only that is set.
+      Override with PIANOCOACH_EXPLAINER=claude|gemini.
+    - 'teacher' (the written teacher notes and the questions you ask about them): Claude first,
+      Gemini if only that is set. Override with PIANOCOACH_TEACHER=claude|gemini."""
+    import os
+    load_env()
+    env = 'PIANOCOACH_TEACHER' if role == 'teacher' else 'PIANOCOACH_EXPLAINER'
+    choice = (choice or os.environ.get(env, 'auto')).lower()
     if choice in ('claude', 'gemini'):
         return choice
-    if os.environ.get('ANTHROPIC_API_KEY') or os.environ.get('ANTHROPIC_AUTH_TOKEN'):
-        return 'claude'
-    if os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY'):
-        return 'gemini'
+    order = ('claude', 'gemini') if role == 'teacher' else ('gemini', 'claude')
+    for name in order:
+        if (name == 'claude' and has_claude()) or (name == 'gemini' and has_gemini()):
+            return name
     return 'claude'  # the SDK may still find a stored profile; otherwise it falls back cleanly
 
 SYSTEM = """You are a piano teacher writing short notes to a self-taught student who just recorded a practice take and cannot afford lessons. A program compared the take with the score and found the spots listed in the JSON. You explain each one and give one thing to try.

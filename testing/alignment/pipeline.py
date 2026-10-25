@@ -223,23 +223,27 @@ _feedback_jobs = {}
 
 
 def prefetch_feedback(report_id):
-    """Start the teacher's written feedback as soon as a comparison is saved, so it is ready (and
-    the page doesn't jump) by the time the report opens. The page's own request waits for this."""
+    """Start the teacher's notes (Claude) and the bar notes (Gemini) as soon as a comparison is
+    saved, in parallel, so both are ready by the time the report opens. The page's requests wait."""
     import threading
+    from pianocoach.teacher import bar_notes, teacher_feedback
+    directory = CACHE / 'reports' / report_id
+    meta = directory / 'meta.json'
+    title = json.loads(meta.read_text(encoding='utf-8')).get('title', '') if meta.is_file() else ''
 
-    def run():
+    def run(kind):
         try:
-            from pianocoach.teacher import teacher_feedback
-            directory = CACHE / 'reports' / report_id
-            teacher_feedback(json.loads((directory / 'report.json').read_text(encoding='utf-8')), directory)
+            report = json.loads((directory / 'report.json').read_text(encoding='utf-8'))
+            (teacher_feedback if kind == 'teacher' else bar_notes)(report, directory, title)
         except Exception:  # noqa: BLE001 - the page asks again and shows the reason
             pass
-    job = threading.Thread(target=run, daemon=True, name=f'feedback-{report_id[:8]}')
-    _feedback_jobs[report_id] = job
-    job.start()
+    for kind in ('teacher', 'bars'):
+        job = threading.Thread(target=run, args=(kind,), daemon=True, name=f'{kind}-{report_id[:8]}')
+        _feedback_jobs[(report_id, kind)] = job
+        job.start()
 
 
-def wait_for_feedback(report_id, timeout=90):
-    job = _feedback_jobs.get(report_id)
+def wait_for_feedback(report_id, kind='teacher', timeout=90):
+    job = _feedback_jobs.get((report_id, kind))
     if job is not None:
         job.join(timeout)
