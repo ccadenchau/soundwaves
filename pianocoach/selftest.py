@@ -166,10 +166,12 @@ def run_case(kind, explain=False):
 
 selftest = Blueprint('selftest', __name__)
 
+from pianocoach.site import HEAD, header  # noqa: E402
+
 PAGE = """<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Test the converters</title>
-<style>
+<title>Self-checks · PianoCoach</title>
+""" + HEAD + """<style>
 :root{color-scheme:dark;--bg:#0c181b;--card:#13242a;--line:#23393f;--text:#eaf4f3;--dim:#8fa7a8;--ok:#5fe0b0;--bad:#ff7a6b;--warn:#f2c14e}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#17323a,var(--bg));color:var(--text);font:16px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif}
 main{max-width:860px;margin:0 auto;padding:40px 20px 80px}h1{font-size:34px;margin:0 0 6px;letter-spacing:-.02em}
@@ -185,7 +187,7 @@ ul.checks{list-style:none;margin:14px 0 0;padding:0;font-size:14px}ul.checks li{
 .mark{width:18px;flex:none;text-align:center}.mark.ok{color:var(--ok)}.mark.no{color:var(--bad)}.mark.warn{color:var(--warn)}.detail{color:var(--dim)}
 h3{margin:34px 0 10px;font-size:16px;color:var(--dim);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
 input[type=file]{color:var(--dim);font:inherit}a{color:var(--ok)}
-</style></head><body><main>
+</style></head><body>""" + header() + """<main>
 <h1>Test the converters</h1>
 <p class="lead">Each case plays the Minuet in G with mistakes planted at known places, runs the real pipeline, and checks that what comes out matches what went in.</p>
 <div class="chips" id="chips"></div>

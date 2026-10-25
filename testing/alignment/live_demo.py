@@ -24,7 +24,10 @@ _notation_cache, _lock = {}, Lock()
 
 @live_demo.get('/live')
 def live_page():
-    return send_file(PAGE, mimetype='text/html', max_age=0)
+    from flask import Response
+    from pianocoach.site import FOOTER, header
+    html = PAGE.read_text(encoding='utf-8').replace('<!--SITE_HEADER-->', header('live')).replace('<!--SITE_FOOTER-->', FOOTER)
+    return Response(html, mimetype='text/html', headers={'Cache-Control': 'no-store'})
 
 
 @live_demo.get('/live-assets/<name>')
@@ -70,7 +73,8 @@ def live_finish():
         path = Path(folder) / f'take{suffix}'
         upload.save(path)
         try:
-            result = compare_files(str(source), path, bpm=float(metadata.get('bpm', 120)))
+            result = compare_files(str(source), path, bpm=float(metadata.get('bpm', 120)),
+                                   title=metadata.get('title') or piece_id)
         except Exception as error:
             return jsonify(error=str(error)[:300]), 422
     directory = CACHE / 'reports' / result['report_id']
@@ -299,11 +303,16 @@ class LiveSession:
                              early=b.get('early_notes'), late=b.get('late_notes'),
                              median_onset_ms=(round(b['median_absolute_timing_error_seconds'] * 1000)
                                               if b.get('median_absolute_timing_error_seconds') is not None else None),
-                             feedback=b.get('feedback', [])))
+                             feedback=_plain(b)))
         # Missing notes in the bar being played right now may still arrive; only bars before it count.
         return dict(version=self.state['version'] + 1, ready=True, heard_seconds=round(total, 2),
                     last_heard=round(last_heard, 2), marks=marks, bars=bars,
                     metrics=dict(alignment['metrics']), status=alignment['alignment']['status'])
+
+
+def _plain(bar):
+    from testing.alignment.wording import plain_feedback
+    return plain_feedback(bar)
 
 
 def _session(sid):

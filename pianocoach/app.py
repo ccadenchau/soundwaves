@@ -228,41 +228,40 @@ def index():
     return report_page()
 
 
+from pianocoach.site import FOOTER as SITE_FOOTER, HEAD as SITE_HEAD, header as site_header  # noqa: E402
+
 SCORE_SUFFIXES = {'.musicxml', '.xml', '.mxl', '.pdf'}
 MAX_SCORE_BYTES = 20 * 1024 * 1024
 
 UPLOAD = """<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Add sheet music</title>
+<title>Add a piece · PianoCoach</title>""" + SITE_HEAD + """
 <style>
-:root{color-scheme:dark}
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(1200px 600px at 20% -10%,#17323a,#0c181b);color:#eaf4f3;font:16px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif}
-main{width:min(560px,92vw);display:grid;gap:18px}h1{font-size:30px;margin:0}p{margin:0;color:#8fa7a8}
-.drop{border:2px dashed #2c4a50;border-radius:18px;padding:34px 20px;text-align:center;cursor:pointer;transition:.15s}.drop.over{border-color:#5fe0b0;background:#12262b}
-input[type=file]{display:none}label.f{display:grid;gap:6px;font-size:13px;color:#8fa7a8}
-input[type=number]{font:inherit;color:inherit;background:#13242a;border:1px solid #23393f;border-radius:10px;padding:9px 12px;width:120px}
-button,.btn{font:inherit;font-weight:600;color:#06201a;background:#5fe0b0;border:0;border-radius:999px;padding:11px 22px;cursor:pointer;text-decoration:none;display:inline-block}
-.btn.ghost{background:transparent;color:#eaf4f3;border:1px solid #23393f}#msg{min-height:1.4em}#msg.err{color:#ff7a6b}
-#done{display:none;background:#13242a;border:1px solid #23393f;border-radius:18px;padding:18px 20px;gap:12px}#done.show{display:grid}
-ul{margin:0;padding-left:18px;color:#8fa7a8;font-size:14px}.row{display:flex;gap:10px;flex-wrap:wrap}
-</style></head><body><main>
-<h1>Add sheet music</h1>
-<p>Any MusicXML, MXL or XML file works right away. PDFs need Audiveris installed on this computer. One piece at a time, up to 20 MB.</p>
-<label class="drop" id="drop"><input type="file" id="file" accept=".musicxml,.xml,.mxl,.pdf"><span id="pick">Drop a score here, or click to choose one</span></label>
-<label class="f">Tempo to use when the score has none <input type="number" id="bpm" value="100" min="20" max="400"></label>
-<p id="msg"></p>
-<div id="done"><strong id="title"></strong><ul id="facts"></ul>
-<div class="row"><a class="btn" id="go-practice">Practice it live</a><a class="btn ghost" id="go-record">Record a take</a><a class="btn ghost" href="/">Compare with a recording</a></div></div>
-<div class="row"><a class="btn ghost" href="/test">Back to the checks</a></div>
-</main><script>
+.drop{display:block;border:2px dashed #b9c7e6;border-radius:var(--radius);padding:36px 20px;text-align:center;cursor:pointer;background:#fafbff;font-weight:400}
+.drop.over{border-color:var(--accent);background:#eef2fb}input[type=file]{display:none}
+.two{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:16px}#msg{min-height:1.4em;margin:12px 0 0}#msg.err{color:var(--wrong)}
+#done{display:none}#done.show{display:block}#done ul{color:var(--muted)}.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+@media(max-width:700px){.two{grid-template-columns:1fr}}
+</style></head><body>""" + site_header('add') + """<main>
+<h1>Add a piece</h1>
+<p class="lede">Upload the sheet music you practise from. After that anyone on this computer can pick it on Play live or Check a recording.</p>
+<section class="card">
+<label class="drop" id="drop"><input type="file" id="file" accept=".musicxml,.xml,.mxl,.pdf"><span id="pick">Drop a score here, or click to choose one. PDF, MusicXML or MXL, up to 20 MB.</span></label>
+<div class="two"><label>Name <small>optional, shown in the piece list</small><input id="name" placeholder="Sonata in C, K. 545"></label>
+<label>Tempo if the score has none <small>beats per minute</small><input type="number" id="bpm" value="100" min="20" max="400"></label></div>
+<p id="msg" class="muted">PDFs are read with Audiveris and take a minute or two the first time. MusicXML is instant.</p>
+</section>
+<section class="card" id="done"><h2 id="title"></h2><ul id="facts"></ul>
+<div class="row"><a class="btn" id="go-live">Play it live</a><a class="btn ghost" href="/check">Check a recording of it</a></div></section>
+</main>""" + SITE_FOOTER + """<script>
 const $=s=>document.querySelector(s);
 async function send(file){
-  $('#msg').className='';$('#msg').textContent='Reading the score…';$('#done').classList.remove('show');
-  const f=new FormData();f.append('score',file);f.append('bpm',$('#bpm').value);
+  $('#msg').className='muted';$('#msg').textContent='Reading the score…';$('#done').classList.remove('show');$('#pick').textContent=file.name;
+  const f=new FormData();f.append('score',file);f.append('bpm',$('#bpm').value);f.append('title',$('#name').value.trim());
   try{const r=await fetch('/api/pieces/upload',{method:'POST',body:f});const d=await r.json();if(!r.ok)throw Error(d.error||'Could not read this score.');
     $('#msg').textContent='';$('#title').textContent=d.title+(d.composer?' · '+d.composer:'');
-    $('#facts').innerHTML=[`${d.bars} bar${d.bars===1?'':'s'}, ${d.time_signature[0]}/${d.time_signature[1]}`,`${d.notes} note${d.notes===1?'':'s'}, tempo ${Math.round(d.bpm)}`,d.reused?'This score was already added.':'Saved. Everyone using this server can pick it.'].map(t=>`<li>${t}</li>`).join('');
-    $('#go-practice').href='/practice?piece='+encodeURIComponent(d.id);$('#go-record').href='/record?piece='+encodeURIComponent(d.id);$('#done').classList.add('show');
+    $('#facts').innerHTML=[`${d.bars} bar${d.bars===1?'':'s'} in ${d.time_signature[0]}/${d.time_signature[1]}`,`${d.notes} notes, tempo ${Math.round(d.bpm)}`,d.reused?'This score was already here.':'Saved.'].map(t=>`<li>${t}</li>`).join('');
+    $('#go-live').href='/live?piece='+encodeURIComponent(d.id);$('#done').classList.add('show');
   }catch(e){$('#msg').className='err';$('#msg').textContent=e.message;}
 }
 $('#file').onchange=e=>e.target.files[0]&&send(e.target.files[0]);
@@ -270,6 +269,11 @@ const drop=$('#drop');['dragenter','dragover'].forEach(t=>drop.addEventListener(
 ['dragleave','drop'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.remove('over');}));
 drop.addEventListener('drop',e=>e.dataTransfer.files[0]&&send(e.dataTransfer.files[0]));
 </script></body></html>"""
+
+
+@coach.get('/site.css')
+def site_css():
+    return _no_cache(send_file(ROOT / 'pianocoach-ui' / 'site.css', mimetype='text/css'))
 
 
 @coach.get('/upload')
@@ -317,9 +321,14 @@ def upload_piece():
             return jsonify(error=f'Could not read this score: {message}'[:300]), 422
         from pianocoach.report import score_metadata
         meta = score_metadata(paths['musicxml'])
-        title = meta.get('title') or Path(upload.filename).stem.replace('_', ' ').replace('-', ' ').strip().title()
+        title = (request.form.get('title') or '').strip()[:120] or meta.get('title') or \
+            Path(upload.filename).stem.replace('_', ' ').replace('-', ' ').strip().title()
         sidecar.write_text(json.dumps(dict(title=title, composer=meta.get('composer'), bpm=bpm, uploaded=True)), encoding='utf-8')
     meta = json.loads(sidecar.read_text(encoding='utf-8'))
+    name = (request.form.get('title') or '').strip()[:120]
+    if reused and name and name != meta.get('title'):  # uploading the same score again with a name renames it
+        meta['title'] = name
+        sidecar.write_text(json.dumps(meta), encoding='utf-8')
     ref = json.loads((cache / 'reference' / 'reference.json').read_text(encoding='utf-8'))
     first = ref['chunks'][0]
     beats = first['end_beat'] - first['start_beat']
@@ -331,8 +340,8 @@ def upload_piece():
 
 CONVERT_PAGE = """<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Audio to MIDI</title>
-<style>
+<title>Audio to MIDI · PianoCoach</title>
+""" + SITE_HEAD + """<style>
 :root{color-scheme:dark;--bg:#0c181b;--card:#13242a;--line:#23393f;--text:#eaf4f3;--dim:#8fa7a8;--ok:#5fe0b0;--bad:#ff7a6b;--add:#7cc4ff}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#17323a,var(--bg));color:var(--text);font:16px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif}
 main{max-width:980px;margin:0 auto;padding:36px 20px 80px}h1{font-size:32px;margin:0 0 4px}p{margin:0}.dim{color:var(--dim)}
@@ -346,7 +355,7 @@ input[type=file]{display:none}.opts{display:flex;gap:22px;flex-wrap:wrap;align-i
 a.btn{font-weight:600;color:#06201a;background:var(--ok);border-radius:999px;padding:8px 16px;text-decoration:none;font-size:14px}a.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
 details{margin-top:10px}summary{cursor:pointer;color:var(--dim);font-size:14px}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}td,th{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left}
 .legend{font-size:12px;color:var(--dim);display:flex;gap:14px;margin-top:6px}.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
-</style></head><body><main>
+</style></head><body>""" + site_header() + """<main>
 <h1>Audio to MIDI</h1>
 <p class="dim">No sheet music needed. Drop in a recording of piano playing. It is cleaned with the piano cleaner, then transcribed to MIDI, and the uncleaned recording is transcribed too so you can hear and see what cleaning changes.</p>
 <label class="drop" id="drop"><input type="file" id="file" accept="audio/*,.m4a,.wav,.mp3,.webm,.ogg,.flac,.aiff,.caf"><span>Drop a recording here, or click to choose one (M4A, WAV, MP3, WebM, OGG, FLAC)</span></label>

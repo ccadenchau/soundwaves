@@ -21,7 +21,8 @@ const WIN = {first: .2, cadence: .1, context: 1.5};
 const S = {phase: 'idle', score: null, elements: new Map(), locations: {}, steps: {}, follower: null, stream: null,
   ctx: null, worklet: null, source: null, recorder: null, chunks: [], pcm: [], origin: 0, rate: 44100,
   busy: false, last: 0, noteStream: null, file: null, token: 0, now: null, here: null,
-  session: null, sent: 0, queue: [], uploading: false, version: -1, shown: new Map(), feedKeys: new Set(), markers: new Map(), barsSeen: new Set()};
+  session: null, sent: 0, queue: [], uploading: false, version: -1, shown: new Map(), feedKeys: new Set(), markers: new Map(), barsSeen: new Set(),
+  extras: {}, fastBar: 0, checkedBar: 0, tempoItems: [], feedHtml: ''};
 
 const message = text => { $('#message').textContent = text || ''; $('#message').hidden = !text; };
 const overlay = text => { $('#overlay').hidden = !text; if (text) $('#overlay').innerHTML = `<span class="spin"></span>${text}`; };
@@ -71,6 +72,7 @@ function reset() {
   for (const el of S.elements.values()) el.classList?.remove('matched', 'missed', 'wrong', 'heard', 'now', 'here', 'fresh');
   for (const g of S.markers.values()) g.remove();
   S.markers.clear(); S.shown.clear(); S.feedKeys.clear(); S.barsSeen.clear(); S.version = -1; S.now = S.here = null;
+  S.extras = {}; S.fastBar = S.checkedBar = 0; S.tempoItems = []; S.feedHtml = '';
   for (const id of ['#n-ok', '#n-wrong', '#n-miss', '#n-extra']) $(id).textContent = '0';
   $('#bar').textContent = '–'; $('#behind').textContent = '';
   $('#feed').innerHTML = '<p class="muted" id="feed-empty">Feedback appears here while you play: wrong keys, skipped notes, extra notes, and bars that rush or drag.</p>';
@@ -92,7 +94,7 @@ function follow(beat) {
   let current = null;
   for (const n of S.sorted) { if (n.beat <= beat + .01) current = n; else break; }
   if (!current) return;
-  $('#bar').textContent = current.printedMeasure ?? current.measure;
+  S.fastBar = current.printedMeasure ?? current.measure; showBar();
   const el = noteEl(current.id);
   if (el && el !== S.now) { S.now?.classList.remove('now'); el.classList.add('now'); S.now = el; }
   const measure = el?.closest('.measure');
@@ -101,6 +103,12 @@ function follow(beat) {
     const box = $('#notation'), top = measure.getBoundingClientRect().top - box.getBoundingClientRect().top;
     if (top < 20 || top > box.clientHeight - 200) box.scrollTo({top: box.scrollTop + top - 90, behavior: 'smooth'});
   }
+}
+
+function showBar() {
+  // The quick cursor can stall on a hard passage; the accurate layer's furthest bar keeps it honest.
+  const bar = Math.max(S.fastBar || 0, S.checkedBar || 0);
+  if (bar) $('#bar').textContent = bar;
 }
 
 /* ---------- accurate layer: marks, played-pitch markers, feed, bar table ---------- */
@@ -124,12 +132,39 @@ function marker(note, mark, extra) {
   g.append(e, t, title); note.append(g);
   return g;
 }
-function feed(key, colour, label, text) {
-  if (S.feedKeys.has(key)) return; S.feedKeys.add(key);
+function renderFeed(marks) {
+  // Rebuilt from the current marks every update, one line per bar and kind of mistake, newest first:
+  // a note the check later re-reads as right drops out instead of lingering in the list.
+  const groups = new Map();
+  for (const m of marks) {
+    if (m.category === 'correct') continue;
+    const id = `${m.category}-${m.occurrence}`;
+    const g = groups.get(id) || {id, kind: m.category, bar: m.measure, items: [], time: -1};
+    g.items.push(m); g.time = Math.max(g.time, m.time ?? -1); groups.set(id, g);
+  }
+  for (const t of S.tempoItems) groups.set(t.id, t);
+  const list = [...groups.values()].sort((a, b) => b.time - a.time);
+  const text = g => {
+    const n = g.items?.length || 0;
+    if (g.kind === 'tempo') return g.text;
+    if (g.kind === 'wrong_pitch') return n === 1 ? `The score has ${pitchName(g.items[0].expected)}; you played ${pitchName(g.items[0].actual)}.`
+      : `${n} wrong keys: ${g.items.slice(0, 4).map(m => `${pitchName(m.actual)} for ${pitchName(m.expected)}`).join(', ')}${n > 4 ? '…' : ''}.`;
+    if (g.kind === 'missing') return n === 1 ? `${pitchName(g.items[0].expected)} didn't sound.`
+      : `${n} notes didn't sound: ${[...new Set(g.items.map(m => pitchName(m.expected)))].slice(0, 6).join(', ')}.`;
+    const names = [...new Set(g.items.map(m => pitchName(m.actual)))];
+    return n === 1 ? `An extra ${names[0]} that isn't in the score.` : `${n} keys that aren't in the score (${names.slice(0, 5).join(', ')}${names.length > 5 ? '…' : ''}).`;
+  };
+  const label = {wrong_pitch: 'wrong key', missing: 'skipped', extra: 'extra notes', tempo: 'tempo'};
+  const colour = {wrong_pitch: '#c43d48', missing: '#c07700', extra: '#793bcc', tempo: '#805000'};
+  const feedEl = $('#feed');
+  if (!list.length) return;
   $('#feed-empty')?.remove();
-  const item = document.createElement('div'); item.className = 'item'; item.style.setProperty('--c', colour);
-  item.innerHTML = `<small>${esc(label)}</small>${esc(text)}`;
-  $('#feed').prepend(item);
+  const html = list.map(g => {
+    const isNew = !S.feedKeys.has(g.id);
+    return `<div class="item${isNew ? '' : ' seen'}" style="--c:${colour[g.kind]}"><small>Bar ${esc(g.bar)} · ${label[g.kind]}</small>${esc(text(g))}</div>`;
+  }).join('');
+  if (html !== S.feedHtml) { feedEl.innerHTML = html; S.feedHtml = html; }
+  for (const g of list) S.feedKeys.add(g.id);
 }
 function applyState(state) {
   if (!state || state.version === S.version) return;
@@ -139,6 +174,8 @@ function applyState(state) {
     $('#behind').textContent = `Checked up to ${fmt(state.heard_seconds)} · ${behind.toFixed(1)} s behind`;
   }
   if (!state.ready) return;
+  const timed = (state.marks || []).filter(m => m.time != null && m.measure != null);
+  if (timed.length) { S.checkedBar = timed.reduce((a, b) => (b.time > a.time ? b : a)).measure; showBar(); }
   const counts = {correct: 0, wrong_pitch: 0, missing: 0, extra: 0};
   const located = (state.marks || []).filter(m => m.id && noteEl(m.id));
   for (const m of state.marks || []) {
@@ -154,20 +191,15 @@ function applyState(state) {
         .sort((a, b) => Math.abs(a.time - m.time) - Math.abs(b.time - m.time))[0];
       const el = near && noteEl(near.id);
       if (el) { const g = marker(el, m, true); if (g) S.markers.set(key, g); }
-      feed(key, '#793bcc', `Bar ${bar} · extra note`, `An extra ${pitchName(m.actual)} that isn't in the score.`);
       continue;
     }
     const el = noteEl(m.id); if (!el) continue;
     el.classList.remove('matched', 'missed', 'wrong', 'heard', 'fresh');
     void el.getBBox(); el.classList.add(CLASS[m.category]);
     if (m.category !== 'correct') el.classList.add('fresh');
-    if (m.category === 'wrong_pitch') {
-      const g = marker(el, m, false); if (g) S.markers.set(key, g);
-      feed(key, '#c43d48', `Bar ${bar} · wrong key`, `The score has ${pitchName(m.expected)}; you played ${pitchName(m.actual)}.`);
-    } else if (m.category === 'missing') {
-      feed(key, '#c07700', `Bar ${bar} · skipped`, `${pitchName(m.expected)} didn't sound.`);
-    }
+    if (m.category === 'wrong_pitch') { const g = marker(el, m, false); if (g) S.markers.set(key, g); }
   }
+  renderFeed(state.marks || []);
   $('#n-ok').textContent = counts.correct; $('#n-wrong').textContent = counts.wrong_pitch;
   $('#n-miss').textContent = counts.missing; $('#n-extra').textContent = counts.extra;
   renderBars(state.bars || []);
@@ -177,8 +209,8 @@ function renderBars(bars) {
   const newest = Math.max(...bars.map(b => b.occurrence));
   $('#bars').innerHTML = bars.map(b => {
     const ratio = b.tempo_ratio, status = b.tempo_status || 'unassessed';
-    const label = {on_target: 'on target', too_fast: 'too fast', too_slow: 'too slow', irregular: 'uneven', unassessed: 'not enough notes yet'}[status] || status;
-    const detail = [b.median_onset_ms != null ? `Median onset error: ${b.median_onset_ms} ms` : '', (b.early != null && b.late != null) ? `<small>${b.early} early · ${b.late} late</small>` : ''].filter(Boolean).join('<br>');
+    const label = {on_target: 'steady', too_fast: 'rushed', too_slow: 'dragged', irregular: 'uneven', unassessed: 'not enough notes yet'}[status] || status;
+    const detail = [b.median_onset_ms != null ? `Off the beat by ${b.median_onset_ms} ms` : '', (b.early != null && b.late != null) ? `<small>${b.early} early · ${b.late} late</small>` : ''].filter(Boolean).join('<br>');
     return `<tr class="${b.occurrence === newest ? 'newest' : ''}"><td><strong>${b.number}</strong></td>
       <td>${b.correct}/${b.expected}<br><progress max="${b.expected}" value="${b.correct}"></progress></td>
       <td>${b.missing} / ${b.wrong} / ${b.extra}</td>
@@ -190,7 +222,8 @@ function renderBars(bars) {
     if (S.barsSeen.has(b.occurrence) || b.occurrence === newest) continue;
     S.barsSeen.add(b.occurrence);  // tempo is only worth saying once a bar is finished
     if ((b.tempo_status === 'too_fast' || b.tempo_status === 'too_slow') && b.tempo_ratio)
-      feed(`tempo${b.occurrence}`, '#805000', `Bar ${b.number} · tempo`, `About ${Math.round(Math.abs(b.tempo_ratio - 1) * 100)}% ${b.tempo_status === 'too_fast' ? 'faster' : 'slower'} than the score.`);
+      S.tempoItems.push({id: `tempo-${b.occurrence}`, kind: 'tempo', bar: b.number, time: S.ctx ? S.ctx.currentTime - S.origin : 0,
+        text: `About ${Math.round(Math.abs(b.tempo_ratio - 1) * 100)}% ${b.tempo_status === 'too_fast' ? 'faster' : 'slower'} than written.`});
   }
 }
 
