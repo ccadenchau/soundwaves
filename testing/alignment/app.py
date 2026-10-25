@@ -70,7 +70,9 @@ small{font-weight:400}ul{padding-left:21px}li{margin:7px 0}.seek{padding:6px 9px
 <div class="metric"><strong>{{ '%.1f'|format(metrics.pitch_recall * 100) }}%</strong>Expected pitches matched</div>
 <div class="metric"><strong>{{ '%.1f'|format(metrics.pitch_precision * 100) }}%</strong>Played notes matching</div>
 <div class="metric"><strong>{{ metrics.tempo_assessed_measures }}/{{ report.measures|length }}</strong>Bars with tempo estimates</div>
+<div class="metric"><strong>{{ '%.1f'|format(metrics.median_relative_dynamics_difference) if metrics.median_relative_dynamics_difference is not none else '—' }}</strong>Typical note difference from each average (velocity points)</div>
 </div><p class="muted">These are candidate note matches, not a certainty score for the alignment path.</p>
+<p class="muted">Dynamics use the average velocity of correctly matched notes in the take as its baseline, then compare each bar’s level and crescendo/decrescendo against the score. This can flag “stronger,” “softer,” or “build more” within the performance. Audio velocity estimates are approximate and do not measure calibrated acoustic loudness.</p>
 {% if result.cache %}<p>Score conversion: {{ 'cache reused' if result.cache.sheet_hit else 'newly cached' }} · Recording conversion: {{ 'cache reused' if result.cache.recording_hit else 'newly cached' }}</p>{% endif %}
 {% if result.cleaned %}
 <h2>Cleaned recording</h2>
@@ -102,7 +104,7 @@ small{font-weight:400}ul{padding-left:21px}li{margin:7px 0}.seek{padding:6px 9px
 <details id="unplaced-notes" hidden><summary>Notes without a reliable score location</summary><div></div></details>
 </section>
 <section class="card"><h2>Bar-by-bar comparison</h2><div class="scroll"><table>
-<thead><tr><th>Bar</th><th>Pitch matches</th><th>Missing / wrong / extra</th><th>Tempo</th><th>Score → played BPM</th><th>Feedback</th></tr></thead><tbody>
+<thead><tr><th>Bar</th><th>Pitch matches</th><th>Missing / wrong / extra</th><th>Tempo</th><th>Score → played BPM</th><th>Fine detail</th><th>Feedback</th></tr></thead><tbody>
 {% for bar in report.measures %}<tr>
 <td><strong>{{ bar.number }}</strong><br><small>Pass {{ bar.occurrence + 1 }}</small>
 {% if bar.estimated_start_seconds is not none %}<p><button class="seek" data-time="{{ [0,bar.estimated_start_seconds]|max }}">Listen {{ '%.1f'|format([0,bar.estimated_start_seconds]|max) }}s</button></p>{% endif %}</td>
@@ -111,8 +113,21 @@ small{font-weight:400}ul{padding-left:21px}li{margin:7px 0}.seek{padding:6px 9px
 <td><span class="badge {{ bar.tempo_status }}">{{ bar.tempo_status|replace('_',' ') }}</span>
 {% if bar.tempo_ratio is not none %}<br><small>{{ '%.2f'|format(bar.tempo_ratio) }}× score speed</small>{% endif %}</td>
 <td>{{ '%.1f'|format(bar.reference_average_bpm) }} → {{ '%.1f'|format(bar.performed_average_bpm) if bar.performed_average_bpm is not none else '—' }}</td>
+<td>{% if bar.median_absolute_timing_error_seconds is not none %}Median onset error: {{ '%.0f'|format(bar.median_absolute_timing_error_seconds * 1000) }} ms<br><small>{{ bar.early_notes }} early · {{ bar.late_notes }} late</small><br>{% endif %}
+{% if bar.median_duration_ratio is not none %}Note length: {{ '%.2f'|format(bar.median_duration_ratio) }}× score<br>{% endif %}
+{% if bar.relative_dynamics_level_difference is not none %}Relative level: {{ '%+.1f'|format(bar.relative_dynamics_level_difference) }} points<br>{% endif %}
+{% if bar.dynamics_trend %}{{ bar.dynamics_trend|replace('_',' ')|capitalize }}<br>{% endif %}
+{% if bar.median_relative_dynamics_difference is not none %}Contour difference: {{ '%.1f'|format(bar.median_relative_dynamics_difference) }} points{% else %}Dynamics: insufficient matched velocity data{% endif %}</td>
 <td>{% for line in bar.feedback %}<div>{{ line }}</div>{% endfor %}</td></tr>{% endfor %}
 </tbody></table></div></section>
+<section class="card"><details><summary>Matched-note detail ({{ report.matches|selectattr('category','equalto','correct')|list|length }})</summary><p class="muted">Timing is measured against each bar’s robust local tempo fit. Duration is compared with the notated length at that fitted pace. Dynamics show each note’s velocity relative to the average matched-note velocity in the score and take.</p><div class="scroll"><table>
+<thead><tr><th>Bar</th><th>Score beat</th><th>MIDI pitch</th><th>Onset offset</th><th>Played / score length</th><th>Relative dynamics difference</th></tr></thead><tbody>
+{% for match in report.matches if match.category == 'correct' %}<tr>
+<td>{{ match.measure if match.measure is not none else '—' }}</td><td>{{ '%.2f'|format(match.score_beat) if match.score_beat is not none else '—' }}</td>
+<td>{{ match.expected_pitch }}</td><td>{{ '%+.0f'|format(match.onset_error_seconds * 1000) if match.onset_error_seconds is not none else '—' }} ms</td>
+<td>{{ '%.2f'|format(match.duration_ratio) if match.duration_ratio is not none else '—' }}×</td>
+<td>{{ '%+.1f'|format(match.relative_dynamics_delta) if match.relative_dynamics_delta is not none else '—' }} velocity points</td></tr>{% endfor %}
+</tbody></table></div></details></section>
 <section class="card"><details><summary>Candidate note discrepancies ({{ report.errors|length }})</summary><div class="scroll"><table>
 <tr><th>Bar</th><th>Type</th><th>Expected / played MIDI pitch</th><th>Recording</th></tr>
 {% for error in report.errors %}<tr><td>{{ error.measure if error.measure is not none else 'Unassigned' }}</td><td>{{ error.category }}</td>
