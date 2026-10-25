@@ -57,7 +57,8 @@ def _extra_anchor(extra, report, located, locations, notes, note_by_id):
     return nearest
 
 
-def build_notation(musicxml, reference, performance, report):
+def render_score(musicxml, notes):
+    """Engrave the score with Verovio. Returns (toolkit, {score note id: engraved element id})."""
     import verovio
 
     toolkit = verovio.toolkit(False)
@@ -67,11 +68,6 @@ def build_notation(musicxml, reference, performance, report):
     if not toolkit.loadFile(str(musicxml)):
         raise ValueError('Could not render the recognized score.')
     toolkit.renderToMIDI()
-    score = json.loads(reference.read_text(encoding='utf-8'))
-    from pianocoach.report import _omr_wedges, _recognition_files, score_metadata
-    notes = score['notes']
-    played, _, _ = load_performance(performance)
-    played = {n['id']: n for n in played}
     by_position = defaultdict(deque)
     for n in notes:
         by_position[(round(n['onset'], 5), n['pitch'])].append(n['id'])
@@ -82,6 +78,16 @@ def build_notation(musicxml, reference, performance, report):
             key = (round(entry['qstamp'], 5), midi.get('pitch'))
             if by_position[key]:
                 locations[by_position[key].popleft()] = xml_id
+    return toolkit, locations
+
+
+def build_notation(musicxml, reference, performance, report):
+    score = json.loads(reference.read_text(encoding='utf-8'))
+    from pianocoach.report import _omr_wedges, _recognition_files, score_metadata
+    notes = score['notes']
+    toolkit, locations = render_score(musicxml, notes)
+    played, _, _ = load_performance(performance)
+    played = {n['id']: n for n in played}
 
     # Audiveris retains the PDF hairpins in its OMR file even though its
     # MusicXML export drops them. Map those score positions onto Verovio note IDs.

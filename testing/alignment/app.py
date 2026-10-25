@@ -20,8 +20,9 @@ app.config['MAX_CONTENT_LENGTH'] = 102 * 1024 * 1024
 from pianocoach.app import coach, report_page  # noqa: E402
 from pianocoach.live import practice  # noqa: E402
 from pianocoach.selftest import selftest  # noqa: E402
+from testing.alignment.live_demo import live_demo  # noqa: E402
 
-for _blueprint in (coach, practice, selftest):
+for _blueprint in (coach, practice, selftest, live_demo):
     app.register_blueprint(_blueprint)
 
 PAGE = '''<!doctype html>
@@ -53,7 +54,7 @@ small{font-weight:400}ul{padding-left:21px}li{margin:7px 0}.seek{padding:6px 9px
 @media(max-width:650px){form{grid-template-columns:1fr}.wide{grid-column:auto}.card{padding:15px}}
 </style>
 <main><h1>Performance alignment</h1><p class="muted">Compare sheet music with your piano recording. See correct pitches and tempo separately, bar by bar.</p>
-<p class="muted" style="margin-top:-6px"><strong>New on this server:</strong> <a href="/test">Run the one-click checks</a> · <a href="/practice">Live practice screen</a> · <a href="/record">Record a take</a> · <a href="/upload">Add sheet music for live practice</a> · <a href="/convert">Audio to MIDI only (no sheet music)</a>. This page now uses the better transcriber, note cleaning and partial-take detection too.</p>
+<p class="muted" style="margin-top:-6px"><strong>New on this server:</strong> <a href="/live"><strong>Live demo</strong></a> · <a href="/test">Run the one-click checks</a> · <a href="/practice">Live practice screen</a> · <a href="/record">Record a take</a> · <a href="/upload">Add sheet music for live practice</a> · <a href="/convert">Audio to MIDI only (no sheet music)</a>. This page now uses the better transcriber, note cleaning and partial-take detection too.</p>
 <section class="card"><form method="post" action="{{ url_for('index') }}" enctype="multipart/form-data" id="upload">
 <label>Sheet music <small>PDF, MusicXML, XML, MXL · up to 20 MB</small>
 <input type="file" name="sheet" accept=".pdf,.musicxml,.xml,.mxl"></label>
