@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0c181b"><meta name="description" content="Listen back, find the note, and try the bar again."><title>PianoCoach · Practice room</title><style>
-:root{color-scheme:dark;--bg:#0c181b;--paper:#142428;--ink:#eff6f4;--ink-2:#a4b8b9;--ink-3:#91a6a8;--line:#ffffff16;--accent:#b9efdf;--amber:var(--accent);--amber-ink:#122d29;--wrong:#ff9b87;--missing:#b4b3f3;--timing:#ecca83;--extra:#7ddcd7;--unsure:#9baeb2;--sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;--mono:ui-monospace,"SF Mono",Menlo,monospace}
+:root{color-scheme:dark;--bg:#0c181b;--paper:#142428;--ink:#eff6f4;--ink-2:#a4b8b9;--ink-3:#91a6a8;--line:#ffffff16;--accent:#b9efdf;--good:#82e0ad;--amber:var(--accent);--amber-ink:#122d29;--wrong:#ff9b87;--missing:#b4b3f3;--timing:#ecca83;--extra:#7ddcd7;--unsure:#9baeb2;--sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;--mono:ui-monospace,"SF Mono",Menlo,monospace}
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -74,10 +74,37 @@ h1,h2,p{margin:0}
 .system .note.open .hit,.system .note.flag:hover .hit,.system .note.flag:focus-visible .hit{fill:currentColor;fill-opacity:.09}
 .system .note.open .nh{stroke:currentColor;stroke-width:1.3}
 .system .playhead{stroke:var(--accent);stroke-width:1.4;pointer-events:none}
+.system .dynamic-mark{fill:var(--ink-2);font:italic 600 10px var(--sans)}
+.system .dynamic-mark.good,.system .dynamic-wedge.good{fill:var(--good);stroke:var(--good)}
+.system .dynamic-mark.wrong,.system .dynamic-wedge.wrong,.system .dynamics-warning{fill:var(--wrong);stroke:var(--wrong)}
+.system .dynamic-wedge{fill:none;stroke:var(--ink-2);stroke-width:1.1}
+.system .dynamics-warning{font:600 7px var(--mono);letter-spacing:.02em}
+.system .dynamic-note-ring{fill:none;stroke:var(--wrong);stroke-width:1.25;stroke-dasharray:2 1.5}
+.system .good-note-ring{fill:none;stroke:var(--good);stroke-width:1.2}
 .system .ring{fill:none;stroke:currentColor;stroke-width:1.4}
 .system .tail{stroke:currentColor;stroke-width:2.3;stroke-linecap:round}
 .system .tail.ghost{stroke-width:1;stroke-dasharray:2 3;opacity:.7}
 .hint{margin:14px 4px 0;display:flex;justify-content:space-between;gap:12px;color:var(--ink-2);font-size:9px;flex-wrap:wrap}
+.dynamics-panel{margin:22px 0 0;background:var(--paper);border:1px solid #bddedc12;border-radius:16px;padding:18px 20px;box-shadow:0 6px 20px #0000000d}
+.dynamics-panel h2{font-size:15px;font-weight:550;letter-spacing:-.2px}
+.dynamics-copy{margin-top:5px;color:var(--ink-2);font-size:10px;line-height:1.6}
+.dynamics-bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:8px;margin-top:14px}
+.dynamics-bar{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#ffffff05;font-size:10px;line-height:1.55}
+.dynamics-bar:hover{background:#ffffff0c}
+.dynamics-bar b{display:block;color:var(--accent);font-size:9px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.detail-panel{margin:12px 0 0;background:var(--paper);border:1px solid #bddedc12;border-radius:16px;padding:15px 20px;color:var(--ink-2);font-size:10px}
+.detail-panel summary{cursor:pointer;color:var(--ink);font-size:11px}
+.detail-scroll{overflow:auto;margin-top:10px;max-height:330px}
+.detail-table{width:100%;border-collapse:collapse;min-width:580px;font:10px var(--mono);font-variant-numeric:tabular-nums}
+.detail-table th,.detail-table td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
+.guide-panel{margin:18px 0 0;background:var(--paper);border:1px solid #bddedc12;border-radius:16px;padding:18px 20px;box-shadow:0 6px 20px #0000000d}
+.guide-panel h2{font-size:15px;font-weight:550;letter-spacing:-.2px}
+.guide-intro{margin-top:5px;color:var(--ink-2);font-size:10px;line-height:1.6}
+.guide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin-top:13px}
+.guide-grid details{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#ffffff04}
+.guide-grid summary{cursor:pointer;color:var(--accent);font-size:10px;font-weight:550}
+.guide-grid p{margin-top:7px;color:var(--ink-2);font-size:10px;line-height:1.6}
+.guide-grid .guide-evidence{color:var(--ink);border-top:1px solid var(--line);padding-top:7px}
 .key{display:flex;gap:13px;flex-wrap:wrap}
 .key span{display:flex;gap:5px;align-items:center}
 .key i{width:5px;height:5px;border-radius:50%;background:var(--c)}
@@ -232,7 +259,17 @@ h1,h2,p{margin:0}
 <header class="masthead"><h1 id="piece-title"></h1><button class="new-take glass-control" id="btn-new">Open report <span aria-hidden="true">↗</span></button></header>
 <main class="workspace">
 <div><section class="score-paper" aria-label="Annotated score"><div class="score-top"><span class="eyebrow" id="score-length">16 bars</span><button id="toggle-marks" aria-pressed="true"><i class="toggle-dot" aria-hidden="true"></i>Annotations</button></div><div class="score" id="score" role="region" aria-label="Score, scroll horizontally" tabindex="0"></div></section>
-<div class="hint"><div class="key"><span><i style="--c:var(--wrong)"></i>Pitch</span><span><i style="--c:var(--timing)"></i>Rhythm</span><span><i style="--c:var(--missing)"></i>Missing</span><span><i style="--c:var(--extra)"></i>Extra</span><span><i style="--c:var(--unsure)"></i>Unclear</span></div><span id="score-meter"></span></div><div class="instrument"><div class="instrument-top"><span id="key-readout" aria-live="polite">C4 — C6</span></div><div class="keyboard" id="keyboard" role="group" aria-label="Playable piano, C4 to C6"></div></div></div>
+<div class="hint"><div class="key"><span><i style="--c:var(--good)"></i>Matched / on track</span><span><i style="--c:var(--wrong)"></i>Needs review</span><span><i style="--c:var(--timing)"></i>Rhythm</span><span><i style="--c:var(--missing)"></i>Missing</span><span><i style="--c:var(--extra)"></i>Extra</span><span><i style="--c:var(--unsure)"></i>Unclear</span></div><span id="score-meter"></span></div>
+<section class="dynamics-panel" id="dynamics-panel" hidden aria-label="Dynamics and phrasing"><h2>Dynamics &amp; phrasing</h2><p class="dynamics-copy" id="dynamics-copy"></p><div class="dynamics-bars" id="dynamics-bars"></div></section>
+<section class="detail-panel" id="detail-panel" hidden aria-label="Fine timing and note length"><details><summary id="detail-summary">Fine note analysis</summary><p class="dynamics-copy">Offsets use the bar’s local tempo fit. Length compares each performed note with its notated duration at that pace. Dynamics are relative to average matched-note velocity.</p><div class="detail-scroll"><table class="detail-table"><thead><tr><th>Bar / pass</th><th>Beat</th><th>Pitch</th><th>Onset offset</th><th>Played / score length</th><th>Relative dynamics</th></tr></thead><tbody id="detail-rows"></tbody></table></div></details></section>
+<section class="guide-panel" aria-label="Pianist's audio and musicality guide"><h2>The pianist’s audio &amp; musicality guide</h2><p class="guide-intro">Use measured results as clues, then listen to the recording. Attack velocity is an estimate; tone color, technique, and pedal choices still need your ear.</p><div class="guide-grid">
+<details><summary>1 · Tone &amp; touch</summary><p>Let the melody sing with a clear, supported sound. Choose pearly, warm, or percussive color to fit the music. Use comfortable arm weight rather than a sharp strike for fortissimo; find the soft pianissimo that still speaks.</p><p class="guide-evidence" id="guide-tone-evidence"></p></details>
+<details><summary>2 · Voicing &amp; texture</summary><p>Bring the lead line forward. Let the bass anchor it, keep inner voices transparent, and make accompaniment a soft cushion. Check that chords do not drown out the melody.</p><p class="guide-evidence" id="guide-voice-evidence"></p></details>
+<details><summary>3 · Phrasing &amp; agogic accent</summary><p>Shape each phrase like a sentence: rise toward its peak, then release. Use flexible timing while keeping the pulse present. Give important notes a little extra time when the phrase asks for it instead of making every accent louder.</p><p class="guide-evidence" id="guide-phrase-evidence"></p></details>
+<details><summary>4 · Articulation as speech</summary><p>Make staccato crisp or warmly detached, legato connected, and portato gently weighted. Let a resolving note taper and release slightly early rather than punching it. Compare note lengths with the score, allowing for pedal and transcription uncertainty.</p><p class="guide-evidence" id="guide-articulation-evidence"></p></details>
+<details><summary>5 · Acoustic awareness</summary><p>Listen past each attack to the decay and how it blends with the next harmony. Clear the sustain pedal when harmony changes. Record a take and listen back for balance, resonance, and phrase shape.</p><p class="guide-evidence" id="guide-listening-evidence"></p></details>
+</div></section>
+<div class="instrument"><div class="instrument-top"><span id="key-readout" aria-live="polite">C4 — C6</span></div><div class="keyboard" id="keyboard" role="group" aria-label="Playable piano, C4 to C6"></div></div></div>
 <aside class="aside" aria-label="Practice notes"><div class="aside-label"><h2 class="eyebrow">Practice notes</h2><span class="review-count" id="review-count"></span></div><nav class="finding-index glass-control" id="finding-index" aria-label="Findings"></nav><div class="sheet" id="sheet" hidden></div><p class="aside-empty" id="aside-empty">Choose a note on the score.</p></aside>
 </main></div>
 <section class="player" aria-label="Playback"><div class="in"><div class="ctrls"><button class="play" id="btn-play" aria-label="Play"><svg viewBox="0 0 16 16" id="play-ico"><path d="M4 2.6v10.8c0 .8.9 1.3 1.6.9l8-5.4a1 1 0 0 0 0-1.8l-8-5.4A1 1 0 0 0 4 2.6Z"/></svg></button><div><div class="transport-label" id="transport-label">TAKE 03</div><p class="time"><b id="t-cur">0:00</b> <span aria-hidden="true">/</span> <span id="t-total">0:30</span></p></div></div>
@@ -245,6 +282,10 @@ h1,h2,p{margin:0}
 {
   "piece": {"title": "Minuet in G major", "catalog": "BWV Anh. 114", "composer": "Petzold", "time_signature": [3, 4], "marked_bpm": 108, "measures": 16},
   "take": {"number": 3, "source": "audio", "bpm": 96, "duration_seconds": 30.0},
+  "dynamics": {"available": true, "baseline": "average matched-note velocity", "score_average_velocity": 74.0, "take_average_velocity": 70.0, "assessed_notes": 48, "typical_contour_difference": 7.4, "bars": [{"measure": 5, "occurrence": 0, "relative_level_difference": -10.2, "trend": null, "issues": ["too_soft"], "feedback": ["Softer than the score suggests; bring this bar out more."]}, {"measure": 8, "occurrence": 0, "relative_level_difference": 2.1, "trend": "crescendo_needs_more", "issues": ["crescendo_needs_more"], "feedback": ["Build the volume more gradually through the marked crescendo."]}]},
+  "score_dynamics": {"marks": [{"measure": 1, "beat": 1.0, "label": "p"}, {"measure": 9, "beat": 1.0, "label": "f"}], "wedges": [{"kind": "crescendo", "start_measure": 5, "start_beat": 1.0, "end_measure": 8, "end_beat": 3.5}, {"kind": "decrescendo", "start_measure": 12, "start_beat": 1.0, "end_measure": 16, "end_beat": 3.5}]},
+  "note_detail": [{"measure": 5, "occurrence": 4, "beat": 1.0, "pitch": "C5", "onset_offset_ms": -180, "duration_ratio": 0.92, "relative_dynamics_delta": -9.0}, {"measure": 8, "occurrence": 7, "beat": 1.0, "pitch": "A4", "onset_offset_ms": 24, "duration_ratio": 1.04, "relative_dynamics_delta": -1.2}, {"measure": 8, "occurrence": 7, "beat": 2.0, "pitch": "B4", "onset_offset_ms": -16, "duration_ratio": 1.01, "relative_dynamics_delta": 5.5}],
+  "musicality": {"dynamics_notes": 48, "median_absolute_onset_offset_ms": 24.0, "timed_notes": 3, "median_played_to_score_duration": 1.01, "duration_notes": 3, "limits": ["Tone color and arm weight need listening.", "Pedal use is not detected."]},
   "notes": [
     [1, 1, "D5", 1], [1, 2, "G4", 0.5], [1, 2.5, "A4", 0.5], [1, 3, "B4", 0.5], [1, 3.5, "C5", 0.5],
     [2, 1, "D5", 1], [2, 2, "G4", 1], [2, 3, "G4", 1],
@@ -343,8 +384,61 @@ function renderHead() {
   $$('[data-finding]').forEach(b => b.addEventListener('click', () => openSheet(b.dataset.finding)));
 }
 
+function renderDynamics() {
+  const panel = $('#dynamics-panel'), D = R.dynamics;
+  panel.hidden = !D;
+  if (!D) return;
+  const copy = $('#dynamics-copy'), rows = $('#dynamics-bars');
+  if (!D.available) {
+    copy.textContent = 'Dynamics comparison needs several matched notes and a score with a marked change in volume.';
+    rows.innerHTML = '';
+    return;
+  }
+  const typical = Number.isFinite(D.typical_contour_difference)
+    ? ` Typical note difference from the score contour: ${D.typical_contour_difference.toFixed(1)} velocity points.` : '';
+  const scoreCues = (R.score_dynamics?.marks?.length || R.score_dynamics?.wedges?.length)
+    ? ' Printed markings are under the staff; red labels, wedges, and note rings show places to review.'
+    : ' No explicit dynamic symbols were detected in the score file; only the relative contour can be compared.';
+  copy.textContent = `Baseline: average velocity of ${D.assessed_notes} correctly matched notes in the take. Bar levels are relative to that average; velocity estimates are approximate, not calibrated acoustic loudness.${typical}${scoreCues}`;
+  const trendText = {crescendo_needs_more:'Build the crescendo more',decrescendo_needs_more:'Shape the decrescendo more',
+    crescendo_followed:'Crescendo followed',decrescendo_followed:'Decrescendo followed'};
+  rows.innerHTML = (D.bars || []).map(bar => {
+    const level = Number.isFinite(bar.relative_level_difference) && Math.abs(bar.relative_level_difference) >= 8
+      ? `${bar.relative_level_difference > 0 ? 'Stronger' : 'Softer'} than the score by ${Math.abs(bar.relative_level_difference).toFixed(1)} relative velocity points.` : '';
+    const feedback = (bar.feedback || []).join(' ');
+    const trend = trendText[bar.trend] || '';
+    return `<button class="dynamics-bar" data-dynamics-bar="${bar.measure}" aria-label="Play bar ${bar.measure} dynamics feedback"><b>Bar ${bar.measure}${trend ? ` · ${esc(trend)}` : ''}</b>${esc(feedback || level || trend || 'Dynamics analyzed; no clear level difference.')}</button>`;
+  }).join('');
+  $$('[data-dynamics-bar]').forEach(button => button.addEventListener('click', () => loopBar(+button.dataset.dynamicsBar)));
+}
+function renderNoteDetail() {
+  const panel = $('#detail-panel'), rows = R.note_detail || [];
+  panel.hidden = !rows.length;
+  if (!rows.length) return;
+  $('#detail-summary').textContent = `Fine note analysis · ${rows.length} matched notes`;
+  $('#detail-rows').innerHTML = rows.map(n => `<tr><td>${n.measure} / ${n.occurrence + 1}</td><td>${Number(n.beat).toFixed(2)}</td><td>${esc(n.pitch)}</td><td>${Number.isFinite(n.onset_offset_ms) ? `${n.onset_offset_ms > 0 ? '+' : ''}${n.onset_offset_ms} ms` : '—'}</td><td>${Number.isFinite(n.duration_ratio) ? `${n.duration_ratio.toFixed(2)}×` : '—'}</td><td>${Number.isFinite(n.relative_dynamics_delta) ? `${n.relative_dynamics_delta > 0 ? '+' : ''}${n.relative_dynamics_delta.toFixed(1)} points` : '—'}</td></tr>`).join('');
+}
+function renderMusicality() {
+  const D = R.dynamics || {}, M = R.musicality || {}, bars = D.bars || [];
+  $('#guide-tone-evidence').textContent = D.available
+    ? `Velocity contour comparison covers ${D.assessed_notes} matched notes; typical difference ${Number(D.typical_contour_difference || 0).toFixed(1)} points from the score.`
+    : 'No reliable score-linked dynamics contour is available for this take.';
+  $('#guide-voice-evidence').textContent = 'The report scores notes and relative attack levels; balance between melody, inner voices, and bass still needs listening.';
+  const onset = Number.isFinite(M.median_absolute_onset_offset_ms)
+    ? `Median onset offset: ${M.median_absolute_onset_offset_ms.toFixed(0)} ms across ${M.timed_notes} matched notes.`
+    : 'No reliable note-level timing summary is available.';
+  const phraseFlags = bars.filter(b => ['crescendo_needs_more','decrescendo_needs_more'].includes(b.trend)).length;
+  $('#guide-phrase-evidence').textContent = `${onset}${phraseFlags ? ` ${phraseFlags} bar${phraseFlags === 1 ? '' : 's'} show a marked swell or fade that may need more shape.` : ''}`;
+  $('#guide-articulation-evidence').textContent = Number.isFinite(M.median_played_to_score_duration)
+    ? `Median detected note length: ${M.median_played_to_score_duration.toFixed(2)}× the notated duration across ${M.duration_notes} notes.`
+    : 'No reliable matched-note length comparison is available.';
+  $('#guide-listening-evidence').textContent = audioURL
+    ? 'A recording is attached. Switch the player to “Your take” and listen for decay, balance, and pedal changes.'
+    : 'Attach a recording with the report to use the player for decay, balance, and pedal listening.';
+}
+
 /* ---------- score ---------- */
-const G = {H: 148, left: 72, right: 20, top: 50, gap: 11, mw: 200, scale: 1.5};
+const G = {H: 176, left: 72, right: 20, top: 50, gap: 11, mw: 200, scale: 1.5};
 const yOf = step => G.top + 4 * G.gap - (step - 2) * (G.gap / 2);
 const xOf = (m, b) => G.left + (m - 1) * G.mw + 17 + ((b - 1) / BPB) * (G.mw - 32);
 const labelY = G.top + 4 * G.gap + 34;
@@ -366,6 +460,7 @@ function renderScore() {
     g += `<line class="bar" x1="${x}" y1="${G.top}" x2="${x}" y2="${G.top + 4 * G.gap}"/><text class="mnum" x="${x + 5}" y="${G.top - 24}">${m}</text>`;
     g += drawMeasure(m);
   }
+  g += drawDynamicWedges();
   g += `<line class="bar end" x1="${endX}" y1="${G.top}" x2="${endX}" y2="${G.top + 4 * G.gap}"/>`;
   g += `<line class="playhead" x1="0" x2="0" y1="${G.top - 18}" y2="${G.top + 4 * G.gap + 18}" hidden/>`;
   wrap.innerHTML = `<svg class="system" width="${width * G.scale}" height="${G.H * G.scale}" viewBox="0 0 ${width} ${G.H}" role="group" aria-label="Bars 1 to ${MEASURES}">${g}</svg>`;
@@ -409,11 +504,49 @@ function drawMeasure(m) {
     const t = up ? 4 : -4;
     s += `<polygon class="beam" points="${xa},${ya} ${xb},${yb} ${xb},${yb + t} ${xa},${ya + t}"/>`;
   }
+  s += drawDynamicMarks(m);
   for (const e of R.errors) if (state.annotations && e.category === 'extra' && e.measure === m && active(e)) {
     const cx = xOf(m, e.beat), cy = yOf(stepOf(e.actual));
     s += `<g class="note flag${state.open === e.id ? ' open' : ''}" data-err="${e.id}" style="color:${COLOR.extra}"><rect class="hit" x="${cx - 16}" y="${G.top - 10}" width="32" height="${4 * G.gap + 52}" rx="8"/><polygon class="nh err" points="${cx},${cy - 6} ${cx + 6.5},${cy} ${cx},${cy + 6} ${cx - 6.5},${cy}"/><text class="lbl" x="${cx}" y="${lblY(m)}" text-anchor="middle">+${pretty(e.actual)}</text></g>`;
   }
+  s += drawDynamicsWarning(m);
   return s;
+}
+function issuesForDynamicBar(measure) {
+  return [...new Set((R.dynamics?.bars || []).filter(b => b.measure === measure)
+    .flatMap(b => b.issues || []))];
+}
+function drawDynamicMarks(measure) {
+  return (R.score_dynamics?.marks || []).filter(mark => mark.measure === measure).map(mark => {
+    const barReports = (R.dynamics?.bars || []).filter(bar => bar.measure === measure);
+    const wrong = state.annotations && barReports.some(bar => (bar.issues || []).some(issue => ['too_loud','too_soft'].includes(issue)));
+    const good = state.annotations && R.dynamics?.available && barReports.length > 0 && !wrong;
+    const x = xOf(measure, mark.beat), y = G.top + 4 * G.gap + 14;
+    return `<text class="dynamic-mark${wrong ? ' wrong' : good ? ' good' : ''}" x="${x}" y="${y}" text-anchor="middle"><title>Score dynamic marking: ${esc(mark.label)}${wrong ? '. Relative level needs review.' : good ? '. Relative level is on track.' : ''}</title>${esc(mark.label)}</text>`;
+  }).join('');
+}
+function drawDynamicWedges() {
+  return (R.score_dynamics?.wedges || []).map(wedge => {
+    const relevant = wedge.kind === 'crescendo' ? 'crescendo_needs_more' : 'decrescendo_needs_more';
+    const measures = Array.from({length: Math.max(0, wedge.end_measure - wedge.start_measure + 1)}, (_,i) => wedge.start_measure + i);
+    const barReports = measures.flatMap(measure => (R.dynamics?.bars || []).filter(bar => bar.measure === measure));
+    const wrong = state.annotations && barReports.some(bar => (bar.issues || []).includes(relevant));
+    const followed = state.annotations && !wrong && barReports.some(bar => bar.trend === `${wedge.kind}_followed`);
+    const x1 = xOf(wedge.start_measure, wedge.start_beat), x2 = xOf(wedge.end_measure, wedge.end_beat);
+    const y = G.top + 4 * G.gap + 25;
+    const path = wedge.kind === 'crescendo'
+      ? `M${x1} ${y-2} L${x2} ${y-6} M${x1} ${y+2} L${x2} ${y+6}`
+      : `M${x1} ${y-6} L${x2} ${y-2} M${x1} ${y+6} L${x2} ${y+2}`;
+    return `<path class="dynamic-wedge${wrong ? ' wrong' : followed ? ' good' : ''}" d="${path}"><title>${wedge.kind === 'crescendo' ? 'Crescendo' : 'Decrescendo'}${wrong ? ' needs more shaping in the performance' : followed ? ' followed in the performance' : ''}</title></path>`;
+  }).join('');
+}
+function drawDynamicsWarning(measure) {
+  if (!state.annotations) return '';
+  const issues = issuesForDynamicBar(measure);
+  const labels = [['too_loud','TOO LOUD'],['too_soft','TOO SOFT'],['crescendo_needs_more','MORE CRESC.'],['decrescendo_needs_more','MORE DIM.']]
+    .filter(([key]) => issues.includes(key)).map(([,label]) => label);
+  if (!labels.length) return '';
+  return `<text class="dynamics-warning" x="${xOf(measure, 1)}" y="${G.top + 4 * G.gap + 53}"><title>Dynamics feedback: ${esc(labels.join(', '))}</title>${esc(labels.join(' · '))}</text>`;
 }
 function drawNote(n, up, beamed) {
   const err0 = errorOnNote(n.id), err = state.annotations && err0 && active(err0) ? err0 : null;
@@ -435,6 +568,12 @@ function drawNote(n, up, beamed) {
     const py = yOf(stepOf(err.actual));
     s += `<ellipse class="nh err" cx="${cx}" cy="${py}" rx="6.5" ry="4.6" transform="rotate(-20 ${cx} ${py})"/>`;
   } else s += `<ellipse class="${headCls}" cx="${cx}" cy="${cy}" rx="6.5" ry="4.6" transform="rotate(-20 ${cx} ${cy})" ${headAttrs}/>`;
+  const dynamicDelta = dynamicDeltaAt(n);
+  if (state.annotations && dynamicDelta !== null && Math.abs(dynamicDelta) >= 8) {
+    s += `<ellipse class="dynamic-note-ring" cx="${cx}" cy="${cy}" rx="10.5" ry="8.5"><title>Dynamics: ${dynamicDelta > 0 ? 'stronger' : 'softer'} than the score by ${Math.abs(dynamicDelta).toFixed(1)} relative velocity points.</title></ellipse>`;
+  } else if (state.annotations && isNoteOnTrack(n)) {
+    s += `<ellipse class="good-note-ring" cx="${cx}" cy="${cy}" rx="10.5" ry="8.5"><title>Matched note with no flagged pitch, timing, or length issue${dynamicDelta !== null ? '; relative dynamics are also within range' : ''}.</title></ellipse>`;
+  }
   if (n.dur === 3) s += `<circle cx="${cx + 12}" cy="${cy - 3}" r="1.9" fill="currentColor"/>`;
   s += `<line class="stem" x1="${sx}" y1="${cy}" x2="${sx}" y2="${sy}"/>`;
   if (n.dur === 0.5 && !beamed) s += `<path d="M${sx} ${sy} q 9 6 6 17" fill="none" stroke="var(--ink)" stroke-width="2"/>`;
@@ -447,6 +586,19 @@ function drawNote(n, up, beamed) {
   else if (cat === 'unsure') s += `<text class="lbl" x="${cx}" y="${lblY(m)}" text-anchor="middle">?</text>`;
   s += '</g>';
   return s;
+}
+function dynamicDeltaAt(note) {
+  const matches = (R.note_detail || []).filter(row => row.measure === note.measure
+    && Math.abs(row.beat - note.beat) < .01 && row.pitch === note.pitch
+    && Number.isFinite(row.relative_dynamics_delta)).map(row => row.relative_dynamics_delta);
+  if (!matches.length) return null;
+  matches.sort((a,b) => a-b);
+  return matches[Math.floor(matches.length / 2)];
+}
+function isNoteOnTrack(note) {
+  const hasDetail = (R.note_detail || []).some(row => row.measure === note.measure
+    && Math.abs(row.beat - note.beat) < .01 && row.pitch === note.pitch);
+  return hasDetail && !errorOnNote(note.id);
 }
 
 /* ---------- finding sheet ---------- */
@@ -711,7 +863,7 @@ function loadReport(report, file) {
   renderInstrument(); renderAll(); $('#score').scrollLeft = 0; if (R.errors.length) openSheet(R.errors[0].id, false);
 }
 window.PianoCoach = {loadReport};
-function renderAll() { renderHead(); renderScore(); renderLine(); paintPosition(A.playing ? curBeat() : A.position); }
+function renderAll() { renderHead(); renderDynamics(); renderNoteDetail(); renderMusicality(); renderScore(); renderLine(); paintPosition(A.playing ? curBeat() : A.position); }
 $('#btn-play').addEventListener('click', () => A.playing ? stopAudio() : seekAndPlay(A.position >= TOTAL-.01 ? 0 : A.position));
 $('#line').addEventListener('click', ev => { const r = $('#line').getBoundingClientRect(); seekAndPlay(Math.max(0, Math.min(.999,(ev.clientX-r.left)/r.width))*TOTAL); });
 $('#line').addEventListener('keydown', ev => { if (['ArrowLeft','ArrowRight','Home','End'].includes(ev.key)) { ev.preventDefault(); ev.stopPropagation(); const b = A.playing ? curBeat() : A.position; seekAndPlay(ev.key === 'Home' ? 0 : ev.key === 'End' ? TOTAL-BPB : b+(ev.key === 'ArrowRight' ? BPB : -BPB)); } });

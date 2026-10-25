@@ -20,6 +20,10 @@ The score is one continuous horizontal staff on every screen size. It follows th
 
 The existing `sample_report.json` contract is unchanged. The frontend does not determine correctness.
 
+Reports can also include an optional `dynamics` object and a `note_detail` array from the backend. When velocity data is available, the page shows bar-level feedback for relative loudness and whether a marked crescendo or decrescendo was followed. The baseline is the average velocity of correctly matched notes in the take, so feedback describes relative dynamics within the performance; audio velocity estimates are not calibrated sound-pressure measurements. `note_detail` adds onset offsets, played-to-score note lengths, and relative dynamics for each matched note. Older reports without these fields continue to load unchanged.
+
+The report includes a five-part pianist’s musicality guide: tone and touch, voicing, phrasing, articulation, and active listening. Timing, dynamics, and note-length measurements appear where the performance data supports them. Green note rings mark matched notes without a flagged issue; red marks show places to review. When available, printed `p`/`f` marks and crescendo/decrescendo wedges appear below the score staff, with followed shapes in green and flagged dynamics in red. The other prompts help the player listen for tone color, hand balance, decay, and pedal use, which the current transcription does not reliably score.
+
 - Replace the JSON inside `<script id="report">` for a server-rendered initial report.
 - Or call `window.PianoCoach.loadReport(report, optionalAudioFile)` after fetching a report. The second argument is an optional browser `File` or `Blob` containing playable audio.
 - Or use **Open report** to select a JSON report and an optional WAV/MP3 recording. Files stay in the browser. Nothing is uploaded by this page.

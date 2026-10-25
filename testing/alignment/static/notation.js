@@ -90,6 +90,33 @@ async function displayNotation() {
       }
       if (item.audio_time !== null) timed.push({item, target, note});
     }
+    for (const wedge of data.wedges || []) {
+      const start = elements.get(wedge.start_xml_id), end = elements.get(wedge.end_xml_id);
+      if (!start || !end) continue;
+      const headOf = el => el.querySelector('.notehead') || el;
+      const a = headOf(start).getBBox(), b = headOf(end).getBBox();
+      const staff = start.closest('.staff');
+      const staffLines = [...(staff?.querySelectorAll(':scope > path') || [])]
+        .map(el => el.getBBox()).filter(box => box.width > 100);
+      const y = staffLines.length ? Math.max(...staffLines.map(box => box.y + box.height)) + 55
+        : Math.max(a.y + a.height, b.y + b.height) + 65;
+      const x1 = a.x + a.width / 2, x2 = b.x + b.width / 2;
+      if (x2 <= x1 + 3) continue;
+      const narrow = wedge.kind === 'crescendo' ? 2 : 14;
+      const wide = wedge.kind === 'crescendo' ? 14 : 2;
+      const group = document.createElementNS(ns, 'g');
+      const cls = `dynamic-wedge${wedge.status ? ` ${wedge.status}` : ''}`;
+      for (const sign of [-1, 1]) {
+        const path = document.createElementNS(ns, 'path');
+        path.setAttribute('class', cls);
+        path.setAttribute('d', `M${x1} ${y + sign * narrow} L${x2} ${y + sign * wide}`);
+        group.append(path);
+      }
+      const title = document.createElementNS(ns, 'title');
+      title.textContent = `${wedge.kind === 'crescendo' ? 'Crescendo' : 'Decrescendo'}${wedge.status === 'wrong' ? ' needs more shaping' : wedge.status === 'good' ? ' followed in the performance' : ''}`;
+      group.append(title);
+      start.ownerSVGElement.append(group);
+    }
     const unplaced = document.getElementById('unplaced-notes');
     unplaced.hidden = !data.unplaced.length;
     for (const item of data.unplaced) {

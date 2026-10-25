@@ -476,12 +476,53 @@ def _session_dir(report_id):
     return directory
 
 
+def _hydrate_score_dynamics(report_data, session_dir):
+    """Refresh printed score symbols for older reports, including recovered hairpins."""
+    candidates = [session_dir / 'score']
+    title = report_data.get('piece', {}).get('title')
+    for piece in _pieces():
+        if piece.get('title') == title:
+            candidates.append(SESSIONS / 'scores' / piece['id'])
+    for root in candidates:
+        reference_path = root / 'reference' / 'reference.json'
+        musicxml_path = root / 'reference' / 'reference.musicxml'
+        if not reference_path.is_file() or not musicxml_path.is_file():
+            continue
+        reference = json.loads(reference_path.read_text(encoding='utf-8'))
+        first_chunk, ui_measure = {}, {}
+        for chunk in reference['chunks']:
+            printed = chunk['measures'][0]
+            if printed not in first_chunk:
+                first_chunk[printed] = chunk
+                ui_measure[printed] = len(ui_measure) + 1
+        denominator = report_data.get('piece', {}).get('time_signature', [4, 4])[1]
+        unit = denominator / 4.0
+        from pianocoach.report import score_dynamics
+        report_data['score_dynamics'] = score_dynamics(
+            musicxml_path, first_chunk, ui_measure,
+            lambda onset, chunk: round(1 + (onset - chunk['start_beat']) * unit, 3))
+        for bar in report_data.get('dynamics', {}).get('bars', []):
+            issues = bar.setdefault('issues', [])
+            delta, trend = bar.get('relative_level_difference'), bar.get('trend')
+            if delta is not None and delta >= 8 and 'too_loud' not in issues:
+                issues.append('too_loud')
+            elif delta is not None and delta <= -8 and 'too_soft' not in issues:
+                issues.append('too_soft')
+            if trend in ('crescendo_needs_more', 'decrescendo_needs_more') and trend not in issues:
+                issues.append(trend)
+        return report_data
+    return report_data
+
+
 @coach.get('/api/report/<report_id>')
 def report(report_id):
-    path = _session_dir(report_id) / 'report.json'
+    session_dir = _session_dir(report_id)
+    path = session_dir / 'report.json'
     if not path.is_file():
         abort(404)
-    return _no_cache(send_file(path, mimetype='application/json'))
+    data = json.loads(path.read_text(encoding='utf-8'))
+    _hydrate_score_dynamics(data, session_dir)
+    return _no_cache(jsonify(data))
 
 
 @coach.get('/api/audio/<report_id>')

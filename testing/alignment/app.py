@@ -46,6 +46,7 @@ small{font-weight:400}ul{padding-left:21px}li{margin:7px 0}.seek{padding:6px 9px
 .notation .note.missed{color:#c07700;fill:#c07700}.notation .note.wrong{color:#c43d48;fill:#c43d48}
 .notation .active-note{filter:drop-shadow(0 0 35px #2684ff);stroke:#2684ff;stroke-width:14}
 .notation .played-marker{color:#793bcc;fill:#793bcc;cursor:pointer}
+.notation .dynamic-wedge{fill:none;stroke:#58677c;stroke-width:5;stroke-linecap:round}.notation .dynamic-wedge.good{stroke:#16804a}.notation .dynamic-wedge.wrong{stroke:#c43d48}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px}.score-tools{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 .score-tools label{display:flex;align-items:center;gap:7px;font-weight:400}.score-tools input{width:auto;margin:0}
 .notation.hide-overlays .played-marker{display:none}.notation.hide-overlays .note{color:black;fill:black}
@@ -96,7 +97,7 @@ small{font-weight:400}ul{padding-left:21px}li{margin:7px 0}.seek{padding:6px 9px
 <section class="card" id="score-view" data-url="{{ url_for('notation', report_id=result.report_id) }}">
 <h2>Follow your performance on the score</h2>
 <p class="muted">Play the recording to follow detected notes. Click a colored note to listen there. Purple noteheads show the detected pitch; hover or focus for the exact note and time. Extra notes sit beside the nearest matched note in their bar.</p>
-<div class="legend"><span style="color:#16804a">● Matched</span><span style="color:#c07700">● Missing</span><span style="color:#c43d48">● Expected, different pitch played</span><span style="color:#793bcc">● Played pitch / extra</span></div>
+<div class="legend"><span style="color:#16804a">● Matched</span><span style="color:#c07700">● Missing</span><span style="color:#c43d48">● Expected, different pitch played</span><span style="color:#793bcc">● Played pitch / extra</span><span>Hairpins show score crescendos and decrescendos</span><span style="color:#16804a">Green: followed</span><span style="color:#c43d48">Red: shape more</span></div>
 <p class="muted">This is the recognized score with repeats expanded. Detected notes and their score locations are estimates{% if report.alignment.status != 'aligned' %}; alignment is uncertain, so treat placement cautiously{% endif %}.</p>
 <div class="score-tools"><label><input type="checkbox" id="show-overlays" checked>Show performance overlay</label><label><input type="checkbox" id="follow-score" checked>Follow playback</label><label>Zoom <select id="score-zoom"><option value="1">100%</option><option value="1.25">125%</option><option value="1.5">150%</option><option value="2">200%</option></select></label><span id="playing-notes" aria-live="polite">Ready to play</span></div>
 <p id="notation-status" role="status">Rendering sheet music…</p>

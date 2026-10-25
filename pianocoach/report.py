@@ -15,6 +15,9 @@ writes plain fallback text that `pianocoach.explain` can replace.
 
 import json
 import math
+from fractions import Fraction
+from zipfile import BadZipFile, ZipFile
+from xml.etree import ElementTree as ET
 from collections import defaultdict
 from pathlib import Path
 from statistics import median
@@ -63,6 +66,132 @@ def score_metadata(musicxml):
     if ks is not None:
         meta['sharps'] = int(ks.sharps)
     return meta
+
+
+def score_dynamics(musicxml, first_chunk, ui_measure, beat_in_bar):
+    """Read printed dynamic marks and wedges for the score overlay."""
+    if musicxml is None or not Path(musicxml).is_file():
+        return dict(marks=[], wedges=[])
+    from music21 import converter, dynamics, stream
+    score = converter.parse(str(musicxml))
+
+    def position(element):
+        measure = element.getContextByClass(stream.Measure)
+        if measure is None or measure.number not in first_chunk:
+            return None
+        chunk = first_chunk[measure.number]
+        return ui_measure[measure.number], beat_in_bar(float(element.getOffsetInHierarchy(score)), chunk)
+
+    marks, seen = [], set()
+    for mark in score.recurse().getElementsByClass(dynamics.Dynamic):
+        pos = position(mark)
+        if pos is None:
+            continue
+        label = str(mark.value or mark.type or '').strip()
+        key = (pos[0], round(pos[1], 3), label)
+        if not label or key in seen:
+            continue
+        seen.add(key)
+        marks.append(dict(measure=pos[0], beat=pos[1], label=label))
+
+    wedges, seen = [], set()
+    for wedge in score.recurse().getElementsByClass(dynamics.DynamicWedge):
+        endpoints = sorted(wedge.getSpannedElements(),
+                           key=lambda element: float(element.getOffsetInHierarchy(score)))
+        if len(endpoints) < 2:
+            continue
+        start, end = position(endpoints[0]), position(endpoints[-1])
+        if start is None or end is None:
+            continue
+        direction = 'crescendo' if isinstance(wedge, dynamics.Crescendo) else 'decrescendo'
+        key = (direction, round(start[0] + start[1], 3), round(end[0] + end[1], 3))
+        if key in seen or (end[0], end[1]) <= (start[0], start[1]):
+            continue
+        seen.add(key)
+        wedges.append(dict(kind=direction, start_measure=start[0], start_beat=start[1],
+                           end_measure=end[0], end_beat=end[1]))
+
+    # Audiveris recognizes hairpins in its OMR file, but its MusicXML exporter
+    # currently omits them. Recover those marks from the source geometry.
+    for omr in _recognition_files(musicxml):
+        for item in _omr_wedges(omr, first_chunk, ui_measure, beat_in_bar):
+            key = (item['kind'], round(item['start_measure'] + item['start_beat'], 3),
+                   round(item['end_measure'] + item['end_beat'], 3))
+            if key not in seen:
+                seen.add(key)
+                wedges.append(item)
+    wedges.sort(key=lambda w: (w['start_measure'], w['start_beat']))
+    return dict(marks=marks, wedges=wedges)
+
+
+def _recognition_files(musicxml):
+    if musicxml is None:
+        return []
+    folder = Path(musicxml).parent.parent / 'recognition'
+    return sorted(folder.glob('*.omr')) if folder.is_dir() else []
+
+
+def _omr_wedges(omr_path, first_chunk, ui_measure, beat_in_bar):
+    """Map Audiveris wedge endpoints from page x coordinates to score beats."""
+    try:
+        with ZipFile(omr_path) as archive:
+            xml_name = next(n for n in archive.namelist() if n.endswith('sheet#1.xml'))
+            root = ET.fromstring(archive.read(xml_name))
+    except (BadZipFile, StopIteration, ET.ParseError, OSError):
+        return []
+
+    def fraction(value, fallback=0.0):
+        try:
+            return float(Fraction(value))
+        except (ValueError, ZeroDivisionError, TypeError):
+            return fallback
+
+    def point_position(system, x):
+        for stack in system.findall('stack'):
+            left, right = fraction(stack.get('left')), fraction(stack.get('right'))
+            if not left <= x <= right:
+                continue
+            try:
+                printed = int(stack.get('id'))
+            except (TypeError, ValueError):
+                return None
+            chunk = first_chunk.get(printed)
+            if chunk is None or printed not in ui_measure:
+                return None
+            points = [(left, 0.0)]
+            for slot in stack.findall('slot'):
+                sx = left + fraction(slot.get('x-offset'))
+                t = fraction(slot.get('time-offset'))
+                points.append((sx, t))
+            points.append((right, 1.0))
+            points.sort()
+            # Interpolate between score slots; the time offset is a fraction
+            # of the printed measure duration in quarter-note beats.
+            t = points[0][1]
+            for (x0, t0), (x1, t1) in zip(points, points[1:]):
+                if x <= x1:
+                    t = t0 if x1 == x0 else t0 + (x - x0) / (x1 - x0) * (t1 - t0)
+                    break
+            length = chunk['end_beat'] - chunk['start_beat']
+            onset = chunk['start_beat'] + t * length
+            return ui_measure[printed], beat_in_bar(onset, chunk)
+        return None
+
+    output = []
+    for system in root.iter('system'):
+        for wedge in system.findall('./sig/inters/wedge'):
+            shape = wedge.get('shape', '').upper()
+            kind = 'crescendo' if shape == 'CRESCENDO' else 'decrescendo' if shape == 'DIMINUENDO' else None
+            line = wedge.find('l1')
+            if kind is None or line is None or len(line) < 2:
+                continue
+            start = point_position(system, fraction(line[0].get('x')))
+            end = point_position(system, fraction(line[1].get('x')))
+            if start is None or end is None or (end[0], end[1]) <= (start[0], start[1]):
+                continue
+            output.append(dict(kind=kind, start_measure=start[0], start_beat=start[1],
+                               end_measure=end[0], end_beat=end[1]))
+    return output
 
 
 def _right_hand_part(notes):
@@ -130,6 +259,8 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
 
     def beat_in_bar(onset, chunk):
         return _round(1 + (onset - chunk['start_beat']) * unit)
+
+    score_expression = score_dynamics(musicxml, first_chunk, ui_measure, beat_in_bar)
 
     # Right-hand notes of each measure's first occurrence, in the page's order.
     ui_notes, slot_of, rh_low = [], {}, {}
@@ -427,6 +558,70 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
         elif status == 'dragged':
             dragged.append(ui_measure[b['number']])
     pace = {m: (ratio, status) for m, ratio, status in pace_rows}
+    dynamic_matches = [m for m in alignment['matches'] if m['category'] == 'correct'
+                       and m.get('score_velocity') is not None
+                       and m.get('performance_velocity') is not None]
+    dynamic_differences = [abs(m['relative_dynamics_delta']) for m in dynamic_matches
+                           if m.get('relative_dynamics_delta') is not None]
+    dynamics_bars = []
+    for b in alignment['measures']:
+        level_delta, trend = b.get('relative_dynamics_level_difference'), b.get('dynamics_trend')
+        feedback = []
+        issues = []
+        if level_delta is not None and level_delta >= 8:
+            feedback.append('Stronger than the score suggests; try playing this bar softer.')
+            issues.append('too_loud')
+        elif level_delta is not None and level_delta <= -8:
+            feedback.append('Softer than the score suggests; bring this bar out more.')
+            issues.append('too_soft')
+        if trend == 'crescendo_needs_more':
+            feedback.append('Build the volume more gradually through the marked crescendo.')
+            issues.append(trend)
+        elif trend == 'decrescendo_needs_more':
+            feedback.append('Decrease the volume more gradually through the marked decrescendo.')
+            issues.append(trend)
+        if level_delta is not None or trend is not None:
+            dynamics_bars.append(dict(measure=ui_measure[b['number']], occurrence=b['occurrence'],
+                                      relative_level_difference=level_delta,
+                                      median_contour_difference=b.get('median_relative_dynamics_difference'),
+                                      trend=trend, issues=issues, feedback=feedback))
+    dynamics = dict(available=bool(dynamic_differences),
+                    baseline='average matched-note velocity',
+                    score_average_velocity=(float(np.mean([m['score_velocity'] for m in dynamic_matches]))
+                                            if dynamic_matches else None),
+                    take_average_velocity=(float(np.mean([m['performance_velocity'] for m in dynamic_matches]))
+                                           if dynamic_matches else None),
+                    assessed_notes=len(dynamic_differences),
+                    typical_contour_difference=(float(median(dynamic_differences)) if dynamic_differences else None),
+                    bars=dynamics_bars)
+    note_detail = []
+    for match in alignment['matches']:
+        if match['category'] != 'correct' or match.get('score_beat') is None:
+            continue
+        score_note = ref_notes.get(match.get('score_note_id'))
+        if score_note is None or (hands == 'right' and score_note['part'] != rh_part):
+            continue
+        chunk = occurrence_chunk.get(match.get('measure_occurrence'))
+        if chunk is None:
+            continue
+        note_detail.append(dict(measure=ui_measure[chunk['measures'][0]],
+                                occurrence=match['measure_occurrence'],
+                                beat=beat_in_bar(match['score_beat'], chunk),
+                                pitch=pitch_name(match['expected_pitch'], flats, sharps),
+                                onset_offset_ms=(round(match['onset_error_seconds'] * 1000)
+                                                 if match.get('onset_error_seconds') is not None else None),
+                                duration_ratio=match.get('duration_ratio'),
+                                relative_dynamics_delta=match.get('relative_dynamics_delta')))
+    onset_offsets = [abs(n['onset_offset_ms']) for n in note_detail if n['onset_offset_ms'] is not None]
+    duration_ratios = [n['duration_ratio'] for n in note_detail if n['duration_ratio'] is not None]
+    musicality = dict(
+        dynamics_notes=len(dynamic_differences),
+        median_absolute_onset_offset_ms=(float(median(onset_offsets)) if onset_offsets else None),
+        timed_notes=len(onset_offsets),
+        median_played_to_score_duration=(float(median(duration_ratios)) if duration_ratios else None),
+        duration_notes=len(duration_ratios),
+        limits=['Tone color, arm weight, and the acoustic decay of a piano note are not reliably inferred from this transcription.',
+                'Pedal use and harmonic clarity require listening to the recording; this analysis does not detect pedal changes.'])
     if audio_duration is None:
         times = [m['audio_time'] for m in alignment['matches'] if m['audio_time'] is not None]
         audio_duration = (max(times) + 1.0) if times else 1.0
@@ -442,6 +637,10 @@ def build_ui_report(reference, alignment, *, performance_notes=None, musicxml=No
                   duration_seconds=_round(float(audio_duration), 2)),
         notes=ui_notes,
         errors=errors,
+        dynamics=dynamics,
+        score_dynamics=score_expression,
+        note_detail=note_detail,
+        musicality=musicality,
         bars=[dict(measure=ui_measure[b['number']], printed=b['number'], occurrence=b['occurrence'],
                    tempo_status=b['tempo_status'], tempo_ratio=b['tempo_ratio'],
                    performed_bpm=b['performed_average_bpm'], pitch_recall=b['pitch_recall'],

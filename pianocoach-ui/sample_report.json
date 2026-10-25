@@ -16,6 +16,35 @@
     "bpm": 96,
     "duration_seconds": 30.0
   },
+  "dynamics": {
+    "available": true,
+    "baseline": "average matched-note velocity",
+    "score_average_velocity": 74.0,
+    "take_average_velocity": 70.0,
+    "assessed_notes": 48,
+    "typical_contour_difference": 7.4,
+    "bars": [
+      {"measure": 5, "occurrence": 0, "relative_level_difference": -10.2, "trend": null, "issues": ["too_soft"], "feedback": ["Softer than the score suggests; bring this bar out more."]},
+      {"measure": 8, "occurrence": 0, "relative_level_difference": 2.1, "trend": "crescendo_needs_more", "issues": ["crescendo_needs_more"], "feedback": ["Build the volume more gradually through the marked crescendo."]}
+    ]
+  },
+  "score_dynamics": {
+    "marks": [{"measure": 1, "beat": 1.0, "label": "p"}, {"measure": 9, "beat": 1.0, "label": "f"}],
+    "wedges": [{"kind": "crescendo", "start_measure": 5, "start_beat": 1.0, "end_measure": 8, "end_beat": 3.5}, {"kind": "decrescendo", "start_measure": 12, "start_beat": 1.0, "end_measure": 16, "end_beat": 3.5}]
+  },
+  "note_detail": [
+    {"measure": 5, "occurrence": 4, "beat": 1.0, "pitch": "C5", "onset_offset_ms": -180, "duration_ratio": 0.92, "relative_dynamics_delta": -9.0},
+    {"measure": 8, "occurrence": 7, "beat": 1.0, "pitch": "A4", "onset_offset_ms": 24, "duration_ratio": 1.04, "relative_dynamics_delta": -1.2},
+    {"measure": 8, "occurrence": 7, "beat": 2.0, "pitch": "B4", "onset_offset_ms": -16, "duration_ratio": 1.01, "relative_dynamics_delta": 5.5}
+  ],
+  "musicality": {
+    "dynamics_notes": 48,
+    "median_absolute_onset_offset_ms": 24.0,
+    "timed_notes": 3,
+    "median_played_to_score_duration": 1.01,
+    "duration_notes": 3,
+    "limits": ["Tone color and arm weight need listening.", "Pedal use is not detected."]
+  },
   "notes": [
     [
       1,
