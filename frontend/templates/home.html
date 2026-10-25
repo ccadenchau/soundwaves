@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Soundwaves</title>{{ site_head|safe }}
+<body>{{ site_header('')|safe }}<main>
+<h1>Practise from your sheet music.<br>Soundwaves marks every note.</h1>
+<p class="lede">For people teaching themselves piano. Play a piece you are learning and the score turns green where you were right and red, orange or purple where you weren't, bar by bar, with notes on tempo and what to practise next.</p>
+<div class="paths" style="margin-top:22px">
+  <section class="card"><h2>Play live</h2><p>Pick a piece, press Start and play into the microphone. Mistakes show up on the score about two seconds after you make them. When you stop you get the full review.</p><a class="btn" href="/live">Play live</a></section>
+  <section class="card"><h2>Check a recording</h2><p>Already recorded yourself? Upload the recording and its sheet music and get the same review: every note, every bar, and a teacher's notes.</p><a class="btn ghost" href="/check">Check a recording</a></section>
+</div>
+<section class="card"><h2>How it works</h2>
+<p class="muted" style="margin:0">Your sheet music (PDF or MusicXML) is read into notes. Your playing is turned into notes by Transkun, a piano transcription model. The two are lined up note by note, so a wrong key, a skipped note, an extra note or a rushed bar is found where it happened. The teacher's notes are written by Claude from those findings and the one-line bar notes by Gemini; neither model ever hears the audio or decides what was right. Measured on real student recordings with hand-labelled mistakes: 190 of 191 caught, 98% of flags real. Don't have a piece yet? <a href="/upload">Add one</a>.</p></section>
+</main>{{ site_footer|safe }}</body></html>

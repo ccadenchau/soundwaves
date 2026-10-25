@@ -1,6 +1,6 @@
 // Feed per-window detections through the browser's real LiveNoteStream and report what it emits.
 // stdin: [{start, end, received, notes:[{pitch, onset, duration, velocity}]}...]  stdout: [{pitch, time, emitted}]
-const LiveNoteStream = require('../../pianocoach-ui/practice/live-stream.js');
+const LiveNoteStream = require('../../frontend/static/live-input/live-stream.js');
 let input = '';
 process.stdin.on('data', d => input += d).on('end', () => {
   const windows = JSON.parse(input), stream = new LiveNoteStream(), out = [];

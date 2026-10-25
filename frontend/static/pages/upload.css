@@ -1,0 +1,5 @@
+.drop{display:block;border:2px dashed #b9c7e6;border-radius:var(--radius);padding:36px 20px;text-align:center;cursor:pointer;background:#fafbff;font-weight:400}
+.drop.over{border-color:var(--accent);background:#eef2fb}input[type=file]{display:none}
+.two{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:16px}#msg{min-height:1.4em;margin:12px 0 0}#msg.err{color:var(--wrong)}
+#done{display:none}#done.show{display:block}#done ul{color:var(--muted)}.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+@media(max-width:700px){.two{grid-template-columns:1fr}}

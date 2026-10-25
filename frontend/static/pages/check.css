@@ -1,0 +1,1 @@
+form{display:grid;grid-template-columns:1fr 1fr;gap:18px}.wide{grid-column:1/-1}@media(max-width:650px){form{grid-template-columns:1fr}.wide{grid-column:auto}}

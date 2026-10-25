@@ -36,7 +36,7 @@ import pretty_midi  # noqa: E402
 from music21 import pitch as m21pitch  # noqa: E402
 
 from alignment import AlignmentConfig  # noqa: E402
-from pianocoach.pipeline import align_clean, convert_once  # noqa: E402
+from soundwaves.pipeline import align_clean, convert_once  # noqa: E402
 
 NOTE_CATEGORIES = ('wrong_pitch', 'missing', 'extra')
 

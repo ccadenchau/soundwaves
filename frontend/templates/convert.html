@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audio to MIDI · Soundwaves</title>
+{{ site_head|safe }}<link rel="stylesheet" href="{{ url_for('static', filename='pages/convert.css') }}"></head><body>{{ site_header('')|safe }}<main>
+<h1>Audio to MIDI</h1>
+<p class="dim">No sheet music needed. Drop in a recording of piano playing. It is cleaned with the piano cleaner, then transcribed to MIDI, and the uncleaned recording is transcribed too so you can hear and see what cleaning changes.</p>
+<label class="drop" id="drop"><input type="file" id="file" accept="audio/*,.m4a,.wav,.mp3,.webm,.ogg,.flac,.aiff,.caf"><span>Drop a recording here, or click to choose one (M4A, WAV, MP3, WebM, OGG, FLAC)</span></label>
+<div class="opts"><label>Cleaner strength <input type="range" id="strength" min="0" max="1" step="0.1" value="0.7"> <b id="sv">0.7</b></label>
+<label><input type="checkbox" id="compare" checked> Also transcribe the uncleaned audio</label><a href="/test" class="dim">Back to the checks</a></div>
+<p id="msg"></p><div id="out"></div>
+</main><script src="{{ url_for('static', filename='pages/convert.js') }}"></script></body></html>

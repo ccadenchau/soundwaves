@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ summary.title }} · Soundwaves</title>{{ site_head|safe }}
+<link rel="stylesheet" href="{{ url_for('static', filename='pages/report.css') }}">
+<body>{{ site_header('')|safe }}<main>
+{% set report = result.report %}{% set metrics = report.metrics %}
+<p class="kicker">Your review</p>
+<h1>{{ summary.title }}</h1>
+<p class="lede">{{ summary.line }}</p>
+<section class="card"><div class="metrics">
+<div class="metric"><strong>{{ summary.bars }}</strong>Bars played</div>
+<div class="metric ok"><strong>{{ '%.0f'|format(metrics.pitch_recall * 100) }}%</strong>Score notes you got right</div>
+<div class="metric bad"><strong>{{ summary.wrong }}</strong>Wrong keys</div>
+<div class="metric miss"><strong>{{ summary.missing }}</strong>Skipped notes</div>
+<div class="metric extra"><strong>{{ summary.extra }}</strong>Extra notes{% if summary.noise %}<br><small class="muted">+{{ summary.noise }} possibly room noise, shown faded</small>{% endif %}</div>
+<div class="metric"><strong>{{ summary.tempo }}</strong>Your tempo (score {{ summary.score_bpm }})</div>
+</div>
+<p class="muted">Transcription: {{ 'MIDI input' if report.performance_source == 'midi' else 'Transkun' if report.preprocessing.transcriber == 'transkun' else 'Basic Pitch' }}.</p>
+<audio controls preload="metadata" id="audio" src="{{ url_for('artifact', report_id=result.report_id, kind='audio') }}"></audio>
+<div class="links"><button type="button" id="play-cleaned">Play cleaned audio</button><a class="btn" href="/live{% if summary.piece_id %}?piece={{ summary.piece_id|urlencode }}{% endif %}">Play it again live</a><a class="btn ghost" href="{{ url_for('check') }}">Check another recording</a></div>
+</section>
+
+<section class="card" id="teacher" data-url="{{ url_for('report_feedback', report_id=result.report_id) }}" data-piece="{{ summary.piece_id or '' }}">
+<h2>Notes from your teacher</h2><p class="muted" id="teacher-status">Writing feedback…</p><div id="teacher-body"></div>
+<div id="ask" hidden><h3>Ask your teacher</h3>
+<div class="legend" id="ask-chips"></div>
+<div id="ask-log"></div>
+<form id="ask-form"><input id="ask-q" placeholder="Why do you say I rushed bars 1 to 8?" maxlength="500" autocomplete="off"><button type="submit" id="ask-go">Ask</button></form>
+<p class="muted" id="ask-note" style="font-size:13px;margin:6px 0 0">Answers come from the note-by-note comparison of this take, not from listening again.</p></div></section>
+
+<section class="card" id="score-view" data-url="{{ url_for('notation', report_id=result.report_id) }}">
+<h2>Your playing on the score</h2>
+<p class="muted">Choose Detected MIDI to hear the notes the app detected while they light up on your sheet music. Switch to Recorded audio to compare at the same moment. Click a coloured note to replay it; purple marks detected wrong or extra notes.</p>
+<div class="legend"><span style="color:var(--matched)">● Right</span><span style="color:var(--missed)">● Skipped</span><span style="color:var(--wrong)">● Wrong key (the written note)</span><span style="color:var(--extra)">● What you played / extra</span><span class="muted">Hairpins: green followed, red needs more shape</span></div>
+<div class="score-tools">
+<label>Playback <select id="playback-mode"><option value="{{ url_for('artifact', report_id=result.report_id, kind='audio') }}">Recorded audio</option><option value="{{ url_for('artifact', report_id=result.report_id, kind='cleaned_audio') }}">Cleaned audio</option>{% if result.midi_playback %}<option value="{{ url_for('artifact', report_id=result.report_id, kind='recording_midi_audio') }}">Detected MIDI</option>{% endif %}</select></label>
+<button type="button" id="score-play" disabled>Play</button>
+<label>Speed <select id="playback-speed"><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option></select></label>
+<label><input type="checkbox" id="show-overlays" checked>Show my notes</label><label><input type="checkbox" id="follow-score" checked>Follow playback</label><label>Zoom <select id="score-zoom"><option value="1">100%</option><option value="1.25">125%</option><option value="1.5">150%</option><option value="2">200%</option></select></label></div><p id="playing-notes" aria-live="polite" class="muted">Ready to play</p>
+<p id="notation-status" role="status" class="muted">Drawing the score…</p>
+<div class="notation" id="notation" aria-label="Sheet music with your notes"></div>
+<details id="unplaced-notes" hidden><summary>Notes without a clear place in the score</summary><div></div></details>
+</section>
+
+<section class="card"><h2>Bar by bar</h2><div class="scroll"><table>
+<thead><tr><th>Bar</th><th>Notes right</th><th>Skipped / wrong / extra</th><th>Tempo</th><th>Score → you (BPM)</th><th>Timing and touch</th><th>Feedback</th></tr></thead><tbody>
+{% for bar in report.measures %}<tr>
+<td><strong>{{ bar.number }}</strong>{% if summary.repeats %}<br><small>Pass {{ bar.occurrence + 1 }}</small>{% endif %}
+{% if bar.estimated_start_seconds is not none %}<p><button class="seek" data-time="{{ [0,bar.estimated_start_seconds]|max }}">Listen</button></p>{% endif %}</td>
+<td>{{ bar.correct_notes }}/{{ bar.expected_notes }}<br>{% if bar.pitch_recall is not none %}<progress aria-label="Notes right" max="1" value="{{ bar.pitch_recall }}"></progress>{% endif %}</td>
+<td>{{ bar.missing_notes }} / {{ bar.wrong_pitch_notes }} / {{ bar.extra_notes }}</td>
+<td><span class="badge {{ bar.tempo_status }}">{{ {'on_target':'steady','too_fast':'rushed','too_slow':'dragged','irregular':'uneven','unassessed':'not enough notes'}.get(bar.tempo_status, bar.tempo_status|replace('_',' ')) }}</span>
+{% if bar.tempo_ratio is not none %}<br><small>{{ '%.2f'|format(bar.tempo_ratio) }}× score speed</small>{% endif %}</td>
+<td>{{ '%.0f'|format(bar.reference_average_bpm) }} → {{ '%.0f'|format(bar.performed_average_bpm) if bar.performed_average_bpm is not none else '—' }}</td>
+<td>{% if bar.median_absolute_timing_error_seconds is not none %}Off the beat by {{ '%.0f'|format(bar.median_absolute_timing_error_seconds * 1000) }} ms<br><small>{{ bar.early_notes }} early · {{ bar.late_notes }} late</small><br>{% endif %}
+{% if bar.median_duration_ratio is not none %}Notes held {{ '%.2f'|format(bar.median_duration_ratio) }}× as long as written<br>{% endif %}
+{% if bar.relative_dynamics_level_difference is not none %}Loudness {{ '%+.1f'|format(bar.relative_dynamics_level_difference) }} vs your average<br>{% endif %}
+{% if bar.dynamics_trend %}{{ bar.dynamics_trend|replace('_',' ')|capitalize }}{% endif %}</td>
+<td data-bar="{{ bar.number }}">{% for line in bar.feedback %}<div>{{ line }}</div>{% endfor %}</td></tr>{% endfor %}
+</tbody></table></div><p class="muted" id="barnote-caption" hidden style="font-size:13px"></p>
+{% if report.played_span and report.played_span.unplayed_bars_hidden %}<p class="muted">{{ report.played_span.unplayed_bars_hidden }} bar{{ '' if report.played_span.unplayed_bars_hidden == 1 else 's' }} you didn't reach {{ 'is' if report.played_span.unplayed_bars_hidden == 1 else 'are' }} left out.</p>{% endif %}
+</section>
+
+<section class="card"><h2>Right and wrong keys</h2>
+<p class="muted">Your recording on a keyboard. A key lights green when you played the right note and red when you didn't; a dashed outline shows the key the sheet wanted.</p>
+<iframe title="Right and wrong keys" src="/falling?embed=1&api={{ url_for('report_falling', report_id=result.report_id)|urlencode }}" style="width:100%;height:230px;border:1px solid var(--line);border-radius:10px;background:#0c181b" allow="autoplay"></iframe></section>
+
+<section class="card"><details><summary>Details and downloads</summary>
+<p class="muted">Matching: {{ '%.0f'|format(metrics.pitch_precision * 100) }}% of the notes you played match the score. Alignment status: {{ report.alignment.status }}. Note matches are estimates from audio, not certainties.{% if metrics.median_relative_dynamics_difference is not none %} Loudness is compared with the average of your own correct notes, not measured in decibels.{% endif %}</p>
+{% if result.cache %}<p class="muted">Score: {{ 'reused' if result.cache.sheet_hit else 'read now' }} · Recording: {{ 'reused' if result.cache.recording_hit else 'transcribed now' }}</p>{% endif %}
+{% if result.midi_playback %}
+<h3>Hear the notes</h3><p class="muted">Synthesized from the score, and from what was heard in your recording.</p>
+<label>The score<audio controls preload="none" src="{{ url_for('artifact', report_id=result.report_id, kind='sheet_midi_audio') }}"></audio></label>
+<label>Your playing, as heard<audio controls preload="none" src="{{ url_for('artifact', report_id=result.report_id, kind='recording_midi_audio') }}"></audio></label>
+{% endif %}
+<div class="links">{% for kind, label in [('report','JSON report'),('sheet_midi','Score MIDI'),('recording_midi','Your MIDI'),('musicxml','Score as read'),('repairs','Score repair log')] %}
+<a href="{{ url_for('artifact', report_id=result.report_id, kind=kind) }}">{{ label }}</a>{% endfor %}</div>
+<h3>Every finding</h3><div class="scroll"><table>
+<tr><th>Bar</th><th>Type</th><th>Written / played</th><th>Recording</th></tr>
+{% for error in report.errors %}<tr><td>{{ error.measure if error.measure is not none else '—' }}</td><td>{{ 'extra (possibly noise)' if error.category == 'extra' and error.maybe_noise else {'missing':'skipped','wrong_pitch':'wrong key','extra':'extra','timing':'timing'}.get(error.category, error.category) }}</td>
+<td>{{ error.expected_name or '—' }} / {{ error.actual_name or '—' }}</td>
+<td>{% if error.audio_time is not none %}<button class="seek" data-time="{{ error.audio_time }}">{{ '%.1f'|format(error.audio_time) }} s</button>{% endif %}</td></tr>{% endfor %}
+</table></div>
+{% if report.warnings %}<h3>Caveats</h3><ul class="muted">{% for warning in report.warnings %}<li>{{ warning }}</li>{% endfor %}</ul>{% endif %}
+</details></section>
+</main>{{ site_footer|safe }}<script src="{{ url_for('static', filename='pages/report.js') }}"></script><script src="{{ url_for('static', filename='notation.js') }}" defer></script></html>

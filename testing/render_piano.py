@@ -1,4 +1,4 @@
-"""Render note events to a WAV with the sampled acoustic grand piano bundled in testing/web-server.
+"""Render note events to a WAV with the sampled acoustic grand piano bundled in frontend/static/audio.
 
     python testing/render_piano.py events.json out.wav [--noise 0.0015]
 
@@ -21,7 +21,7 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-SAMPLES = ROOT / 'testing' / 'web-server' / 'static' / 'audio' / 'piano.json'
+SAMPLES = ROOT / 'frontend' / 'static' / 'audio' / 'piano.json'
 NAMES = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
 SAMPLE_RATE = 16000
 

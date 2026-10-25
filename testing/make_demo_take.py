@@ -1,6 +1,6 @@
 """Plant mistakes into a score and render the result as a piano recording for demos and tests.
 
-    python testing/make_demo_take.py pianocoach/pieces/minuet_in_g.mxl out/minuet-take \\
+    python testing/make_demo_take.py soundwaves/pieces/minuet_in_g.mxl out/minuet-take \\
         --tempo 96 --wrong 3:3.5 --drop 7:2 --rush 5 --late 15:2:150 --lh-wrong 9:1
 
 Mistakes apply to the first time a bar is played (repeats are expanded by the converter).
@@ -20,7 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from pianocoach.pipeline import convert_once  # noqa: E402
+from soundwaves.pipeline import convert_once  # noqa: E402
 from testing.render_piano import render  # noqa: E402
 
 

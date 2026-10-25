@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Soundwaves · Falling notes</title><link rel="stylesheet" href="{{ url_for('static', filename='pages/keyboard-replay.css') }}"></head><body>
+<header>
+  <h1>Falling notes</h1>
+  <label class="btn" id="open">Open MIDI<input id="file" type="file" accept=".mid,.midi,audio/midi,audio/x-midi"></label>
+  <button id="play" disabled>Play</button>
+  <span class="title" id="name">No file</span>
+  <span class="ctl"><span id="time">0:00 / 0:00</span></span>
+  <input id="seek" type="range" min="0" max="1000" value="0" disabled aria-label="Position">
+  <label class="ctl">Speed <input id="speed" type="range" min="0.25" max="2" step="0.05" value="1" style="width:80px"><span id="speedv">1.00×</span></label>
+  <label class="ctl">Fall <input id="look" type="range" min="1" max="6" step="0.25" value="3" style="width:70px"></label>
+  <label class="ctl">Vol <input id="vol" type="range" min="0" max="1" step="0.05" value="0.7" style="width:70px"></label>
+  <span id="compare" hidden class="ctl">
+    <label class="btn">Upload score<input id="scorefile" type="file" accept=".musicxml,.xml,.mxl,.pdf"></label>
+    <span id="scorename" hidden></span>
+    <select id="piece" aria-label="Or pick a built-in piece"></select>
+    <label class="btn">Compare recording<input id="rec" type="file" accept="audio/*,.mid,.midi"></label>
+  </span>
+  <span id="legend" hidden class="ctl"><i class="sw" style="background:#3ddc97"></i>matches score <i class="sw" style="background:#ff5d5d"></i>doesn't <span id="score"></span></span>
+  <button id="fbtn" hidden>Teacher feedback</button>
+  <span id="msg" role="alert"></span>
+</header>
+<div id="stage"><canvas id="cv"></canvas><aside id="fb" hidden></aside><div id="drop">Drop a .mid file here, or use Open MIDI.<br>Space plays/pauses · ←/→ seek 5s</div></div>
+<script src="{{ url_for('static', filename='pages/keyboard-replay.js') }}"></script></body></html>

@@ -119,7 +119,7 @@ def si_snr(reference, estimate):
 
 def engines(which):
     from transcribe_recording.backend import BasicPitchBackend
-    from pianocoach.transkun_backend import TranskunBackend
+    from soundwaves.transkun_backend import TranskunBackend
     out = {}
     if 'transkun' in which and TranskunBackend.available():
         out['transkun'] = TranskunBackend()
@@ -131,7 +131,7 @@ def engines(which):
 def convert(path, backend, workdir):
     """What /convert does: transcribe, then the note cleanup."""
     from transcribe_recording import transcribe_recording
-    from pianocoach.clean import clean_notes
+    from soundwaves.clean import clean_notes
     take = transcribe_recording(path, workdir, backend=backend)
     kept, _ = clean_notes(take.notes, harmonics=backend.__class__.__name__ == 'BasicPitchBackend')
     return sorted((n['onset'], n['pitch']) for n in kept)
@@ -217,7 +217,7 @@ def run_feedback(args):
     import csv
     from alignment import AlignmentConfig
     from music21 import pitch as m21pitch
-    from pianocoach.pipeline import align_clean, convert_once
+    from soundwaves.pipeline import align_clean, convert_once
     from testing.datasets.asap_eval import plant_mistakes, score_findings
     from testing.render_piano import render
     import pretty_midi
@@ -257,7 +257,7 @@ def run_feedback(args):
             t0 = time.time()
             detected_path = work / f't-{key}-{variant}'
             from transcribe_recording import transcribe_recording
-            from pianocoach.clean import clean_notes
+            from soundwaves.clean import clean_notes
             take = transcribe_recording(wav, detected_path, backend=backend)
             kept, _ = clean_notes(take.notes, harmonics=False)
             transcribe_seconds = time.time() - t0
@@ -358,8 +358,8 @@ def _score_against_labels(report, missed, extra, tol=0.3, confident_only=False):
 
 
 def run_real(args):
-    from pianocoach.pipeline import align_clean
-    from pianocoach.clean import clean_notes
+    from soundwaves.pipeline import align_clean
+    from soundwaves.clean import clean_notes
     from testing.render_piano import render
     from transcribe_recording import transcribe_recording
     rng = np.random.default_rng(args.seed)
@@ -428,7 +428,7 @@ def run_real(args):
 
 def run_live(args):
     """Stream SMD excerpts the way /practice does: a window of the last 1.5 s every 100 ms."""
-    from pianocoach.live import _transcribe_window
+    from soundwaves.live import _transcribe_window
     import io
     if args.beginner:
         # Student-level pieces: the labelled ABRSM grade 1-2 performances, rendered with the sampled piano.
@@ -486,7 +486,7 @@ def run_live(args):
 def run_livefeedback(args):
     """What the practice screen paints while a student plays, scored against hand-labelled mistakes."""
     import io, subprocess, shutil
-    from pianocoach.live import _transcribe_window
+    from soundwaves.live import _transcribe_window
     from testing.render_piano import render
     node = shutil.which('node') or str(next(Path.home().glob('.nvm/versions/node/*/bin/node')))
     rng = np.random.default_rng(args.seed)

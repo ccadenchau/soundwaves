@@ -1,4 +1,4 @@
-# Testing PianoCoach
+# Testing Soundwaves
 
 Two commands. Both work from a fresh clone of this branch.
 
@@ -37,9 +37,8 @@ piano so you can hear what the converter heard, the MIDI file to download, and w
 
 ## Try it by hand
 
-- **http://127.0.0.1:5001/practice** — the live screen. Press **Play demo** for a sampled-piano example with three
-  deliberate mistakes, or pick Microphone, USB / MIDI or On-screen keys and play.
-- **http://127.0.0.1:5001/record** — record or upload a whole take and get the full review.
+- **http://127.0.0.1:5001/live** — the current live screen.
+- **http://127.0.0.1:5001/check** — upload a recording and score for the full review.
 - The bottom of `/test` takes any WAV/MP3/M4A/MIDI file of the Minuet in G.
 
 If the microphone hears nothing: Chrome → the lock icon next to the address → allow Microphone, and check the input
@@ -60,7 +59,7 @@ Without a key the app uses plain built-in wording and every test still runs.
 ## Other checks
 
 ```sh
-.venv/bin/python -m pianocoach.selftest mistakes     # one end-to-end case from the terminal
-.venv/bin/python -m pianocoach.benchmark_live        # live-listening latency
-.venv/bin/python testing/make_demo_take.py pianocoach/pieces/minuet_in_g.mxl out/take --wrong 3:3.5 --drop 7:2
+.venv/bin/python -m soundwaves.selftest mistakes     # one end-to-end case from the terminal
+.venv/bin/python -m testing.soundwaves.benchmark_live        # live-listening latency
+.venv/bin/python testing/make_demo_take.py soundwaves/pieces/minuet_in_g.mxl out/take --wrong 3:3.5 --drop 7:2
 ```

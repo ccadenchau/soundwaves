@@ -5,15 +5,15 @@ main/
 instance/
 venv/
 /temp_files/
-/pianocoach/web/cache/*
-!/pianocoach/web/cache/.gitkeep
-/pianocoach/sessions/
-/pianocoach/cache/
+/soundwaves/web/cache/*
+!/soundwaves/web/cache/.gitkeep
+/soundwaves/sessions/
+/soundwaves/cache/
 /.venv-transkun/
 .env
 /testing/datasets/results/
 /testing/datasets/results_long/
-/pianocoach/pieces/upload-*
+/soundwaves/pieces/upload-*
 /testing/datasets/results_audio/
 
 /.python-transkun/

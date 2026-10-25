@@ -1,0 +1,16 @@
+.notation{height:620px}.notation .note{cursor:pointer}
+.notation .active-note{color:var(--here)!important;fill:var(--here)!important}
+.notation .played-marker{cursor:pointer}.notation .played-marker.faint{opacity:.45}
+.notation .dynamic-wedge{fill:none;stroke:#58677c;stroke-width:5;stroke-linecap:round}.notation .dynamic-wedge.good{stroke:var(--matched)}.notation .dynamic-wedge.wrong{stroke:var(--wrong)}
+.score-tools{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.score-tools label{display:flex;align-items:center;gap:7px;font-weight:400}.score-tools select{width:auto;margin:0}
+#score-play{min-width:5.5rem;text-align:center}
+#playing-notes{display:block;height:1.5em;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:10px 0}
+#notation{overflow-anchor:none;overscroll-behavior:contain;scrollbar-gutter:stable}
+.notation.hide-overlays .played-marker{display:none}.notation.hide-overlays .note{color:black;fill:black}
+.links{display:flex;gap:15px;flex-wrap:wrap}.kicker{color:var(--muted);font-weight:600;font-size:14px;letter-spacing:.04em;text-transform:uppercase;margin:0}
+#teacher-body .focus{border-left:4px solid var(--accent);padding:2px 14px;margin:14px 0}
+#ask{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}#ask h3{margin-top:0}
+#ask-chips button{background:#eef2fb;color:var(--accent);border:1px solid #c9d6f5;padding:6px 11px;font-size:14px;font-weight:600}
+#ask-form{display:flex;gap:10px;align-items:stretch;margin-top:8px}#ask-form input{margin:0;flex:1}
+#ask-log .q{font-weight:600;margin:12px 0 4px}#ask-log .a{background:#f8fafd;border-left:4px solid var(--accent);padding:8px 12px;border-radius:0 8px 8px 0;margin:0 0 4px;white-space:pre-wrap}
+td .barnote{font-weight:600;margin-bottom:4px}

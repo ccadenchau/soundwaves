@@ -1,6 +1,6 @@
 # Testing on real performances
 
-`asap_eval.py` runs the whole PianoCoach path (score preparation, alignment, the page adapter with
+`asap_eval.py` runs the whole Soundwaves path (score preparation, alignment, the page adapter with
 its repairs) on the [ASAP dataset](https://github.com/fosfrancesco/asap-dataset): MusicXML scores
 paired with MIDI performances by competition pianists. The dataset is cloned outside the repo at
 `~/Desktop/calhacks/datasets/asap-dataset` (shallow clone, no audio).
@@ -161,7 +161,7 @@ hackathon demo and would matter only if the project were productised.
 
 ### Public-domain scores for beginner pieces
 
-- **Minuet in G, BWV Anh. 114**: [MuseTrainer MXL](https://musetrainer.github.io/library/scores/Bach_Minuet_in_G_Major_BWV_Anh._114.mxl) (public domain, 32 bars, 2 staves) — now `pianocoach/pieces/minuet_in_g.mxl`. Mutopia has only `.ly/.mid/.pdf` ([dir](https://www.mutopiaproject.org/ftp/BachJS/BWVAnh114/anna-magdalena-04/)); IMSLP has PDFs and no MusicXML; the music21 corpus has nothing from the Anna Magdalena notebook.
+- **Minuet in G, BWV Anh. 114**: [MuseTrainer MXL](https://musetrainer.github.io/library/scores/Bach_Minuet_in_G_Major_BWV_Anh._114.mxl) (public domain, 32 bars, 2 staves) — now `soundwaves/pieces/minuet_in_g.mxl`. Mutopia has only `.ly/.mid/.pdf` ([dir](https://www.mutopiaproject.org/ftp/BachJS/BWVAnh114/anna-magdalena-04/)); IMSLP has PDFs and no MusicXML; the music21 corpus has nothing from the Anna Magdalena notebook.
 - Für Elise: [Mutopia MIDI](https://www.mutopiaproject.org/ftp/BeethovenLv/WoO59/fur_Elise_WoO59/fur_Elise_WoO59.mid); MuseTrainer lists `Fur_Elise.mxl`.
 - Clementi Sonatina Op.36/1: [Mutopia MIDI zip](https://www.mutopiaproject.org/ftp/ClementiM/O36/sonatina-1/sonatina-1-mids.zip).
 - Burgmüller Op.100 Nos. 1–18: [Mutopia](https://www.mutopiaproject.org/ftp/BurgmullerJFF/O100/25EF-01/25EF-01.mid) (one dir per étude).

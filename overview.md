@@ -1,6 +1,6 @@
 # Piano Performance Analyzer — Project Overview & Technical Architecture
 
-**Working title:** PianoCoach  
+**Working title:** Soundwaves
 **Implementation language:** Python  
 **Document version:** 1.0 — October 2026  
 **Goal:** Analyze a piano performance against written sheet music, identify probable mistakes, and provide specific, useful practice feedback.
@@ -9,7 +9,7 @@
 
 ## 1. Executive summary
 
-PianoCoach accepts (1) a reference score and (2) a recording of someone playing that score. It converts both into a shared representation of musical notes, aligns the performed notes with the intended notes even when the player changes speed, detects discrepancies, and produces measure-level feedback.
+Soundwaves accepts (1) a reference score and (2) a recording of someone playing that score. It converts both into a shared representation of musical notes, aligns the performed notes with the intended notes even when the player changes speed, detects discrepancies, and produces measure-level feedback.
 
 **Core principle:** Use proven tools for optical music recognition (OMR) and audio-to-note transcription. Focus original engineering effort on score-to-performance alignment, error detection, confidence estimation, and actionable feedback.
 

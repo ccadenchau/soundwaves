@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add a piece · Soundwaves</title>{{ site_head|safe }}
+<link rel="stylesheet" href="{{ url_for('static', filename='pages/upload.css') }}"></head><body>{{ site_header('add')|safe }}<main>
+<h1>Add a piece</h1>
+<p class="lede">Upload the sheet music you practise from. After that anyone on this computer can pick it on Play live or Check a recording.</p>
+<section class="card">
+<label class="drop" id="drop"><input type="file" id="file" accept=".musicxml,.xml,.mxl,.pdf"><span id="pick">Drop a score here, or click to choose one. PDF, MusicXML or MXL, up to 20 MB.</span></label>
+<div class="two"><label>Name <small>optional, shown in the piece list</small><input id="name" placeholder="Sonata in C, K. 545"></label>
+<label>Tempo if the score has none <small>beats per minute</small><input type="number" id="bpm" value="100" min="20" max="400"></label></div>
+<p id="msg" class="muted">PDFs are read with Audiveris and take a minute or two the first time. MusicXML is instant.</p>
+</section>
+<section class="card" id="done"><h2 id="title"></h2><ul id="facts"></ul>
+<div class="row"><a class="btn" id="go-live">Play it live</a><a class="btn ghost" href="/check">Check a recording of it</a></div></section>
+</main>{{ site_footer|safe }}<script src="{{ url_for('static', filename='pages/upload.js') }}"></script></body></html>

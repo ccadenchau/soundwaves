@@ -1,8 +1,8 @@
-# PianoCoach
+# Soundwaves
 
-Play from your sheet music and PianoCoach marks every note.
+Play from your sheet music and Soundwaves marks every note.
 
-It is for people teaching themselves piano. You read music, you practise alone, and nobody tells you that the left hand in bar 11 was an octave too high or that you rush every time the semiquavers start. PianoCoach listens while you play, turns the score green, red, orange and purple as you go, and when you stop it writes you the notes a teacher would.
+It is for people teaching themselves piano. You read music, you practise alone, and nobody tells you that the left hand in bar 11 was an octave too high or that you rush every time the semiquavers start. Soundwaves listens while you play, turns the score green, red, orange and purple as you go, and when you stop it writes you the notes a teacher would.
 
 Built at Cal Hacks 13.0 (October 2026).
 
@@ -19,7 +19,7 @@ Sheet music goes through Audiveris (optical music recognition) into MusicXML, th
 
 Your playing goes through Transkun v2 (a piano transcription model, PyTorch on Apple silicon) into notes with onsets, lengths and velocities. Basic Pitch is the fallback when Transkun's environment isn't installed, and the quick layer that moves the cursor live.
 
-Before Basic Pitch transcription, the piano cleaner reduces short broadband key clicks separately from steady room noise. It preserves the recording timeline and protects sustained pitch components. This is conservative attenuation, not guaranteed separation of keyboard mechanics from piano attacks. Transkun still uses the original audio by default; `PIANOCOACH_CLEAN=on` enables cleaning for it too.
+Before Basic Pitch transcription, the piano cleaner reduces short broadband key clicks separately from steady room noise. It preserves the recording timeline and protects sustained pitch components. This is conservative attenuation, not guaranteed separation of keyboard mechanics from piano attacks. Transkun still uses the original audio by default; `SOUNDWAVES_CLEAN=on` enables cleaning for it too.
 
 The two note lists are lined up by a monotone sequence alignment, then repaired by rules we wrote from watching real takes fail: same-pitch re-pairing, split chord notes, runs played a step off, right note in the wrong octave, quiet background noise, grace notes, partial takes and where a take actually ends. Each bar gets a robust tempo fit, so timing is judged against your own pace in that bar, not a metronome.
 
@@ -41,7 +41,7 @@ Measured on real data, details in `testing/datasets/README.md`:
 | Planted mistakes in expert ASAP performances | 39 of 40, no new false alarms |
 | Live marks agreeing with the final report, test clip | 245 of 247 notes |
 
-Those rows were measured on the comparison adapter in `pianocoach/report.py`, which the older review page uses. The review and live pages in `pianocoach/web` run a lighter path: the same aligner with the split-note merge, end-of-take trimming and the room-noise rules, without the adapter's other repairs. On the same hand-labelled student set that path catches 86 to 88% of mistakes, and 94% of its flags are real in a quiet room, 79% with someone talking at 10 dB. Bringing the remaining repairs across is the next job.
+Those rows were measured on the comparison adapter in `soundwaves/report.py`, which the older review page uses. The review and live pages in `soundwaves/web` run a lighter path: the same aligner with the split-note merge, end-of-take trimming and the room-noise rules, without the adapter's other repairs. On the same hand-labelled student set that path catches 86 to 88% of mistakes, and 94% of its flags are real in a quiet room, 79% with someone talking at 10 dB. Bringing the remaining repairs across is the next job.
 
 The self-checks at `/test` run five end-to-end cases (planted mistakes, a clean take, a MIDI take, a partial take, silence) in about 30 seconds.
 
@@ -65,14 +65,19 @@ Pages: `/` home, `/live` play live, `/check` check a recording, `/upload` add a 
 ## Repository map
 
 - `sheet_downloader/` score reading and repair (Audiveris, music21)
-- `transcribe_recording/`, `pianocoach/transkun_*` audio to notes
+- `transcribe_recording/`, `soundwaves/transkun_*` audio to notes
 - `alignment/` the aligner and per-bar analysis
-- `pianocoach/` report adapter, repairs, teacher notes, pages
-- `pianocoach/web/` the main Flask app, report/playback routes, score rendering, and comparison cache
+- `soundwaves/` report adapter, repairs, teacher notes, pages
+- `soundwaves/web/` the main Flask app, report/playback routes, score rendering, and comparison cache
 - `testing/` test cases, demo audio generation, and dataset evaluation tools
-- `pianocoach-ui/` browser code: live note stream, score follower, falling keys, shared theme
+- `frontend/` current app templates, scripts, styles, and shared piano samples
+- `ipad_keys/` independent iPad falling-keyboard page
 - `testing/datasets/` real-data evaluation scripts and results
 
 ## Built with
 
 Python, Flask, music21, Audiveris, Transkun, Basic Pitch, PyTorch, NumPy, Verovio, Web Audio, the Anthropic API (Claude), the Gemini API.
+
+Application tests: `venv/bin/python -m unittest discover -s testing/soundwaves -t .`. Browser tests: `node --test testing/frontend/*.test.cjs`.
+
+Frontend layout and removed legacy interfaces are documented in [frontend/README.md](frontend/README.md) and [frontend/CLEANUP.md](frontend/CLEANUP.md). The iPad page is independent; see [ipad_keys/README.md](ipad_keys/README.md).

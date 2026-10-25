@@ -1,0 +1,17 @@
+.controls{display:grid;grid-template-columns:2fr 1.5fr 0.7fr 2fr auto;gap:16px;align-items:end}
+.live-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#aebdd2;margin-right:7px;vertical-align:1px}
+.live-dot.on{background:var(--wrong);animation:pulse 1.2s infinite}@keyframes pulse{50%{opacity:.35}}
+.level{height:6px;background:#e7ecf4;border-radius:3px;overflow:hidden;width:160px;margin-top:8px}.level i{display:block;height:100%;width:0;background:var(--accent);transition:width .08s}
+.split{display:grid;grid-template-columns:1fr 320px;gap:18px}.split>.card{margin:0}
+.notation{height:560px}.notation .note{transition:color .25s,fill .25s}
+.notation .note.heard{color:var(--matched);fill:var(--matched);opacity:.45}
+.notation .played-marker.faint{opacity:.45}
+.notation .note.now{filter:drop-shadow(0 0 30px var(--here));stroke:var(--here);stroke-width:12}
+.notation .fresh{animation:pop .7s ease-out}@keyframes pop{0%{filter:none}30%{filter:drop-shadow(0 0 40px currentColor)}100%{filter:none}}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.85);font-size:19px;color:var(--accent);text-align:center;padding:20px;z-index:2}
+.spin{width:22px;height:22px;border:3px solid #c9d6f5;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-right:12px;flex:none}@keyframes spin{to{transform:rotate(360deg)}}
+.feed{height:560px;overflow:auto;margin-top:10px}.feed .item{border-left:4px solid var(--c,var(--accent));padding:6px 12px;margin:0 0 10px;background:#f8fafd;border-radius:0 8px 8px 0;animation:slide .35s ease-out}.feed .item.seen{animation:none}
+.feed .item small{display:block;color:var(--muted);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+@keyframes slide{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+tr.newest td{background:#f2f6ff}[hidden]{display:none!important}
+@media(max-width:900px){.controls{grid-template-columns:1fr}.split{grid-template-columns:1fr}.feed{height:auto;max-height:320px}}

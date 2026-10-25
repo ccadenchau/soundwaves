@@ -1,4 +1,4 @@
-"""Run PianoCoach at http://127.0.0.1:5001."""
+"""Run Soundwaves at http://127.0.0.1:5001."""
 
 import hashlib
 import os
@@ -28,4 +28,4 @@ if __name__ == "__main__":
     python = setup()
     os.chdir(ROOT)
     os.execv(str(python), [str(python), "-c",
-             "from pianocoach.web.app import run_server; run_server()"])
+             "from soundwaves.web.app import run_server; run_server()"])
