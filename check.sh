@@ -10,7 +10,7 @@ fail=0
 quiet() { grep -v -i -E "warning|re\.match|return fn|check_backward" || true; }
 
 echo "==> Python unit tests"
-$PY -m unittest pianocoach.test_clean pianocoach.test_scoreprep pianocoach.test_report pianocoach.test_partial \
+$PY -m unittest pianocoach.test_audio_cleaner pianocoach.test_clean pianocoach.test_scoreprep pianocoach.test_report pianocoach.test_partial \
   pianocoach.test_pipeline pianocoach.test_live pianocoach.test_transkun sheet_downloader.test_reference \
   testing.alignment.test_notation 2>&1 | quiet | tail -4 | tee /tmp/pianocoach-unit.txt
 grep -q "^OK" /tmp/pianocoach-unit.txt || fail=1
