@@ -32,7 +32,7 @@ async function displayNotation() {
       audio.currentTime = Math.max(0, time);
       audio.play().catch(() => {});
     };
-    const describe = item => `${item.category.replaceAll('_', ' ')}: expected ${item.expected_name || 'no note'}, played ${item.actual_name || 'no note'}${item.audio_time === null ? '' : ` at ${item.audio_time.toFixed(2)}s`}`;
+    const describe = item => `${item.category.replaceAll('_', ' ')}${item.maybe_noise ? ' (possibly background noise)' : ''}: expected ${item.expected_name || 'no note'}, played ${item.actual_name || 'no note'}${item.audio_time === null ? '' : ` at ${item.audio_time.toFixed(2)}s`}`;
     const interactive = (el, item) => {
       const title = document.createElementNS(ns, 'title');
       title.textContent = describe(item);
@@ -65,6 +65,7 @@ async function displayNotation() {
         const y = box.y + box.height / 2 - item.staff_steps * gap / 2;
         const group = document.createElementNS(ns, 'g');
         group.classList.add('played-marker');
+        if (item.maybe_noise) group.classList.add('faint');
         const ellipse = document.createElementNS(ns, 'ellipse');
         for (const [key, value] of Object.entries({cx:x, cy:y, rx:box.width/2, ry:box.height/2})) ellipse.setAttribute(key, value);
         group.append(ellipse);
