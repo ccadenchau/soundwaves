@@ -1,0 +1,81 @@
+2026-10-24 23:57:22,678 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                 Book.java:560  | 1 sheet in /home/alanlai/Documents/GitHub/soundwaves/testing/alignment/cache/inputs/f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075.pdf
+2026-10-24 23:57:22,900 INFO []                 Book.java:2565 | Stored /book.xml
+2026-10-24 23:57:22,901 INFO []                 Book.java:2525 | Book stored as /home/alanlai/Documents/GitHub/soundwaves/testing/alignment/cache/sheets/.build-97wrxfmd/entry/converted/recognition/f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075.omr
+2026-10-24 23:57:22,904 INFO []                 Book.java:1929 | Book reaching PAGE on sheets:[#1]
+2026-10-24 23:57:22,907 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | LOAD
+2026-10-24 23:57:23,419 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]            SheetStub.java:1278 | Loaded image #1 2479x3508 from /home/alanlai/Documents/GitHub/soundwaves/testing/alignment/cache/inputs/f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075.pdf
+2026-10-24 23:57:23,424 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | BINARY
+2026-10-24 23:57:23,937 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | SCALE
+2026-10-24 23:57:23,957 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]         ScaleBuilder.java:254  | Beam  guessed height: 11 -- 0.25 of [9..19] range
+2026-10-24 23:57:23,958 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]         ScaleBuilder.java:271  | Beam measured height: 10 -- 0.10 of [9..19] range at 652% of needed quorum
+2026-10-24 23:57:23,959 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]         ScaleBuilder.java:401  | Normalized black jitter: 5.00 %
+2026-10-24 23:57:23,959 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]            ScaleStep.java:65   | Scale{ interline(19,20,20) line(2,2,3) beam(10)}
+2026-10-24 23:57:23,960 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | GRID
+2026-10-24 23:57:24,373 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       LinesRetriever.java:1508 | Global slope: 0.00000
+2026-10-24 23:57:24,432 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]    ClustersRetriever.java:326  | Retrieved raw line clusters: 12 of sizes [5] with interline(19,20,20)
+2026-10-24 23:57:24,667 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]            PeakGraph.java:310  | Systems: #1[1, 2] #2[3, 4] #3[5, 6] #4[7, 8] #5[9, 10] #6[11, 12]
+2026-10-24 23:57:24,879 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SystemManager.java:800  | 1 part along 6 systems
+2026-10-24 23:57:24,879 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                 Book.java:543  | Created scores: [{Score 1}]
+2026-10-24 23:57:24,880 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | HEADERS
+2026-10-24 23:57:25,445 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | STEM_SEEDS
+2026-10-24 23:57:25,492 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        StemSeedsStep.java:86   | stem(2 max:3)
+2026-10-24 23:57:25,534 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | BEAMS
+2026-10-24 23:57:29,424 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | LEDGERS
+2026-10-24 23:57:29,590 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | HEADS
+2026-10-24 23:57:34,460 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        HeadSeedTally.java:235  | Scale information: HeadSeeds{NOTEHEAD_BLACK[L:-0.5,R:-0.7]}
+2026-10-24 23:57:34,460 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | STEMS
+2026-10-24 23:57:35,331 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | REDUCTION
+2026-10-24 23:57:35,485 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        ReductionStep.java:105  | Stems free length median value: 69 pixels, 3.5 interlines
+2026-10-24 23:57:35,490 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | CUE_BEAMS
+2026-10-24 23:57:35,490 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]         CueBeamsStep.java:81   | Step CUE_BEAMS is skipped because small heads switch is off
+2026-10-24 23:57:35,491 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | TEXTS
+2026-10-24 23:57:35,614 WARN [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]         TesseractOCR.java:335  | The collection of supported languages is empty
+2026-10-24 23:57:35,614 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]              OcrUtil.java:106  | Missing support for 'eng' language(s)
+2026-10-24 23:57:35,622 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | MEASURES
+2026-10-24 23:57:35,628 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                 Page.java:307  | 26 raw measures: [4 in system#1, 5 in system#2, 5 in system#3, 3 in system#4, 4 in system#5, 5 in system#6]
+2026-10-24 23:57:35,629 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | CHORDS
+2026-10-24 23:57:35,646 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | CURVES
+2026-10-24 23:57:36,453 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]         SlursBuilder.java:240  | Slurs: 32
+2026-10-24 23:57:36,475 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]      SegmentsBuilder.java:155  | Segments: 41
+2026-10-24 23:57:36,481 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | SYMBOLS
+2026-10-24 23:57:37,152 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | LINKS
+2026-10-24 23:57:37,173 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10408{(0.200) staff:4 QUINDICESIMA} at java.awt.Point[x=144,y=1352]
+2026-10-24 23:57:37,185 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10541{(0.200) staff:5 QUINDICESIMA} at java.awt.Point[x=144,y=1352]
+2026-10-24 23:57:37,185 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]             KeyInter.java:1198 | No effective key before AlterInter#10649{(0.140) staff:6 NATURAL pitch:-1.0}
+2026-10-24 23:57:37,198 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10677{(0.719) staff:8 OTTAVA BASSA} at java.awt.Point[x=153,y=2315]
+2026-10-24 23:57:37,198 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10679{(0.341) staff:8 QUINDICESIMA} at java.awt.Point[x=144,y=2315]
+2026-10-24 23:57:37,199 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10692{(0.152) staff:8 OTTAVA BASSA} at java.awt.Point[x=1210,y=2329]
+2026-10-24 23:57:37,199 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10702{(0.126) staff:8 OTTAVA ALTA} at java.awt.Point[x=2061,y=2035]
+2026-10-24 23:57:37,208 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10763{(0.719) staff:9 OTTAVA ALTA} at java.awt.Point[x=153,y=2315]
+2026-10-24 23:57:37,208 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10764{(0.341) staff:9 QUINDICESIMA} at java.awt.Point[x=144,y=2315]
+2026-10-24 23:57:37,208 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10767{(0.312) staff:10 VENTIDUESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 23:57:37,208 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10768{(0.154) staff:10 QUINDICESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 23:57:37,208 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10770{(0.619) staff:10 VENTIDUESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 23:57:37,209 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10774{(0.313) staff:10 VENTIDUESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 23:57:37,209 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10787{(0.227) staff:10 OTTAVA BASSA} at java.awt.Point[x=670,y=2821]
+2026-10-24 23:57:37,218 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10854{(0.312) staff:11 VENTIDUESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 23:57:37,219 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10855{(0.154) staff:11 QUINDICESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 23:57:37,219 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10856{(0.619) staff:11 VENTIDUESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 23:57:37,219 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10857{(0.313) staff:11 VENTIDUESIMA} at java.awt.Point[x=145,y=2791]
+2026-10-24 23:57:37,219 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10863{(0.143) staff:12 QUINDICESIMA ALTA} at java.awt.Point[x=329,y=2989]
+2026-10-24 23:57:37,220 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]             KeyInter.java:1198 | No effective key before AlterInter#10901{(0.797) staff:11 NATURAL pitch:-2.0}
+2026-10-24 23:57:37,230 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | RHYTHMS
+2026-10-24 23:57:37,284 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                Voice.java:257  | Measure{#20} Voice{#2 excess:1/8} too long
+2026-10-24 23:57:37,285 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]          StackRhythm.java:224  | S5 MeasureStack#20 no correct rhythm
+2026-10-24 23:57:37,290 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                Voice.java:257  | Measure{#23} Voice{#2 excess:1/8} too long
+2026-10-24 23:57:37,290 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]          StackRhythm.java:224  | S6 MeasureStack#23 no correct rhythm
+2026-10-24 23:57:37,293 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]       StepMonitoring.java:98   | PAGE
+2026-10-24 23:57:37,298 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                Voice.java:257  | Measure{#20} Voice{#2 excess:1/8} too long
+2026-10-24 23:57:37,298 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                Voice.java:257  | Measure{#23} Voice{#2 excess:1/8} too long
+2026-10-24 23:57:37,299 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                 Book.java:2584 | Book{f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075} storing
+2026-10-24 23:57:37,395 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                 Book.java:2565 | Stored /book.xml
+2026-10-24 23:57:37,553 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2026-10-24 23:57:38,408 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2026-10-24 23:57:38,409 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                 Book.java:2525 | Book stored as /home/alanlai/Documents/GitHub/soundwaves/testing/alignment/cache/sheets/.build-97wrxfmd/entry/converted/recognition/f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075.omr
+2026-10-24 23:57:38,410 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]            SheetStub.java:1655 | Sheet disposed
+2026-10-24 23:57:38,450 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                 Book.java:2050 | End of Stub#1
+2026-10-24 23:57:38,451 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                 Book.java:2057 | End of Book{f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075}
+2026-10-24 23:57:38,815 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]            SheetStub.java:1000 | Loaded /sheet#1/sheet#1.xml
+2026-10-24 23:57:39,205 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]      PartwiseBuilder.java:2707 | Exporting sheet(s): [#1]
+2026-10-24 23:57:39,372 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]        ScoreExporter.java:164  | Score f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075 exported to /home/alanlai/Documents/GitHub/soundwaves/testing/alignment/cache/sheets/.build-97wrxfmd/entry/converted/recognition/f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075.mxl
+2026-10-24 23:57:39,426 INFO [f264ff53831953cdea41ff3351efa667131859b44140170c183044f683c5d075]                Score.java:181  | Closing {Score 1}

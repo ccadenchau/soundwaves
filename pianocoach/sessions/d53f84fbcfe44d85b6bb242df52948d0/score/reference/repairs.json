@@ -1,0 +1,92 @@
+{
+  "issues": [
+    {
+      "code": "short_measure",
+      "part": "P1-Staff1",
+      "measure": 14,
+      "beat": null,
+      "message": "Measure is shorter than its time signature. Check missing notes, rests, and false tuplets."
+    },
+    {
+      "code": "overfull_measure",
+      "part": "P1-Staff1",
+      "measure": 20,
+      "beat": null,
+      "message": "Notes extend beyond the time signature. Check voices, tuplets, and barlines."
+    },
+    {
+      "code": "overfull_measure",
+      "part": "P1-Staff1",
+      "measure": 23,
+      "beat": null,
+      "message": "Notes extend beyond the time signature. Check voices, tuplets, and barlines."
+    },
+    {
+      "code": "short_measure",
+      "part": "P1-Staff2",
+      "measure": 14,
+      "beat": null,
+      "message": "Measure is shorter than its time signature. Check missing notes, rests, and false tuplets."
+    },
+    {
+      "code": "staff_duration_mismatch",
+      "part": null,
+      "measure": 20,
+      "beat": null,
+      "message": "Staves have different measure lengths. Check misplaced voices, rests, and tuplet groups."
+    },
+    {
+      "code": "staff_duration_mismatch",
+      "part": null,
+      "measure": 23,
+      "beat": null,
+      "message": "Staves have different measure lengths. Check misplaced voices, rests, and tuplet groups."
+    }
+  ],
+  "tuplets": [],
+  "applied_fixes": [],
+  "original_issues": [
+    {
+      "code": "short_measure",
+      "part": "P1-Staff1",
+      "measure": 14,
+      "beat": null,
+      "message": "Measure is shorter than its time signature. Check missing notes, rests, and false tuplets."
+    },
+    {
+      "code": "overfull_measure",
+      "part": "P1-Staff1",
+      "measure": 20,
+      "beat": null,
+      "message": "Notes extend beyond the time signature. Check voices, tuplets, and barlines."
+    },
+    {
+      "code": "overfull_measure",
+      "part": "P1-Staff1",
+      "measure": 23,
+      "beat": null,
+      "message": "Notes extend beyond the time signature. Check voices, tuplets, and barlines."
+    },
+    {
+      "code": "short_measure",
+      "part": "P1-Staff2",
+      "measure": 14,
+      "beat": null,
+      "message": "Measure is shorter than its time signature. Check missing notes, rests, and false tuplets."
+    },
+    {
+      "code": "staff_duration_mismatch",
+      "part": null,
+      "measure": 20,
+      "beat": null,
+      "message": "Staves have different measure lengths. Check misplaced voices, rests, and tuplet groups."
+    },
+    {
+      "code": "staff_duration_mismatch",
+      "part": null,
+      "measure": 23,
+      "beat": null,
+      "message": "Staves have different measure lengths. Check misplaced voices, rests, and tuplet groups."
+    }
+  ]
+}

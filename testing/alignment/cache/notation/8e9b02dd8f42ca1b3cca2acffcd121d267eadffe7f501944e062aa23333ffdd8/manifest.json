@@ -1,0 +1,7 @@
+{
+  "signature": "{\"performance\": \"6a6dd4c1ce9f94fbd2a8c36c7a5eaf71beb43c661ec7de82c444b3504d988bf5\", \"reference\": \"db9d8ae3e4a61563d9912b84ccfa2ee506c541c4f2b6abbe4fa8e8a4a4d8e7e8\", \"renderer\": \"a69b914d469a789f2beacf3f6cdb49e6ba43ed193b8480b244e2183d297aef4f\", \"report\": \"08c3980526769bc2ea9e6c2dcd47a7c4791d0ee8611cb9cab9a77de8e161127d\", \"verovio\": \"6.3.0\"}",
+  "source_sha256": "aa0120621b319d5d6f1c4f6997f22c8018e5d8894b259bb1c01a4e4c90b2a8ad",
+  "hashes": {
+    "notation.json": "afd892ad92c9121ccbee48cca53b15cafaf4315f40924baad04fad9bd515756b"
+  }
+}

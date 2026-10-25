@@ -1,0 +1,4634 @@
+{
+  "piece": {
+    "title": "Minuet in G major",
+    "catalog": "BWV Anh. 114",
+    "composer": "Christian Petzold",
+    "time_signature": [
+      3,
+      4
+    ],
+    "marked_bpm": 126.0,
+    "measures": 32
+  },
+  "take": {
+    "number": 1,
+    "source": "audio",
+    "bpm": 126.0,
+    "duration_seconds": 29.33
+  },
+  "notes": [
+    [
+      1,
+      1.0,
+      "D5",
+      1.0
+    ],
+    [
+      1,
+      2.0,
+      "G4",
+      0.5
+    ],
+    [
+      1,
+      2.5,
+      "A4",
+      0.5
+    ],
+    [
+      1,
+      3.0,
+      "B4",
+      0.5
+    ],
+    [
+      1,
+      3.5,
+      "C5",
+      0.5
+    ],
+    [
+      2,
+      1.0,
+      "D5",
+      1.0
+    ],
+    [
+      2,
+      2.0,
+      "G4",
+      1.0
+    ],
+    [
+      2,
+      3.0,
+      "G4",
+      1.0
+    ],
+    [
+      3,
+      1.0,
+      "E5",
+      1.0
+    ],
+    [
+      3,
+      2.0,
+      "C5",
+      0.5
+    ],
+    [
+      3,
+      2.5,
+      "D5",
+      0.5
+    ],
+    [
+      3,
+      3.0,
+      "E5",
+      0.5
+    ],
+    [
+      3,
+      3.5,
+      "F#5",
+      0.5
+    ],
+    [
+      4,
+      1.0,
+      "G5",
+      1.0
+    ],
+    [
+      4,
+      2.0,
+      "G4",
+      1.0
+    ],
+    [
+      4,
+      3.0,
+      "G4",
+      1.0
+    ],
+    [
+      5,
+      1.0,
+      "C5",
+      1.0
+    ],
+    [
+      5,
+      2.0,
+      "D5",
+      0.5
+    ],
+    [
+      5,
+      2.5,
+      "C5",
+      0.5
+    ],
+    [
+      5,
+      3.0,
+      "B4",
+      0.5
+    ],
+    [
+      5,
+      3.5,
+      "A4",
+      0.5
+    ],
+    [
+      6,
+      1.0,
+      "B4",
+      1.0
+    ],
+    [
+      6,
+      2.0,
+      "C5",
+      0.5
+    ],
+    [
+      6,
+      2.5,
+      "B4",
+      0.5
+    ],
+    [
+      6,
+      3.0,
+      "A4",
+      0.5
+    ],
+    [
+      6,
+      3.5,
+      "G4",
+      0.5
+    ],
+    [
+      7,
+      1.0,
+      "F#4",
+      1.0
+    ],
+    [
+      7,
+      2.0,
+      "G4",
+      0.5
+    ],
+    [
+      7,
+      2.5,
+      "A4",
+      0.5
+    ],
+    [
+      7,
+      3.0,
+      "B4",
+      0.5
+    ],
+    [
+      7,
+      3.5,
+      "G4",
+      0.5
+    ],
+    [
+      8,
+      1.0,
+      "B4",
+      1.0
+    ],
+    [
+      8,
+      2.0,
+      "A4",
+      2.0
+    ],
+    [
+      9,
+      1.0,
+      "D5",
+      1.0
+    ],
+    [
+      9,
+      2.0,
+      "G4",
+      0.5
+    ],
+    [
+      9,
+      2.5,
+      "A4",
+      0.5
+    ],
+    [
+      9,
+      3.0,
+      "B4",
+      0.5
+    ],
+    [
+      9,
+      3.5,
+      "C5",
+      0.5
+    ],
+    [
+      10,
+      1.0,
+      "D5",
+      1.0
+    ],
+    [
+      10,
+      2.0,
+      "G4",
+      1.0
+    ],
+    [
+      10,
+      3.0,
+      "G4",
+      1.0
+    ],
+    [
+      11,
+      1.0,
+      "E5",
+      1.0
+    ],
+    [
+      11,
+      2.0,
+      "C5",
+      0.5
+    ],
+    [
+      11,
+      2.5,
+      "D5",
+      0.5
+    ],
+    [
+      11,
+      3.0,
+      "E5",
+      0.5
+    ],
+    [
+      11,
+      3.5,
+      "F#5",
+      0.5
+    ],
+    [
+      12,
+      1.0,
+      "G5",
+      1.0
+    ],
+    [
+      12,
+      2.0,
+      "G4",
+      1.0
+    ],
+    [
+      12,
+      3.0,
+      "G4",
+      1.0
+    ],
+    [
+      13,
+      1.0,
+      "C5",
+      1.0
+    ],
+    [
+      13,
+      2.0,
+      "D5",
+      0.5
+    ],
+    [
+      13,
+      2.5,
+      "C5",
+      0.5
+    ],
+    [
+      13,
+      3.0,
+      "B4",
+      0.5
+    ],
+    [
+      13,
+      3.5,
+      "A4",
+      0.5
+    ],
+    [
+      14,
+      1.0,
+      "B4",
+      1.0
+    ],
+    [
+      14,
+      2.0,
+      "C5",
+      0.5
+    ],
+    [
+      14,
+      2.5,
+      "B4",
+      0.5
+    ],
+    [
+      14,
+      3.0,
+      "A4",
+      0.5
+    ],
+    [
+      14,
+      3.5,
+      "G4",
+      0.5
+    ],
+    [
+      15,
+      1.0,
+      "A4",
+      1.0
+    ],
+    [
+      15,
+      2.0,
+      "B4",
+      0.5
+    ],
+    [
+      15,
+      2.5,
+      "A4",
+      0.5
+    ],
+    [
+      15,
+      3.0,
+      "G4",
+      0.5
+    ],
+    [
+      15,
+      3.5,
+      "F#4",
+      0.5
+    ],
+    [
+      16,
+      1.0,
+      "G4",
+      3.0
+    ],
+    [
+      17,
+      1.0,
+      "B5",
+      1.0
+    ],
+    [
+      17,
+      2.0,
+      "G5",
+      0.5
+    ],
+    [
+      17,
+      2.5,
+      "A5",
+      0.5
+    ],
+    [
+      17,
+      3.0,
+      "B5",
+      0.5
+    ],
+    [
+      17,
+      3.5,
+      "G5",
+      0.5
+    ],
+    [
+      18,
+      1.0,
+      "A5",
+      1.0
+    ],
+    [
+      18,
+      2.0,
+      "D5",
+      0.5
+    ],
+    [
+      18,
+      2.5,
+      "E5",
+      0.5
+    ],
+    [
+      18,
+      3.0,
+      "F#5",
+      0.5
+    ],
+    [
+      18,
+      3.5,
+      "D5",
+      0.5
+    ],
+    [
+      19,
+      1.0,
+      "G5",
+      1.0
+    ],
+    [
+      19,
+      2.0,
+      "E5",
+      0.5
+    ],
+    [
+      19,
+      2.5,
+      "F#5",
+      0.5
+    ],
+    [
+      19,
+      3.0,
+      "G5",
+      0.5
+    ],
+    [
+      19,
+      3.5,
+      "D5",
+      0.5
+    ],
+    [
+      20,
+      1.0,
+      "C#5",
+      1.0
+    ],
+    [
+      20,
+      2.0,
+      "B4",
+      0.5
+    ],
+    [
+      20,
+      2.5,
+      "C#5",
+      0.5
+    ],
+    [
+      20,
+      3.0,
+      "A4",
+      1.0
+    ],
+    [
+      21,
+      1.0,
+      "A4",
+      0.5
+    ],
+    [
+      21,
+      1.5,
+      "B4",
+      0.5
+    ],
+    [
+      21,
+      2.0,
+      "C#5",
+      0.5
+    ],
+    [
+      21,
+      2.5,
+      "D5",
+      0.5
+    ],
+    [
+      21,
+      3.0,
+      "E5",
+      0.5
+    ],
+    [
+      21,
+      3.5,
+      "F#5",
+      0.5
+    ],
+    [
+      22,
+      1.0,
+      "G5",
+      1.0
+    ],
+    [
+      22,
+      2.0,
+      "F#5",
+      1.0
+    ],
+    [
+      22,
+      3.0,
+      "E5",
+      1.0
+    ],
+    [
+      23,
+      1.0,
+      "F#5",
+      1.0
+    ],
+    [
+      23,
+      2.0,
+      "A4",
+      1.0
+    ],
+    [
+      23,
+      3.0,
+      "C#5",
+      1.0
+    ],
+    [
+      24,
+      1.0,
+      "D5",
+      3.0
+    ],
+    [
+      25,
+      1.0,
+      "D5",
+      1.0
+    ],
+    [
+      25,
+      2.0,
+      "G4",
+      0.5
+    ],
+    [
+      25,
+      2.5,
+      "F#4",
+      0.5
+    ],
+    [
+      25,
+      3.0,
+      "G4",
+      1.0
+    ],
+    [
+      26,
+      1.0,
+      "E5",
+      1.0
+    ],
+    [
+      26,
+      2.0,
+      "G4",
+      0.5
+    ],
+    [
+      26,
+      2.5,
+      "F#4",
+      0.5
+    ],
+    [
+      26,
+      3.0,
+      "G4",
+      1.0
+    ],
+    [
+      27,
+      1.0,
+      "D5",
+      1.0
+    ],
+    [
+      27,
+      2.0,
+      "C5",
+      1.0
+    ],
+    [
+      27,
+      3.0,
+      "B4",
+      1.0
+    ],
+    [
+      28,
+      1.0,
+      "A4",
+      0.5
+    ],
+    [
+      28,
+      1.5,
+      "G4",
+      0.5
+    ],
+    [
+      28,
+      2.0,
+      "F#4",
+      0.5
+    ],
+    [
+      28,
+      2.5,
+      "G4",
+      0.5
+    ],
+    [
+      28,
+      3.0,
+      "A4",
+      1.0
+    ],
+    [
+      29,
+      1.0,
+      "D4",
+      0.5
+    ],
+    [
+      29,
+      1.5,
+      "E4",
+      0.5
+    ],
+    [
+      29,
+      2.0,
+      "F#4",
+      0.5
+    ],
+    [
+      29,
+      2.5,
+      "G4",
+      0.5
+    ],
+    [
+      29,
+      3.0,
+      "A4",
+      0.5
+    ],
+    [
+      29,
+      3.5,
+      "B4",
+      0.5
+    ],
+    [
+      30,
+      1.0,
+      "C5",
+      1.0
+    ],
+    [
+      30,
+      2.0,
+      "B4",
+      1.0
+    ],
+    [
+      30,
+      3.0,
+      "A4",
+      1.0
+    ],
+    [
+      31,
+      1.0,
+      "B4",
+      0.5
+    ],
+    [
+      31,
+      1.5,
+      "D5",
+      0.5
+    ],
+    [
+      31,
+      2.0,
+      "G4",
+      1.0
+    ],
+    [
+      31,
+      3.0,
+      "F#4",
+      1.0
+    ],
+    [
+      32,
+      1.0,
+      "B3",
+      3.0
+    ],
+    [
+      32,
+      1.0,
+      "D4",
+      3.0
+    ],
+    [
+      32,
+      1.0,
+      "G4",
+      3.0
+    ]
+  ],
+  "errors": [
+    {
+      "id": "err-1",
+      "category": "missing",
+      "measure": 1,
+      "beat": 1.0,
+      "note_id": "n1-1",
+      "expected": "D5",
+      "actual": null,
+      "audio_time": 13.449,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The D5 on beat 1 of bar 1 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 1 on its own and make that D5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-2",
+      "category": "missing",
+      "measure": 2,
+      "beat": 1.0,
+      "note_id": "n2-1",
+      "expected": "D5",
+      "actual": null,
+      "audio_time": 2.133,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The D5 on beat 1 of bar 2 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 2 on its own and make that D5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-3",
+      "category": "missing",
+      "measure": 2,
+      "beat": 2.0,
+      "note_id": "n2-2",
+      "expected": "G4",
+      "actual": null,
+      "audio_time": 13.937,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G4 on beat 2 of bar 2 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 2 on its own and make that G4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-4",
+      "category": "extra",
+      "measure": 2,
+      "beat": 2.557,
+      "note_id": null,
+      "expected": null,
+      "actual": "E4",
+      "audio_time": 2.487,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a E4 in bar 2 that isn't in the score.",
+      "tip": "Slow bar 2 right down and watch which finger lands on the E4."
+    },
+    {
+      "id": "err-5",
+      "category": "missing",
+      "measure": 2,
+      "beat": 3.0,
+      "note_id": "n2-3",
+      "expected": "G4",
+      "actual": null,
+      "audio_time": 13.971,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G4 on beat 3 of bar 2 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 2 on its own and make that G4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-6",
+      "category": "missing",
+      "measure": 3,
+      "beat": 2.0,
+      "note_id": "n3-2",
+      "expected": "C5",
+      "actual": null,
+      "audio_time": 2.957,
+      "confidence": 0.75,
+      "tier": "likely",
+      "occurrences": 2,
+      "audio_times": [
+        2.957,
+        14.121
+      ],
+      "explanation": "The C5 on beat 2 of bar 3 didn't come through. It may have been too soft, or skipped. It happened both times through the repeat.",
+      "tip": "Play bar 3 on its own and make that C5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-7",
+      "category": "wrong_pitch",
+      "measure": 3,
+      "beat": 2.5,
+      "note_id": "n3-3",
+      "expected": "D5",
+      "actual": "F5",
+      "audio_time": 14.112,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 3, beat 2.5: the score has D5 and you played F5.",
+      "tip": "Play bar 3 slowly and stop on the D5. Say its name before you press it."
+    },
+    {
+      "id": "err-8",
+      "category": "missing",
+      "measure": 3,
+      "beat": 2.5,
+      "note_id": "n3-3",
+      "expected": "D5",
+      "actual": null,
+      "audio_time": 3.03,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The D5 on beat 2.5 of bar 3 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 3 on its own and make that D5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-9",
+      "category": "wrong_pitch",
+      "measure": 3,
+      "beat": 3.0,
+      "note_id": "n3-4",
+      "expected": "E5",
+      "actual": "E4",
+      "audio_time": 2.873,
+      "confidence": 0.81,
+      "tier": "confident",
+      "octave": true,
+      "explanation": "Bar 3, beat 3: right note, wrong octave. The score has E5 and you played E4, an octave lower.",
+      "tip": "Find the E5 on the keyboard before you start bar 3, then play the bar once with just that hand."
+    },
+    {
+      "id": "err-10",
+      "category": "wrong_pitch",
+      "measure": 3,
+      "beat": 3.5,
+      "note_id": "n3-5",
+      "expected": "F#5",
+      "actual": "G4",
+      "audio_time": 3.056,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 3, beat 3.5: the score has F#5 and you played G4.",
+      "tip": "Play bar 3 slowly and stop on the F#5. Say its name before you press it."
+    },
+    {
+      "id": "err-11",
+      "category": "missing",
+      "measure": 3,
+      "beat": 3.5,
+      "note_id": "n3-5",
+      "expected": "F#5",
+      "actual": null,
+      "audio_time": 14.246,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The F#5 on beat 3.5 of bar 3 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 3 on its own and make that F#5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-12",
+      "category": "missing",
+      "measure": 4,
+      "beat": 1.0,
+      "note_id": "n4-1",
+      "expected": "G5",
+      "actual": null,
+      "audio_time": 14.254,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G5 on beat 1 of bar 4 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 4 on its own and make that G5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-13",
+      "category": "missing",
+      "measure": 4,
+      "beat": 2.0,
+      "note_id": "n4-2",
+      "expected": "G4",
+      "actual": null,
+      "audio_time": 14.269,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G4 on beat 2 of bar 4 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 4 on its own and make that G4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-14",
+      "category": "extra",
+      "measure": 4,
+      "beat": 2.573,
+      "note_id": null,
+      "expected": null,
+      "actual": "B4",
+      "audio_time": 3.677,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a B4 in bar 4 that isn't in the score.",
+      "tip": "Slow bar 4 right down and watch which finger lands on the B4."
+    },
+    {
+      "id": "err-15",
+      "category": "missing",
+      "measure": 4,
+      "beat": 3.0,
+      "note_id": "n4-3",
+      "expected": "G4",
+      "actual": null,
+      "audio_time": 14.285,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G4 on beat 3 of bar 4 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 4 on its own and make that G4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-16",
+      "category": "extra",
+      "measure": 4,
+      "beat": 3.57,
+      "note_id": null,
+      "expected": null,
+      "actual": "F4",
+      "audio_time": 4.105,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a F4 in bar 4 that isn't in the score.",
+      "tip": "Slow bar 4 right down and watch which finger lands on the F4."
+    },
+    {
+      "id": "err-17",
+      "category": "missing",
+      "measure": 5,
+      "beat": 1.0,
+      "note_id": "n5-1",
+      "expected": "C5",
+      "actual": null,
+      "audio_time": 14.301,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The C5 on beat 1 of bar 5 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 5 on its own and make that C5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-18",
+      "category": "missing",
+      "measure": 5,
+      "beat": 2.5,
+      "note_id": "n5-3",
+      "expected": "C5",
+      "actual": null,
+      "audio_time": 14.339,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The C5 on beat 2.5 of bar 5 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 5 on its own and make that C5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-19",
+      "category": "extra",
+      "measure": 5,
+      "beat": 2.704,
+      "note_id": null,
+      "expected": null,
+      "actual": "G4",
+      "audio_time": 4.654,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a G4 in bar 5 that isn't in the score.",
+      "tip": "Slow bar 5 right down and watch which finger lands on the G4."
+    },
+    {
+      "id": "err-20",
+      "category": "wrong_pitch",
+      "measure": 5,
+      "beat": 3.0,
+      "note_id": "n5-4",
+      "expected": "B4",
+      "actual": "E4",
+      "audio_time": 4.847,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 5, beat 3: the score has B4 and you played E4.",
+      "tip": "Play bar 5 slowly and stop on the B4. Say its name before you press it."
+    },
+    {
+      "id": "err-21",
+      "category": "missing",
+      "measure": 5,
+      "beat": 3.0,
+      "note_id": "n5-4",
+      "expected": "B4",
+      "actual": null,
+      "audio_time": 14.363,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The B4 on beat 3 of bar 5 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 5 on its own and make that B4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-22",
+      "category": "extra",
+      "measure": 5,
+      "beat": 3.267,
+      "note_id": null,
+      "expected": null,
+      "actual": "A5",
+      "audio_time": 5.217,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a A5 in bar 5 that isn't in the score.",
+      "tip": "Slow bar 5 right down and watch which finger lands on the A5."
+    },
+    {
+      "id": "err-23",
+      "category": "wrong_pitch",
+      "measure": 5,
+      "beat": 3.5,
+      "note_id": "n5-5",
+      "expected": "A4",
+      "actual": "G4",
+      "audio_time": 5.009,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "Bar 5, beat 3.5: the score has A4 and you played G4.",
+      "tip": "Play bar 5 slowly and stop on the A4. Say its name before you press it."
+    },
+    {
+      "id": "err-24",
+      "category": "missing",
+      "measure": 5,
+      "beat": 3.5,
+      "note_id": "n5-5",
+      "expected": "A4",
+      "actual": null,
+      "audio_time": 14.386,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The A4 on beat 3.5 of bar 5 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 5 on its own and make that A4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-25",
+      "category": "missing",
+      "measure": 6,
+      "beat": 1.0,
+      "note_id": "n6-1",
+      "expected": "B4",
+      "actual": null,
+      "audio_time": 5.518,
+      "confidence": 0.75,
+      "tier": "likely",
+      "occurrences": 2,
+      "audio_times": [
+        5.518,
+        14.409
+      ],
+      "explanation": "The B4 on beat 1 of bar 6 didn't come through. It may have been too soft, or skipped. It happened both times through the repeat.",
+      "tip": "Play bar 6 on its own and make that B4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-26",
+      "category": "wrong_pitch",
+      "measure": 6,
+      "beat": 2.0,
+      "note_id": "n6-2",
+      "expected": "C5",
+      "actual": "A4",
+      "audio_time": 5.45,
+      "confidence": 0.8,
+      "tier": "confident",
+      "explanation": "Bar 6, beat 2: the score has C5 and you played A4.",
+      "tip": "Play bar 6 slowly and stop on the C5. Say its name before you press it."
+    },
+    {
+      "id": "err-27",
+      "category": "wrong_pitch",
+      "measure": 6,
+      "beat": 2.5,
+      "note_id": "n6-3",
+      "expected": "B4",
+      "actual": "F4",
+      "audio_time": 5.614,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 6, beat 2.5: the score has B4 and you played F4.",
+      "tip": "Play bar 6 slowly and stop on the B4. Say its name before you press it."
+    },
+    {
+      "id": "err-28",
+      "category": "missing",
+      "measure": 6,
+      "beat": 3.0,
+      "note_id": "n6-4",
+      "expected": "A4",
+      "actual": null,
+      "audio_time": 14.592,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The A4 on beat 3 of bar 6 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 6 on its own and make that A4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-29",
+      "category": "extra",
+      "measure": 6,
+      "beat": 3.26,
+      "note_id": null,
+      "expected": null,
+      "actual": "G5",
+      "audio_time": 5.976,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a G5 in bar 6 that isn't in the score.",
+      "tip": "Slow bar 6 right down and watch which finger lands on the G5."
+    },
+    {
+      "id": "err-30",
+      "category": "missing",
+      "measure": 6,
+      "beat": 3.5,
+      "note_id": "n6-5",
+      "expected": "G4",
+      "actual": null,
+      "audio_time": 14.611,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G4 on beat 3.5 of bar 6 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 6 on its own and make that G4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-31",
+      "category": "wrong_pitch",
+      "measure": 7,
+      "beat": 1.0,
+      "note_id": "n7-1",
+      "expected": "F#4",
+      "actual": "E4",
+      "audio_time": 6.355,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 7, beat 1: the score has F#4 and you played E4.",
+      "tip": "Play bar 7 slowly and stop on the F#4. Say its name before you press it."
+    },
+    {
+      "id": "err-32",
+      "category": "missing",
+      "measure": 7,
+      "beat": 1.0,
+      "note_id": "n7-1",
+      "expected": "F#4",
+      "actual": null,
+      "audio_time": 14.631,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The F#4 on beat 1 of bar 7 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 7 on its own and make that F#4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-33",
+      "category": "extra",
+      "measure": 7,
+      "beat": 1.364,
+      "note_id": null,
+      "expected": null,
+      "actual": "C6",
+      "audio_time": 6.346,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a C6 in bar 7 that isn't in the score.",
+      "tip": "Slow bar 7 right down and watch which finger lands on the C6."
+    },
+    {
+      "id": "err-34",
+      "category": "missing",
+      "measure": 7,
+      "beat": 2.0,
+      "note_id": "n7-2",
+      "expected": "G4",
+      "actual": null,
+      "audio_time": 14.67,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G4 on beat 2 of bar 7 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 7 on its own and make that G4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-35",
+      "category": "missing",
+      "measure": 7,
+      "beat": 2.5,
+      "note_id": "n7-3",
+      "expected": "A4",
+      "actual": null,
+      "audio_time": 6.616,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The A4 on beat 2.5 of bar 7 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 7 on its own and make that A4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-36",
+      "category": "wrong_pitch",
+      "measure": 7,
+      "beat": 3.0,
+      "note_id": "n7-4",
+      "expected": "B4",
+      "actual": "G5",
+      "audio_time": 6.715,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 7, beat 3: the score has B4 and you played G5.",
+      "tip": "Play bar 7 slowly and stop on the B4. Say its name before you press it."
+    },
+    {
+      "id": "err-37",
+      "category": "missing",
+      "measure": 7,
+      "beat": 3.0,
+      "note_id": "n7-4",
+      "expected": "B4",
+      "actual": null,
+      "audio_time": 14.738,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The B4 on beat 3 of bar 7 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 7 on its own and make that B4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-38",
+      "category": "wrong_pitch",
+      "measure": 8,
+      "beat": 1.0,
+      "note_id": "n8-1",
+      "expected": "B4",
+      "actual": "F5",
+      "audio_time": 7.101,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 8, beat 1: the score has B4 and you played F5.",
+      "tip": "Play bar 8 slowly and stop on the B4. Say its name before you press it."
+    },
+    {
+      "id": "err-39",
+      "category": "missing",
+      "measure": 8,
+      "beat": 1.0,
+      "note_id": "n8-1",
+      "expected": "B4",
+      "actual": null,
+      "audio_time": 14.865,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The B4 on beat 1 of bar 8 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 8 on its own and make that B4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-40",
+      "category": "extra",
+      "measure": 8,
+      "beat": 1.0,
+      "note_id": null,
+      "expected": null,
+      "actual": "G5",
+      "audio_time": 7.054,
+      "maybe_noise": true,
+      "confidence": 0.4,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A G5 was heard in bar 8, but it doesn't fit the music around it. It may have been background sound rather than a key.",
+      "tip": "If you didn't play a G5 there, mark this as fine. A quieter room makes these go away."
+    },
+    {
+      "id": "err-41",
+      "category": "extra",
+      "measure": 8,
+      "beat": 1.557,
+      "note_id": null,
+      "expected": null,
+      "actual": "G5",
+      "audio_time": 7.19,
+      "confidence": 0.45,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A G5 sounded in bar 8 right next to a correct note. That could be a brushed key, or an ornament, or the recording.",
+      "tip": "Play bar 8 slowly once and listen for the G5. If it isn't there, mark this as fine."
+    },
+    {
+      "id": "err-42",
+      "category": "extra",
+      "measure": 8,
+      "beat": 1.721,
+      "note_id": null,
+      "expected": null,
+      "actual": "G4",
+      "audio_time": 7.23,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a G4 in bar 8 that isn't in the score.",
+      "tip": "Slow bar 8 right down and watch which finger lands on the G4."
+    },
+    {
+      "id": "err-43",
+      "category": "extra",
+      "measure": 8,
+      "beat": 1.815,
+      "note_id": null,
+      "expected": null,
+      "actual": "F5",
+      "audio_time": 7.253,
+      "confidence": 0.45,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A F5 sounded in bar 8 right next to a correct note. That could be a brushed key, or an ornament, or the recording.",
+      "tip": "Play bar 8 slowly once and listen for the F5. If it isn't there, mark this as fine."
+    },
+    {
+      "id": "err-44",
+      "category": "wrong_pitch",
+      "measure": 8,
+      "beat": 2.0,
+      "note_id": "n8-2",
+      "expected": "A4",
+      "actual": "E5",
+      "audio_time": 7.333,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 8, beat 2: the score has A4 and you played E5.",
+      "tip": "Play bar 8 slowly and stop on the A4. Say its name before you press it."
+    },
+    {
+      "id": "err-45",
+      "category": "wrong_pitch",
+      "measure": 8,
+      "beat": 2.0,
+      "note_id": "n8-2",
+      "expected": "A4",
+      "actual": "F4",
+      "audio_time": 14.894,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 8, beat 2: the score has A4 and you played F4.",
+      "tip": "Play bar 8 slowly and stop on the A4. Say its name before you press it."
+    },
+    {
+      "id": "err-46",
+      "category": "extra",
+      "measure": 8,
+      "beat": 2.5,
+      "note_id": null,
+      "expected": null,
+      "actual": "F5",
+      "audio_time": 7.421,
+      "confidence": 0.45,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A F5 sounded in bar 8 right next to a correct note. That could be a brushed key, or an ornament, or the recording.",
+      "tip": "Play bar 8 slowly once and listen for the F5. If it isn't there, mark this as fine."
+    },
+    {
+      "id": "err-47",
+      "category": "extra",
+      "measure": 8,
+      "beat": 2.5,
+      "note_id": null,
+      "expected": null,
+      "actual": "E4",
+      "audio_time": 15.098,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a E4 in bar 8 that isn't in the score.",
+      "tip": "Slow bar 8 right down and watch which finger lands on the E4."
+    },
+    {
+      "id": "err-48",
+      "category": "extra",
+      "measure": 8,
+      "beat": 2.827,
+      "note_id": null,
+      "expected": null,
+      "actual": "E5",
+      "audio_time": 7.502,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a E5 in bar 8 that isn't in the score.",
+      "tip": "Slow bar 8 right down and watch which finger lands on the E5."
+    },
+    {
+      "id": "err-49",
+      "category": "missing",
+      "measure": 9,
+      "beat": 1.0,
+      "note_id": "n9-1",
+      "expected": "D5",
+      "actual": null,
+      "audio_time": 7.793,
+      "confidence": 0.75,
+      "tier": "likely",
+      "occurrences": 2,
+      "audio_times": [
+        7.793,
+        15.306
+      ],
+      "explanation": "The D5 on beat 1 of bar 9 didn't come through. It may have been too soft, or skipped. It happened both times through the repeat.",
+      "tip": "Play bar 9 on its own and make that D5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-50",
+      "category": "extra",
+      "measure": 9,
+      "beat": 2.26,
+      "note_id": null,
+      "expected": null,
+      "actual": "A4",
+      "audio_time": 8.645,
+      "maybe_noise": true,
+      "confidence": 0.4,
+      "tier": "possible",
+      "explanation": "A A4 was heard in bar 9, but it doesn't fit the music around it. It may have been background sound rather than a key.",
+      "tip": "If you didn't play a A4 there, mark this as fine. A quieter room makes these go away."
+    },
+    {
+      "id": "err-51",
+      "category": "extra",
+      "measure": 9,
+      "beat": 2.39,
+      "note_id": null,
+      "expected": null,
+      "actual": "A4",
+      "audio_time": 8.946,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a A4 in bar 9 that isn't in the score.",
+      "tip": "Slow bar 9 right down and watch which finger lands on the A4."
+    },
+    {
+      "id": "err-52",
+      "category": "wrong_pitch",
+      "measure": 10,
+      "beat": 2.0,
+      "note_id": "n10-2",
+      "expected": "G4",
+      "actual": "F5",
+      "audio_time": 9.864,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 10, beat 2: the score has G4 and you played F5.",
+      "tip": "Play bar 10 slowly and stop on the G4. Say its name before you press it."
+    },
+    {
+      "id": "err-53",
+      "category": "missing",
+      "measure": 10,
+      "beat": 2.0,
+      "note_id": "n10-2",
+      "expected": "G4",
+      "actual": null,
+      "audio_time": 15.901,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G4 on beat 2 of bar 10 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 10 on its own and make that G4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-54",
+      "category": "missing",
+      "measure": 10,
+      "beat": 3.0,
+      "note_id": "n10-3",
+      "expected": "G4",
+      "actual": null,
+      "audio_time": 9.974,
+      "confidence": 0.75,
+      "tier": "likely",
+      "occurrences": 2,
+      "audio_times": [
+        9.974,
+        15.94
+      ],
+      "explanation": "The G4 on beat 3 of bar 10 didn't come through. It may have been too soft, or skipped. It happened both times through the repeat.",
+      "tip": "Play bar 10 on its own and make that G4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-55",
+      "category": "wrong_pitch",
+      "measure": 11,
+      "beat": 1.0,
+      "note_id": "n11-1",
+      "expected": "E5",
+      "actual": "A5",
+      "audio_time": 10.128,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 11, beat 1: the score has E5 and you played A5.",
+      "tip": "Play bar 11 slowly and stop on the E5. Say its name before you press it."
+    },
+    {
+      "id": "err-56",
+      "category": "wrong_pitch",
+      "measure": 11,
+      "beat": 2.0,
+      "note_id": "n11-2",
+      "expected": "C5",
+      "actual": "G5",
+      "audio_time": 10.269,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 11, beat 2: the score has C5 and you played G5.",
+      "tip": "Play bar 11 slowly and stop on the C5. Say its name before you press it."
+    },
+    {
+      "id": "err-57",
+      "category": "wrong_pitch",
+      "measure": 11,
+      "beat": 2.0,
+      "note_id": "n11-2",
+      "expected": "C5",
+      "actual": "C3",
+      "audio_time": 16.289,
+      "confidence": 0.81,
+      "tier": "confident",
+      "octave": true,
+      "explanation": "Bar 11, beat 2: right note, wrong octave. The score has C5 and you played C3, an octave lower.",
+      "tip": "Find the C5 on the keyboard before you start bar 11, then play the bar once with just that hand."
+    },
+    {
+      "id": "err-58",
+      "category": "wrong_pitch",
+      "measure": 11,
+      "beat": 2.5,
+      "note_id": "n11-3",
+      "expected": "D5",
+      "actual": "F5",
+      "audio_time": 10.42,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 11, beat 2.5: the score has D5 and you played F5.",
+      "tip": "Play bar 11 slowly and stop on the D5. Say its name before you press it."
+    },
+    {
+      "id": "err-59",
+      "category": "wrong_pitch",
+      "measure": 11,
+      "beat": 3.0,
+      "note_id": "n11-4",
+      "expected": "E5",
+      "actual": "C5",
+      "audio_time": 16.211,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 11, beat 3: the score has E5 and you played C5.",
+      "tip": "Play bar 11 slowly and stop on the E5. Say its name before you press it."
+    },
+    {
+      "id": "err-60",
+      "category": "extra",
+      "measure": 11,
+      "beat": 3.172,
+      "note_id": null,
+      "expected": null,
+      "actual": "D5",
+      "audio_time": 10.625,
+      "confidence": 0.45,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A D5 sounded in bar 11 right next to a correct note. That could be a brushed key, or an ornament, or the recording.",
+      "tip": "Play bar 11 slowly once and listen for the D5. If it isn't there, mark this as fine."
+    },
+    {
+      "id": "err-61",
+      "category": "extra",
+      "measure": 11,
+      "beat": 3.473,
+      "note_id": null,
+      "expected": null,
+      "actual": "B4",
+      "audio_time": 10.763,
+      "confidence": 0.45,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A B4 sounded in bar 11 right next to a correct note. That could be a brushed key, or an ornament, or the recording.",
+      "tip": "Play bar 11 slowly once and listen for the B4. If it isn't there, mark this as fine."
+    },
+    {
+      "id": "err-62",
+      "category": "wrong_pitch",
+      "measure": 11,
+      "beat": 3.5,
+      "note_id": "n11-5",
+      "expected": "F#5",
+      "actual": "C5",
+      "audio_time": 10.742,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 11, beat 3.5: the score has F#5 and you played C5.",
+      "tip": "Play bar 11 slowly and stop on the F#5. Say its name before you press it."
+    },
+    {
+      "id": "err-63",
+      "category": "wrong_pitch",
+      "measure": 11,
+      "beat": 3.5,
+      "note_id": "n11-5",
+      "expected": "F#5",
+      "actual": "B4",
+      "audio_time": 16.332,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 11, beat 3.5: the score has F#5 and you played B4.",
+      "tip": "Play bar 11 slowly and stop on the F#5. Say its name before you press it."
+    },
+    {
+      "id": "err-64",
+      "category": "wrong_pitch",
+      "measure": 12,
+      "beat": 1.0,
+      "note_id": "n12-1",
+      "expected": "G5",
+      "actual": "A4",
+      "audio_time": 11.128,
+      "confidence": 0.96,
+      "tier": "confident",
+      "occurrences": 2,
+      "audio_times": [
+        11.128,
+        16.466
+      ],
+      "explanation": "Bar 12, beat 1: the score has G5 and you played A4. It happened both times through the repeat.",
+      "tip": "Play bar 12 slowly and stop on the G5. Say its name before you press it."
+    },
+    {
+      "id": "err-65",
+      "category": "extra",
+      "measure": 12,
+      "beat": 1.288,
+      "note_id": null,
+      "expected": null,
+      "actual": "E4",
+      "audio_time": 11.138,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a E4 in bar 12 that isn't in the score.",
+      "tip": "Slow bar 12 right down and watch which finger lands on the E4."
+    },
+    {
+      "id": "err-66",
+      "category": "wrong_pitch",
+      "measure": 12,
+      "beat": 3.0,
+      "note_id": "n12-3",
+      "expected": "G4",
+      "actual": "A4",
+      "audio_time": 11.69,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 12, beat 3: the score has G4 and you played A4.",
+      "tip": "Play bar 12 slowly and stop on the G4. Say its name before you press it."
+    },
+    {
+      "id": "err-67",
+      "category": "missing",
+      "measure": 12,
+      "beat": 3.0,
+      "note_id": "n12-3",
+      "expected": "G4",
+      "actual": null,
+      "audio_time": 16.77,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G4 on beat 3 of bar 12 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 12 on its own and make that G4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-68",
+      "category": "wrong_pitch",
+      "measure": 13,
+      "beat": 1.0,
+      "note_id": "n13-1",
+      "expected": "C5",
+      "actual": "D4",
+      "audio_time": 17.214,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 13, beat 1: the score has C5 and you played D4.",
+      "tip": "Play bar 13 slowly and stop on the C5. Say its name before you press it."
+    },
+    {
+      "id": "err-69",
+      "category": "extra",
+      "measure": 13,
+      "beat": 1.155,
+      "note_id": null,
+      "expected": null,
+      "actual": "D5",
+      "audio_time": 11.93,
+      "maybe_noise": true,
+      "confidence": 0.4,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A D5 was heard in bar 13, but it doesn't fit the music around it. It may have been background sound rather than a key.",
+      "tip": "If you didn't play a D5 there, mark this as fine. A quieter room makes these go away."
+    },
+    {
+      "id": "err-70",
+      "category": "extra",
+      "measure": 13,
+      "beat": 1.564,
+      "note_id": null,
+      "expected": null,
+      "actual": "E4",
+      "audio_time": 17.472,
+      "confidence": 0.45,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A E4 sounded in bar 13 right next to a correct note. That could be a brushed key, or an ornament, or the recording.",
+      "tip": "Play bar 13 slowly once and listen for the E4. If it isn't there, mark this as fine."
+    },
+    {
+      "id": "err-71",
+      "category": "wrong_pitch",
+      "measure": 13,
+      "beat": 2.0,
+      "note_id": "n13-2",
+      "expected": "D5",
+      "actual": "F4",
+      "audio_time": 17.564,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 13, beat 2: the score has D5 and you played F4.",
+      "tip": "Play bar 13 slowly and stop on the D5. Say its name before you press it."
+    },
+    {
+      "id": "err-72",
+      "category": "extra",
+      "measure": 13,
+      "beat": 2.355,
+      "note_id": null,
+      "expected": null,
+      "actual": "E5",
+      "audio_time": 12.091,
+      "confidence": 0.45,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A E5 sounded in bar 13 right next to a correct note. That could be a brushed key, or an ornament, or the recording.",
+      "tip": "Play bar 13 slowly once and listen for the E5. If it isn't there, mark this as fine."
+    },
+    {
+      "id": "err-73",
+      "category": "wrong_pitch",
+      "measure": 13,
+      "beat": 2.5,
+      "note_id": "n13-3",
+      "expected": "C5",
+      "actual": "G5",
+      "audio_time": 12.287,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 13, beat 2.5: the score has C5 and you played G5.",
+      "tip": "Play bar 13 slowly and stop on the C5. Say its name before you press it."
+    },
+    {
+      "id": "err-74",
+      "category": "wrong_pitch",
+      "measure": 13,
+      "beat": 2.5,
+      "note_id": "n13-3",
+      "expected": "C5",
+      "actual": "F4",
+      "audio_time": 17.702,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 13, beat 2.5: the score has C5 and you played F4.",
+      "tip": "Play bar 13 slowly and stop on the C5. Say its name before you press it."
+    },
+    {
+      "id": "err-75",
+      "category": "extra",
+      "measure": 13,
+      "beat": 2.757,
+      "note_id": null,
+      "expected": null,
+      "actual": "F5",
+      "audio_time": 12.185,
+      "confidence": 0.45,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A F5 sounded in bar 13 right next to a correct note. That could be a brushed key, or an ornament, or the recording.",
+      "tip": "Play bar 13 slowly once and listen for the F5. If it isn't there, mark this as fine."
+    },
+    {
+      "id": "err-76",
+      "category": "wrong_pitch",
+      "measure": 13,
+      "beat": 3.0,
+      "note_id": "n13-4",
+      "expected": "B4",
+      "actual": "F5",
+      "audio_time": 12.419,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 13, beat 3: the score has B4 and you played F5.",
+      "tip": "Play bar 13 slowly and stop on the B4. Say its name before you press it."
+    },
+    {
+      "id": "err-77",
+      "category": "wrong_pitch",
+      "measure": 13,
+      "beat": 3.0,
+      "note_id": "n13-4",
+      "expected": "B4",
+      "actual": "G4",
+      "audio_time": 17.967,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 13, beat 3: the score has B4 and you played G4.",
+      "tip": "Play bar 13 slowly and stop on the B4. Say its name before you press it."
+    },
+    {
+      "id": "err-78",
+      "category": "wrong_pitch",
+      "measure": 13,
+      "beat": 3.5,
+      "note_id": "n13-5",
+      "expected": "A4",
+      "actual": "E5",
+      "audio_time": 12.5,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 13, beat 3.5: the score has A4 and you played E5.",
+      "tip": "Play bar 13 slowly and stop on the A4. Say its name before you press it."
+    },
+    {
+      "id": "err-79",
+      "category": "wrong_pitch",
+      "measure": 14,
+      "beat": 1.0,
+      "note_id": "n14-1",
+      "expected": "B4",
+      "actual": "D5",
+      "audio_time": 12.605,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 14, beat 1: the score has B4 and you played D5.",
+      "tip": "Play bar 14 slowly and stop on the B4. Say its name before you press it."
+    },
+    {
+      "id": "err-80",
+      "category": "missing",
+      "measure": 14,
+      "beat": 1.0,
+      "note_id": "n14-1",
+      "expected": "B4",
+      "actual": null,
+      "audio_time": 18.408,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The B4 on beat 1 of bar 14 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 14 on its own and make that B4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-81",
+      "category": "missing",
+      "measure": 14,
+      "beat": 2.0,
+      "note_id": "n14-2",
+      "expected": "C5",
+      "actual": null,
+      "audio_time": 18.509,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The C5 on beat 2 of bar 14 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 14 on its own and make that C5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-82",
+      "category": "wrong_pitch",
+      "measure": 14,
+      "beat": 3.0,
+      "note_id": "n14-4",
+      "expected": "A4",
+      "actual": "C#5",
+      "audio_time": 18.726,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 14, beat 3: the score has A4 and you played C#5.",
+      "tip": "Play bar 14 slowly and stop on the A4. Say its name before you press it."
+    },
+    {
+      "id": "err-83",
+      "category": "wrong_pitch",
+      "measure": 14,
+      "beat": 3.5,
+      "note_id": "n14-5",
+      "expected": "G4",
+      "actual": "D5",
+      "audio_time": 18.886,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 14, beat 3.5: the score has G4 and you played D5.",
+      "tip": "Play bar 14 slowly and stop on the G4. Say its name before you press it."
+    },
+    {
+      "id": "err-84",
+      "category": "missing",
+      "measure": 15,
+      "beat": 1.0,
+      "note_id": "n15-1",
+      "expected": "A4",
+      "actual": null,
+      "audio_time": 13.076,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The A4 on beat 1 of bar 15 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 15 on its own and make that A4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-85",
+      "category": "missing",
+      "measure": 15,
+      "beat": 2.0,
+      "note_id": "n15-2",
+      "expected": "B4",
+      "actual": null,
+      "audio_time": 13.146,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The B4 on beat 2 of bar 15 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 15 on its own and make that B4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-86",
+      "category": "missing",
+      "measure": 15,
+      "beat": 2.5,
+      "note_id": "n15-3",
+      "expected": "A4",
+      "actual": null,
+      "audio_time": 13.181,
+      "confidence": 0.75,
+      "tier": "likely",
+      "occurrences": 2,
+      "audio_times": [
+        13.181,
+        19.205
+      ],
+      "explanation": "The A4 on beat 2.5 of bar 15 didn't come through. It may have been too soft, or skipped. It happened both times through the repeat.",
+      "tip": "Play bar 15 on its own and make that A4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-87",
+      "category": "wrong_pitch",
+      "measure": 15,
+      "beat": 3.0,
+      "note_id": "n15-4",
+      "expected": "G4",
+      "actual": "F4",
+      "audio_time": 13.243,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 15, beat 3: the score has G4 and you played F4.",
+      "tip": "Play bar 15 slowly and stop on the G4. Say its name before you press it."
+    },
+    {
+      "id": "err-88",
+      "category": "missing",
+      "measure": 15,
+      "beat": 3.0,
+      "note_id": "n15-4",
+      "expected": "G4",
+      "actual": null,
+      "audio_time": 19.251,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G4 on beat 3 of bar 15 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 15 on its own and make that G4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-89",
+      "category": "wrong_pitch",
+      "measure": 15,
+      "beat": 3.5,
+      "note_id": "n15-5",
+      "expected": "F#4",
+      "actual": "C#5",
+      "audio_time": 19.258,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 15, beat 3.5: the score has F#4 and you played C#5.",
+      "tip": "Play bar 15 slowly and stop on the F#4. Say its name before you press it."
+    },
+    {
+      "id": "err-90",
+      "category": "missing",
+      "measure": 15,
+      "beat": 3.5,
+      "note_id": "n15-5",
+      "expected": "F#4",
+      "actual": null,
+      "audio_time": 13.245,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The F#4 on beat 3.5 of bar 15 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 15 on its own and make that F#4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-91",
+      "category": "wrong_pitch",
+      "measure": 16,
+      "beat": 1.0,
+      "note_id": "n16-1",
+      "expected": "G4",
+      "actual": "D5",
+      "audio_time": 19.395,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 16, beat 1: the score has G4 and you played D5.",
+      "tip": "Play bar 16 slowly and stop on the G4. Say its name before you press it."
+    },
+    {
+      "id": "err-92",
+      "category": "wrong_pitch",
+      "measure": 16,
+      "beat": 1.0,
+      "note_id": "n16-1",
+      "expected": "G4",
+      "actual": "E4",
+      "audio_time": 13.217,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "Bar 16, beat 1: the score has G4 and you played E4.",
+      "tip": "Play bar 16 slowly and stop on the G4. Say its name before you press it."
+    },
+    {
+      "id": "err-93",
+      "category": "extra",
+      "measure": 16,
+      "beat": 2.681,
+      "note_id": null,
+      "expected": null,
+      "actual": "E5",
+      "audio_time": 19.497,
+      "confidence": 0.45,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A E5 sounded in bar 16 right next to a correct note. That could be a brushed key, or an ornament, or the recording.",
+      "tip": "Play bar 16 slowly once and listen for the E5. If it isn't there, mark this as fine."
+    },
+    {
+      "id": "err-94",
+      "category": "wrong_pitch",
+      "measure": 17,
+      "beat": 1.0,
+      "note_id": "n17-1",
+      "expected": "B5",
+      "actual": "F5",
+      "audio_time": 19.612,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 17, beat 1: the score has B5 and you played F5.",
+      "tip": "Play bar 17 slowly and stop on the B5. Say its name before you press it."
+    },
+    {
+      "id": "err-95",
+      "category": "extra",
+      "measure": 17,
+      "beat": 3.473,
+      "note_id": null,
+      "expected": null,
+      "actual": "C6",
+      "audio_time": 20.423,
+      "maybe_noise": true,
+      "confidence": 0.4,
+      "tier": "possible",
+      "explanation": "A C6 was heard in bar 17, but it doesn't fit the music around it. It may have been background sound rather than a key.",
+      "tip": "If you didn't play a C6 there, mark this as fine. A quieter room makes these go away."
+    },
+    {
+      "id": "err-96",
+      "category": "wrong_pitch",
+      "measure": 17,
+      "beat": 3.5,
+      "note_id": "n17-5",
+      "expected": "G5",
+      "actual": "B5",
+      "audio_time": 20.6,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 17, beat 3.5: the score has G5 and you played B5.",
+      "tip": "Play bar 17 slowly and stop on the G5. Say its name before you press it."
+    },
+    {
+      "id": "err-97",
+      "category": "extra",
+      "measure": 18,
+      "beat": 1.416,
+      "note_id": null,
+      "expected": null,
+      "actual": "G5",
+      "audio_time": 20.825,
+      "confidence": 0.45,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A G5 sounded in bar 18 right next to a correct note. That could be a brushed key, or an ornament, or the recording.",
+      "tip": "Play bar 18 slowly once and listen for the G5. If it isn't there, mark this as fine."
+    },
+    {
+      "id": "err-98",
+      "category": "wrong_pitch",
+      "measure": 18,
+      "beat": 2.0,
+      "note_id": "n18-2",
+      "expected": "D5",
+      "actual": "F5",
+      "audio_time": 20.974,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 18, beat 2: the score has D5 and you played F5.",
+      "tip": "Play bar 18 slowly and stop on the D5. Say its name before you press it."
+    },
+    {
+      "id": "err-99",
+      "category": "missing",
+      "measure": 18,
+      "beat": 3.0,
+      "note_id": "n18-4",
+      "expected": "F#5",
+      "actual": null,
+      "audio_time": 21.153,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The F#5 on beat 3 of bar 18 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 18 on its own and make that F#5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-100",
+      "category": "extra",
+      "measure": 18,
+      "beat": 3.85,
+      "note_id": null,
+      "expected": null,
+      "actual": "F5",
+      "audio_time": 21.604,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a F5 in bar 18 that isn't in the score.",
+      "tip": "Slow bar 18 right down and watch which finger lands on the F5."
+    },
+    {
+      "id": "err-101",
+      "category": "missing",
+      "measure": 19,
+      "beat": 2.0,
+      "note_id": "n19-2",
+      "expected": "E5",
+      "actual": null,
+      "audio_time": 21.942,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The E5 on beat 2 of bar 19 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 19 on its own and make that E5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-102",
+      "category": "wrong_pitch",
+      "measure": 19,
+      "beat": 2.5,
+      "note_id": "n19-3",
+      "expected": "F#5",
+      "actual": "A5",
+      "audio_time": 21.948,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 19, beat 2.5: the score has F#5 and you played A5.",
+      "tip": "Play bar 19 slowly and stop on the F#5. Say its name before you press it."
+    },
+    {
+      "id": "err-103",
+      "category": "extra",
+      "measure": 19,
+      "beat": 3.183,
+      "note_id": null,
+      "expected": null,
+      "actual": "F5",
+      "audio_time": 22.264,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a F5 in bar 19 that isn't in the score.",
+      "tip": "Slow bar 19 right down and watch which finger lands on the F5."
+    },
+    {
+      "id": "err-104",
+      "category": "extra",
+      "measure": 19,
+      "beat": 3.364,
+      "note_id": null,
+      "expected": null,
+      "actual": "E5",
+      "audio_time": 22.409,
+      "maybe_noise": true,
+      "confidence": 0.4,
+      "tier": "possible",
+      "explanation": "A E5 was heard in bar 19, but it doesn't fit the music around it. It may have been background sound rather than a key.",
+      "tip": "If you didn't play a E5 there, mark this as fine. A quieter room makes these go away."
+    },
+    {
+      "id": "err-105",
+      "category": "extra",
+      "measure": 19,
+      "beat": 3.657,
+      "note_id": null,
+      "expected": null,
+      "actual": "C5",
+      "audio_time": 22.689,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a C5 in bar 19 that isn't in the score.",
+      "tip": "Slow bar 19 right down and watch which finger lands on the C5."
+    },
+    {
+      "id": "err-106",
+      "category": "wrong_pitch",
+      "measure": 20,
+      "beat": 1.0,
+      "note_id": "n20-1",
+      "expected": "C#5",
+      "actual": "B4",
+      "audio_time": 23.06,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 20, beat 1: the score has C#5 and you played B4.",
+      "tip": "Play bar 20 slowly and stop on the C#5. Say its name before you press it."
+    },
+    {
+      "id": "err-107",
+      "category": "missing",
+      "measure": 20,
+      "beat": 2.5,
+      "note_id": "n20-3",
+      "expected": "C#5",
+      "actual": null,
+      "audio_time": 23.322,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The C#5 on beat 2.5 of bar 20 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 20 on its own and make that C#5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-108",
+      "category": "missing",
+      "measure": 20,
+      "beat": 3.0,
+      "note_id": "n20-4",
+      "expected": "A4",
+      "actual": null,
+      "audio_time": 23.339,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The A4 on beat 3 of bar 20 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 20 on its own and make that A4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-109",
+      "category": "missing",
+      "measure": 21,
+      "beat": 2.0,
+      "note_id": "n21-3",
+      "expected": "C#5",
+      "actual": null,
+      "audio_time": 23.65,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The C#5 on beat 2 of bar 21 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 21 on its own and make that C#5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-110",
+      "category": "missing",
+      "measure": 21,
+      "beat": 2.5,
+      "note_id": "n21-4",
+      "expected": "D5",
+      "actual": null,
+      "audio_time": 23.675,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The D5 on beat 2.5 of bar 21 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 21 on its own and make that D5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-111",
+      "category": "missing",
+      "measure": 21,
+      "beat": 3.0,
+      "note_id": "n21-5",
+      "expected": "E5",
+      "actual": null,
+      "audio_time": 23.7,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The E5 on beat 3 of bar 21 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 21 on its own and make that E5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-112",
+      "category": "missing",
+      "measure": 21,
+      "beat": 3.5,
+      "note_id": "n21-6",
+      "expected": "F#5",
+      "actual": null,
+      "audio_time": 23.724,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The F#5 on beat 3.5 of bar 21 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 21 on its own and make that F#5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-113",
+      "category": "wrong_pitch",
+      "measure": 22,
+      "beat": 1.0,
+      "note_id": "n22-1",
+      "expected": "G5",
+      "actual": "G3",
+      "audio_time": 23.626,
+      "confidence": 0.81,
+      "tier": "confident",
+      "octave": true,
+      "explanation": "Bar 22, beat 1: right note, wrong octave. The score has G5 and you played G3, an octave lower.",
+      "tip": "Find the G5 on the keyboard before you start bar 22, then play the bar once with just that hand."
+    },
+    {
+      "id": "err-114",
+      "category": "missing",
+      "measure": 22,
+      "beat": 2.0,
+      "note_id": "n22-2",
+      "expected": "F#5",
+      "actual": null,
+      "audio_time": 23.808,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The F#5 on beat 2 of bar 22 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 22 on its own and make that F#5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-115",
+      "category": "missing",
+      "measure": 22,
+      "beat": 3.0,
+      "note_id": "n22-3",
+      "expected": "E5",
+      "actual": null,
+      "audio_time": 23.867,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The E5 on beat 3 of bar 22 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 22 on its own and make that E5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-116",
+      "category": "wrong_pitch",
+      "measure": 23,
+      "beat": 1.0,
+      "note_id": "n23-1",
+      "expected": "F#5",
+      "actual": "G5",
+      "audio_time": 23.958,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 23, beat 1: the score has F#5 and you played G5.",
+      "tip": "Play bar 23 slowly and stop on the F#5. Say its name before you press it."
+    },
+    {
+      "id": "err-117",
+      "category": "wrong_pitch",
+      "measure": 23,
+      "beat": 2.0,
+      "note_id": "n23-2",
+      "expected": "A4",
+      "actual": "G4",
+      "audio_time": 24.039,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 23, beat 2: the score has A4 and you played G4.",
+      "tip": "Play bar 23 slowly and stop on the A4. Say its name before you press it."
+    },
+    {
+      "id": "err-118",
+      "category": "wrong_pitch",
+      "measure": 23,
+      "beat": 3.0,
+      "note_id": "n23-3",
+      "expected": "C#5",
+      "actual": "F5",
+      "audio_time": 24.272,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 23, beat 3: the score has C#5 and you played F5.",
+      "tip": "Play bar 23 slowly and stop on the C#5. Say its name before you press it."
+    },
+    {
+      "id": "err-119",
+      "category": "extra",
+      "measure": 24,
+      "beat": 1.011,
+      "note_id": null,
+      "expected": null,
+      "actual": "E5",
+      "audio_time": 24.715,
+      "confidence": 0.45,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A E5 sounded in bar 24 right next to a correct note. That could be a brushed key, or an ornament, or the recording.",
+      "tip": "Play bar 24 slowly once and listen for the E5. If it isn't there, mark this as fine."
+    },
+    {
+      "id": "err-120",
+      "category": "wrong_pitch",
+      "measure": 25,
+      "beat": 1.0,
+      "note_id": "n25-1",
+      "expected": "D5",
+      "actual": "C5",
+      "audio_time": 25.162,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 25, beat 1: the score has D5 and you played C5.",
+      "tip": "Play bar 25 slowly and stop on the D5. Say its name before you press it."
+    },
+    {
+      "id": "err-121",
+      "category": "extra",
+      "measure": 25,
+      "beat": 1.168,
+      "note_id": null,
+      "expected": null,
+      "actual": "E4",
+      "audio_time": 25.116,
+      "maybe_noise": true,
+      "confidence": 0.4,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A E4 was heard in bar 25, but it doesn't fit the music around it. It may have been background sound rather than a key.",
+      "tip": "If you didn't play a E4 there, mark this as fine. A quieter room makes these go away."
+    },
+    {
+      "id": "err-122",
+      "category": "wrong_pitch",
+      "measure": 25,
+      "beat": 2.5,
+      "note_id": "n25-3",
+      "expected": "F#4",
+      "actual": "D5",
+      "audio_time": 25.437,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 25, beat 2.5: the score has F#4 and you played D5.",
+      "tip": "Play bar 25 slowly and stop on the F#4. Say its name before you press it."
+    },
+    {
+      "id": "err-123",
+      "category": "wrong_pitch",
+      "measure": 25,
+      "beat": 3.0,
+      "note_id": "n25-4",
+      "expected": "G4",
+      "actual": "G3",
+      "audio_time": 25.451,
+      "confidence": 0.81,
+      "tier": "confident",
+      "octave": true,
+      "explanation": "Bar 25, beat 3: right note, wrong octave. The score has G4 and you played G3, an octave lower.",
+      "tip": "Find the G4 on the keyboard before you start bar 25, then play the bar once with just that hand."
+    },
+    {
+      "id": "err-124",
+      "category": "wrong_pitch",
+      "measure": 26,
+      "beat": 1.0,
+      "note_id": "n26-1",
+      "expected": "E5",
+      "actual": "G5",
+      "audio_time": 25.778,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 26, beat 1: the score has E5 and you played G5.",
+      "tip": "Play bar 26 slowly and stop on the E5. Say its name before you press it."
+    },
+    {
+      "id": "err-125",
+      "category": "extra",
+      "measure": 26,
+      "beat": 1.396,
+      "note_id": null,
+      "expected": null,
+      "actual": "A5",
+      "audio_time": 25.778,
+      "maybe_noise": true,
+      "confidence": 0.4,
+      "tier": "possible",
+      "maybe_ornament": true,
+      "explanation": "A A5 was heard in bar 26, but it doesn't fit the music around it. It may have been background sound rather than a key.",
+      "tip": "If you didn't play a A5 there, mark this as fine. A quieter room makes these go away."
+    },
+    {
+      "id": "err-126",
+      "category": "wrong_pitch",
+      "measure": 26,
+      "beat": 2.5,
+      "note_id": "n26-3",
+      "expected": "F#4",
+      "actual": "E5",
+      "audio_time": 26.065,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 26, beat 2.5: the score has F#4 and you played E5.",
+      "tip": "Play bar 26 slowly and stop on the F#4. Say its name before you press it."
+    },
+    {
+      "id": "err-127",
+      "category": "wrong_pitch",
+      "measure": 26,
+      "beat": 3.0,
+      "note_id": "n26-4",
+      "expected": "G4",
+      "actual": "G3",
+      "audio_time": 26.047,
+      "confidence": 0.81,
+      "tier": "confident",
+      "octave": true,
+      "explanation": "Bar 26, beat 3: right note, wrong octave. The score has G4 and you played G3, an octave lower.",
+      "tip": "Find the G4 on the keyboard before you start bar 26, then play the bar once with just that hand."
+    },
+    {
+      "id": "err-128",
+      "category": "missing",
+      "measure": 27,
+      "beat": 1.0,
+      "note_id": "n27-1",
+      "expected": "D5",
+      "actual": null,
+      "audio_time": 26.33,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The D5 on beat 1 of bar 27 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 27 on its own and make that D5 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-129",
+      "category": "missing",
+      "measure": 27,
+      "beat": 3.0,
+      "note_id": "n27-3",
+      "expected": "B4",
+      "actual": null,
+      "audio_time": 26.441,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The B4 on beat 3 of bar 27 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 27 on its own and make that B4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-130",
+      "category": "missing",
+      "measure": 28,
+      "beat": 1.0,
+      "note_id": "n28-1",
+      "expected": "A4",
+      "actual": null,
+      "audio_time": 26.463,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The A4 on beat 1 of bar 28 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 28 on its own and make that A4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-131",
+      "category": "missing",
+      "measure": 28,
+      "beat": 1.5,
+      "note_id": "n28-2",
+      "expected": "G4",
+      "actual": null,
+      "audio_time": 26.474,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The G4 on beat 1.5 of bar 28 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 28 on its own and make that G4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-132",
+      "category": "missing",
+      "measure": 28,
+      "beat": 2.0,
+      "note_id": "n28-3",
+      "expected": "F#4",
+      "actual": null,
+      "audio_time": 26.485,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The F#4 on beat 2 of bar 28 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 28 on its own and make that F#4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-133",
+      "category": "missing",
+      "measure": 28,
+      "beat": 3.0,
+      "note_id": "n28-5",
+      "expected": "A4",
+      "actual": null,
+      "audio_time": 26.511,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The A4 on beat 3 of bar 28 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 28 on its own and make that A4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-134",
+      "category": "missing",
+      "measure": 29,
+      "beat": 1.0,
+      "note_id": "n29-1",
+      "expected": "D4",
+      "actual": null,
+      "audio_time": 26.54,
+      "confidence": 0.7,
+      "tier": "likely",
+      "explanation": "The D4 on beat 1 of bar 29 didn't come through. It may have been too soft, or skipped.",
+      "tip": "Play bar 29 on its own and make that D4 the loudest note in the bar until it stops disappearing."
+    },
+    {
+      "id": "err-135",
+      "category": "wrong_pitch",
+      "measure": 30,
+      "beat": 2.0,
+      "note_id": "n30-2",
+      "expected": "B4",
+      "actual": "D5",
+      "audio_time": 26.815,
+      "confidence": 0.91,
+      "tier": "confident",
+      "explanation": "Bar 30, beat 2: the score has B4 and you played D5.",
+      "tip": "Play bar 30 slowly and stop on the B4. Say its name before you press it."
+    },
+    {
+      "id": "err-136",
+      "category": "extra",
+      "measure": 31,
+      "beat": 1.002,
+      "note_id": null,
+      "expected": null,
+      "actual": "G5",
+      "audio_time": 27.441,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a G5 in bar 31 that isn't in the score.",
+      "tip": "Slow bar 31 right down and watch which finger lands on the G5."
+    },
+    {
+      "id": "err-137",
+      "category": "extra",
+      "measure": 31,
+      "beat": 1.052,
+      "note_id": null,
+      "expected": null,
+      "actual": "D5",
+      "audio_time": 27.451,
+      "confidence": 0.81,
+      "tier": "confident",
+      "explanation": "There is a D5 in bar 31 that isn't in the score.",
+      "tip": "Slow bar 31 right down and watch which finger lands on the D5."
+    }
+  ],
+  "dynamics": {
+    "available": true,
+    "baseline": "average matched-note velocity",
+    "score_average_velocity": 73.11235955056179,
+    "take_average_velocity": 72.31460674157303,
+    "assessed_notes": 89,
+    "typical_contour_difference": 7.797752808988761,
+    "bars": [
+      {
+        "measure": 1,
+        "occurrence": 0,
+        "relative_level_difference": -2.2022471910112387,
+        "median_contour_difference": 2.2022471910112387,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 2,
+        "occurrence": 1,
+        "relative_level_difference": -16.70224719101124,
+        "median_contour_difference": 16.70224719101124,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 3,
+        "occurrence": 2,
+        "relative_level_difference": 8.797752808988761,
+        "median_contour_difference": 8.797752808988761,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 4,
+        "occurrence": 3,
+        "relative_level_difference": -2.535580524344572,
+        "median_contour_difference": 11.797752808988761,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 5,
+        "occurrence": 4,
+        "relative_level_difference": -2.2022471910112387,
+        "median_contour_difference": 5.297752808988761,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 6,
+        "occurrence": 5,
+        "relative_level_difference": -12.202247191011239,
+        "median_contour_difference": 12.202247191011239,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 7,
+        "occurrence": 6,
+        "relative_level_difference": -3.7022471910112387,
+        "median_contour_difference": 3.7022471910112387,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 8,
+        "occurrence": 7,
+        "relative_level_difference": -19.20224719101124,
+        "median_contour_difference": 19.20224719101124,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 9,
+        "occurrence": 8,
+        "relative_level_difference": 7.047752808988761,
+        "median_contour_difference": 7.297752808988761,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 10,
+        "occurrence": 9,
+        "relative_level_difference": -8.202247191011239,
+        "median_contour_difference": 8.202247191011239,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 11,
+        "occurrence": 10,
+        "relative_level_difference": 0.7977528089887613,
+        "median_contour_difference": 4.0,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 12,
+        "occurrence": 11,
+        "relative_level_difference": 2.2977528089887613,
+        "median_contour_difference": 5.5,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 13,
+        "occurrence": 12,
+        "relative_level_difference": 3.2977528089887613,
+        "median_contour_difference": 3.2977528089887613,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 14,
+        "occurrence": 13,
+        "relative_level_difference": 3.0477528089887613,
+        "median_contour_difference": 8.5,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 15,
+        "occurrence": 14,
+        "relative_level_difference": 3.7977528089887613,
+        "median_contour_difference": 3.7977528089887613,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 1,
+        "occurrence": 16,
+        "relative_level_difference": 4.047752808988761,
+        "median_contour_difference": 2.2977528089887613,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 2,
+        "occurrence": 17,
+        "relative_level_difference": 9.797752808988761,
+        "median_contour_difference": 9.797752808988761,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 3,
+        "occurrence": 18,
+        "relative_level_difference": 5.297752808988761,
+        "median_contour_difference": 5.297752808988761,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 5,
+        "occurrence": 20,
+        "relative_level_difference": 2.7977528089887613,
+        "median_contour_difference": 2.7977528089887613,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 6,
+        "occurrence": 21,
+        "relative_level_difference": -6.702247191011239,
+        "median_contour_difference": 8.5,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 7,
+        "occurrence": 22,
+        "relative_level_difference": -2.2022471910112387,
+        "median_contour_difference": 2.2022471910112387,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 8,
+        "occurrence": 23,
+        "relative_level_difference": -1.2022471910112387,
+        "median_contour_difference": 1.2022471910112387,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 9,
+        "occurrence": 24,
+        "relative_level_difference": 5.297752808988761,
+        "median_contour_difference": 4.797752808988761,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 10,
+        "occurrence": 25,
+        "relative_level_difference": -0.20224719101123867,
+        "median_contour_difference": 0.20224719101123867,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 11,
+        "occurrence": 26,
+        "relative_level_difference": 9.797752808988761,
+        "median_contour_difference": 9.797752808988761,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 12,
+        "occurrence": 27,
+        "relative_level_difference": 2.2977528089887613,
+        "median_contour_difference": 2.5,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 13,
+        "occurrence": 28,
+        "relative_level_difference": 6.297752808988761,
+        "median_contour_difference": 6.297752808988761,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 14,
+        "occurrence": 29,
+        "relative_level_difference": 2.7977528089887613,
+        "median_contour_difference": 2.7977528089887613,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 15,
+        "occurrence": 30,
+        "relative_level_difference": 2.7977528089887613,
+        "median_contour_difference": 2.7977528089887613,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 17,
+        "occurrence": 32,
+        "relative_level_difference": -4.535580524344572,
+        "median_contour_difference": 5.202247191011239,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 18,
+        "occurrence": 33,
+        "relative_level_difference": -6.202247191011239,
+        "median_contour_difference": 5.202247191011239,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 19,
+        "occurrence": 34,
+        "relative_level_difference": -14.535580524344573,
+        "median_contour_difference": 11.202247191011239,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 20,
+        "occurrence": 35,
+        "relative_level_difference": -22.70224719101124,
+        "median_contour_difference": 22.70224719101124,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 21,
+        "occurrence": 36,
+        "relative_level_difference": -17.20224719101124,
+        "median_contour_difference": 17.20224719101124,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 22,
+        "occurrence": 37,
+        "relative_level_difference": -21.20224719101124,
+        "median_contour_difference": 21.20224719101124,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 23,
+        "occurrence": 38,
+        "relative_level_difference": -24.20224719101124,
+        "median_contour_difference": 24.20224719101124,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 24,
+        "occurrence": 39,
+        "relative_level_difference": -17.70224719101124,
+        "median_contour_difference": 17.70224719101124,
+        "trend": null,
+        "issues": [
+          "too_soft"
+        ],
+        "feedback": [
+          "Softer than the score suggests; bring this bar out more."
+        ]
+      },
+      {
+        "measure": 25,
+        "occurrence": 40,
+        "relative_level_difference": 24.79775280898876,
+        "median_contour_difference": 24.79775280898876,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 26,
+        "occurrence": 41,
+        "relative_level_difference": 19.29775280898876,
+        "median_contour_difference": 19.29775280898876,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 27,
+        "occurrence": 42,
+        "relative_level_difference": 38.79775280898876,
+        "median_contour_difference": 38.79775280898876,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 28,
+        "occurrence": 43,
+        "relative_level_difference": 20.79775280898876,
+        "median_contour_difference": 20.79775280898876,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 29,
+        "occurrence": 44,
+        "relative_level_difference": 10.797752808988761,
+        "median_contour_difference": 10.797752808988761,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 30,
+        "occurrence": 45,
+        "relative_level_difference": 3.7977528089887613,
+        "median_contour_difference": 3.7977528089887613,
+        "trend": null,
+        "issues": [],
+        "feedback": []
+      },
+      {
+        "measure": 31,
+        "occurrence": 46,
+        "relative_level_difference": 10.797752808988761,
+        "median_contour_difference": 10.797752808988761,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      },
+      {
+        "measure": 32,
+        "occurrence": 47,
+        "relative_level_difference": 15.297752808988761,
+        "median_contour_difference": 15.297752808988761,
+        "trend": null,
+        "issues": [
+          "too_loud"
+        ],
+        "feedback": [
+          "Stronger than the score suggests; try playing this bar softer."
+        ]
+      }
+    ]
+  },
+  "score_dynamics": {
+    "marks": [
+      {
+        "measure": 1,
+        "beat": 1.0,
+        "label": "mf"
+      },
+      {
+        "measure": 1,
+        "beat": 49.0,
+        "label": "mf"
+      },
+      {
+        "measure": 17,
+        "beat": 1.0,
+        "label": "f"
+      },
+      {
+        "measure": 25,
+        "beat": 1.0,
+        "label": "p"
+      },
+      {
+        "measure": 17,
+        "beat": 49.0,
+        "label": "f"
+      },
+      {
+        "measure": 25,
+        "beat": 49.0,
+        "label": "p"
+      }
+    ],
+    "wedges": []
+  },
+  "note_detail": [
+    {
+      "measure": 1,
+      "occurrence": 0,
+      "beat": 3.5,
+      "pitch": "C5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -2.2022471910112387
+    },
+    {
+      "measure": 2,
+      "occurrence": 1,
+      "beat": 2.0,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -22.20224719101124
+    },
+    {
+      "measure": 2,
+      "occurrence": 1,
+      "beat": 3.0,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -11.202247191011239
+    },
+    {
+      "measure": 3,
+      "occurrence": 2,
+      "beat": 1.0,
+      "pitch": "E5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 8.797752808988761
+    },
+    {
+      "measure": 4,
+      "occurrence": 3,
+      "beat": 1.0,
+      "pitch": "G5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 11.797752808988761
+    },
+    {
+      "measure": 4,
+      "occurrence": 3,
+      "beat": 2.0,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -13.202247191011239
+    },
+    {
+      "measure": 4,
+      "occurrence": 3,
+      "beat": 3.0,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -6.202247191011239
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 1.0,
+      "pitch": "C5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -2.2022471910112387
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 2.0,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 3.7977528089887613
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 2.5,
+      "pitch": "C5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 6.797752808988761
+    },
+    {
+      "measure": 5,
+      "occurrence": 4,
+      "beat": 3.5,
+      "pitch": "A4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -17.20224719101124
+    },
+    {
+      "measure": 6,
+      "occurrence": 5,
+      "beat": 3.0,
+      "pitch": "A4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -10.202247191011239
+    },
+    {
+      "measure": 6,
+      "occurrence": 5,
+      "beat": 3.5,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -14.202247191011239
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 2.0,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -4.202247191011239
+    },
+    {
+      "measure": 7,
+      "occurrence": 6,
+      "beat": 3.5,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -3.2022471910112387
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 2.0,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -0.20224719101123867
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 2.5,
+      "pitch": "A4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 5.797752808988761
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 3.0,
+      "pitch": "B4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 8.797752808988761
+    },
+    {
+      "measure": 9,
+      "occurrence": 8,
+      "beat": 3.5,
+      "pitch": "C5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 13.797752808988761
+    },
+    {
+      "measure": 10,
+      "occurrence": 9,
+      "beat": 1.0,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -8.202247191011239
+    },
+    {
+      "measure": 11,
+      "occurrence": 10,
+      "beat": 3.0,
+      "pitch": "E5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 4.797752808988761
+    },
+    {
+      "measure": 12,
+      "occurrence": 11,
+      "beat": 2.0,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 7.797752808988761
+    },
+    {
+      "measure": 13,
+      "occurrence": 12,
+      "beat": 1.0,
+      "pitch": "C5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 2.7977528089887613
+    },
+    {
+      "measure": 13,
+      "occurrence": 12,
+      "beat": 2.0,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 3.7977528089887613
+    },
+    {
+      "measure": 14,
+      "occurrence": 13,
+      "beat": 2.0,
+      "pitch": "C5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 11.797752808988761
+    },
+    {
+      "measure": 14,
+      "occurrence": 13,
+      "beat": 2.5,
+      "pitch": "B4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -0.20224719101123867
+    },
+    {
+      "measure": 14,
+      "occurrence": 13,
+      "beat": 3.0,
+      "pitch": "A4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -8.202247191011239
+    },
+    {
+      "measure": 14,
+      "occurrence": 13,
+      "beat": 3.5,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 8.797752808988761
+    },
+    {
+      "measure": 1,
+      "occurrence": 16,
+      "beat": 2.0,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 0.7977528089887613
+    },
+    {
+      "measure": 1,
+      "occurrence": 16,
+      "beat": 2.5,
+      "pitch": "A4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -0.20224719101123867
+    },
+    {
+      "measure": 1,
+      "occurrence": 16,
+      "beat": 3.0,
+      "pitch": "B4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 3.7977528089887613
+    },
+    {
+      "measure": 1,
+      "occurrence": 16,
+      "beat": 3.5,
+      "pitch": "C5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 11.797752808988761
+    },
+    {
+      "measure": 2,
+      "occurrence": 17,
+      "beat": 1.0,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 9.797752808988761
+    },
+    {
+      "measure": 3,
+      "occurrence": 18,
+      "beat": 1.0,
+      "pitch": "E5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 1.7977528089887613
+    },
+    {
+      "measure": 3,
+      "occurrence": 18,
+      "beat": 3.0,
+      "pitch": "E5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 8.797752808988761
+    },
+    {
+      "measure": 5,
+      "occurrence": 20,
+      "beat": 2.0,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 2.7977528089887613
+    },
+    {
+      "measure": 6,
+      "occurrence": 21,
+      "beat": 2.0,
+      "pitch": "C5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -15.202247191011239
+    },
+    {
+      "measure": 6,
+      "occurrence": 21,
+      "beat": 2.5,
+      "pitch": "B4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 1.7977528089887613
+    },
+    {
+      "measure": 7,
+      "occurrence": 22,
+      "beat": 2.5,
+      "pitch": "A4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -2.2022471910112387
+    },
+    {
+      "measure": 7,
+      "occurrence": 22,
+      "beat": 3.5,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -2.2022471910112387
+    },
+    {
+      "measure": 9,
+      "occurrence": 24,
+      "beat": 2.0,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 1.7977528089887613
+    },
+    {
+      "measure": 9,
+      "occurrence": 24,
+      "beat": 2.5,
+      "pitch": "A4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 3.7977528089887613
+    },
+    {
+      "measure": 9,
+      "occurrence": 24,
+      "beat": 3.0,
+      "pitch": "B4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 9.797752808988761
+    },
+    {
+      "measure": 9,
+      "occurrence": 24,
+      "beat": 3.5,
+      "pitch": "C5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 5.797752808988761
+    },
+    {
+      "measure": 10,
+      "occurrence": 25,
+      "beat": 1.0,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -0.20224719101123867
+    },
+    {
+      "measure": 11,
+      "occurrence": 26,
+      "beat": 1.0,
+      "pitch": "E5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 10.797752808988761
+    },
+    {
+      "measure": 11,
+      "occurrence": 26,
+      "beat": 2.5,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 8.797752808988761
+    },
+    {
+      "measure": 12,
+      "occurrence": 27,
+      "beat": 2.0,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 4.797752808988761
+    },
+    {
+      "measure": 13,
+      "occurrence": 28,
+      "beat": 3.5,
+      "pitch": "A4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 10.797752808988761
+    },
+    {
+      "measure": 14,
+      "occurrence": 29,
+      "beat": 2.5,
+      "pitch": "B4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 2.7977528089887613
+    },
+    {
+      "measure": 15,
+      "occurrence": 30,
+      "beat": 1.0,
+      "pitch": "A4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 1.7977528089887613
+    },
+    {
+      "measure": 15,
+      "occurrence": 30,
+      "beat": 2.0,
+      "pitch": "B4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 3.7977528089887613
+    },
+    {
+      "measure": 17,
+      "occurrence": 32,
+      "beat": 2.0,
+      "pitch": "G5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -2.2022471910112387
+    },
+    {
+      "measure": 17,
+      "occurrence": 32,
+      "beat": 2.5,
+      "pitch": "A5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -5.202247191011239
+    },
+    {
+      "measure": 17,
+      "occurrence": 32,
+      "beat": 3.0,
+      "pitch": "B5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -6.202247191011239
+    },
+    {
+      "measure": 18,
+      "occurrence": 33,
+      "beat": 1.0,
+      "pitch": "A5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -5.202247191011239
+    },
+    {
+      "measure": 18,
+      "occurrence": 33,
+      "beat": 2.5,
+      "pitch": "E5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -4.202247191011239
+    },
+    {
+      "measure": 18,
+      "occurrence": 33,
+      "beat": 3.5,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -9.202247191011239
+    },
+    {
+      "measure": 19,
+      "occurrence": 34,
+      "beat": 1.0,
+      "pitch": "G5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -28.20224719101124
+    },
+    {
+      "measure": 19,
+      "occurrence": 34,
+      "beat": 3.0,
+      "pitch": "G5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -4.202247191011239
+    },
+    {
+      "measure": 19,
+      "occurrence": 34,
+      "beat": 3.5,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -11.202247191011239
+    },
+    {
+      "measure": 20,
+      "occurrence": 35,
+      "beat": 2.0,
+      "pitch": "B4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -13.202247191011239
+    },
+    {
+      "measure": 21,
+      "occurrence": 36,
+      "beat": 1.0,
+      "pitch": "A4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -27.20224719101124
+    },
+    {
+      "measure": 21,
+      "occurrence": 36,
+      "beat": 1.5,
+      "pitch": "B4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -7.202247191011239
+    },
+    {
+      "measure": 24,
+      "occurrence": 39,
+      "beat": 1.0,
+      "pitch": "D5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": -14.202247191011239
+    },
+    {
+      "measure": 25,
+      "occurrence": 40,
+      "beat": 2.0,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 29.79775280898876
+    },
+    {
+      "measure": 26,
+      "occurrence": 41,
+      "beat": 2.0,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 22.79775280898876
+    },
+    {
+      "measure": 27,
+      "occurrence": 42,
+      "beat": 2.0,
+      "pitch": "C5",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 38.79775280898876
+    },
+    {
+      "measure": 28,
+      "occurrence": 43,
+      "beat": 2.5,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 20.79775280898876
+    },
+    {
+      "measure": 29,
+      "occurrence": 44,
+      "beat": 1.5,
+      "pitch": "E4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 10.797752808988761
+    },
+    {
+      "measure": 31,
+      "occurrence": 46,
+      "beat": 1.0,
+      "pitch": "B4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 14.797752808988761
+    },
+    {
+      "measure": 32,
+      "occurrence": 47,
+      "beat": 1.0,
+      "pitch": "G4",
+      "onset_offset_ms": null,
+      "duration_ratio": null,
+      "relative_dynamics_delta": 20.79775280898876
+    }
+  ],
+  "musicality": {
+    "dynamics_notes": 89,
+    "median_absolute_onset_offset_ms": null,
+    "timed_notes": 0,
+    "median_played_to_score_duration": null,
+    "duration_notes": 0,
+    "limits": [
+      "Tone color, arm weight, and the acoustic decay of a piano note are not reliably inferred from this transcription.",
+      "Pedal use and harmonic clarity require listening to the recording; this analysis does not detect pedal changes."
+    ]
+  },
+  "bars": [
+    {
+      "measure": 1,
+      "printed": 1,
+      "occurrence": 0,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.1111111111111111,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 2,
+      "printed": 2,
+      "occurrence": 1,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.5,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 3,
+      "printed": 3,
+      "occurrence": 2,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.16666666666666666,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 4,
+      "printed": 4,
+      "occurrence": 3,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.75,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 5,
+      "printed": 5,
+      "occurrence": 4,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.6666666666666666,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 6,
+      "printed": 6,
+      "occurrence": 5,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.3333333333333333,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 7,
+      "printed": 7,
+      "occurrence": 6,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.25,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 8,
+      "printed": 8,
+      "occurrence": 7,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.2857142857142857,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 9,
+      "printed": 9,
+      "occurrence": 8,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.5714285714285714,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 10,
+      "printed": 10,
+      "occurrence": 9,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.16666666666666666,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 11,
+      "printed": 11,
+      "occurrence": 10,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.3333333333333333,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 12,
+      "printed": 12,
+      "occurrence": 11,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.25,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 13,
+      "printed": 13,
+      "occurrence": 12,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.2857142857142857,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 14,
+      "printed": 14,
+      "occurrence": 13,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.5714285714285714,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 15,
+      "printed": 15,
+      "occurrence": 14,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.125,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 16,
+      "printed": 16,
+      "occurrence": 15,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.0,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 1,
+      "printed": 1,
+      "occurrence": 16,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.4444444444444444,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 2,
+      "printed": 2,
+      "occurrence": 17,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.25,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 3,
+      "printed": 3,
+      "occurrence": 18,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.3333333333333333,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 4,
+      "printed": 4,
+      "occurrence": 19,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.0,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 5,
+      "printed": 5,
+      "occurrence": 20,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.16666666666666666,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 6,
+      "printed": 6,
+      "occurrence": 21,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.3333333333333333,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 7,
+      "printed": 7,
+      "occurrence": 22,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.25,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 8,
+      "printed": 8,
+      "occurrence": 23,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.14285714285714285,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 9,
+      "printed": 9,
+      "occurrence": 24,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.5714285714285714,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 10,
+      "printed": 10,
+      "occurrence": 25,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.16666666666666666,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 11,
+      "printed": 11,
+      "occurrence": 26,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.3333333333333333,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 12,
+      "printed": 12,
+      "occurrence": 27,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.25,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 13,
+      "printed": 13,
+      "occurrence": 28,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.2857142857142857,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 14,
+      "printed": 14,
+      "occurrence": 29,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.14285714285714285,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 15,
+      "printed": 15,
+      "occurrence": 30,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.25,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 16,
+      "printed": 16,
+      "occurrence": 31,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.0,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 17,
+      "printed": 17,
+      "occurrence": 32,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.5,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 18,
+      "printed": 18,
+      "occurrence": 33,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.5,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 19,
+      "printed": 19,
+      "occurrence": 34,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.375,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 20,
+      "printed": 20,
+      "occurrence": 35,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.3333333333333333,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 21,
+      "printed": 21,
+      "occurrence": 36,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.2857142857142857,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 22,
+      "printed": 22,
+      "occurrence": 37,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.16666666666666666,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 23,
+      "printed": 23,
+      "occurrence": 38,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.16666666666666666,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 24,
+      "printed": 24,
+      "occurrence": 39,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.5,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 25,
+      "printed": 25,
+      "occurrence": 40,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.2857142857142857,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 26,
+      "printed": 26,
+      "occurrence": 41,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.2857142857142857,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 27,
+      "printed": 27,
+      "occurrence": 42,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.16666666666666666,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 28,
+      "printed": 28,
+      "occurrence": 43,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.16666666666666666,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 29,
+      "printed": 29,
+      "occurrence": 44,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.125,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 30,
+      "printed": 30,
+      "occurrence": 45,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.16666666666666666,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 31,
+      "printed": 31,
+      "occurrence": 46,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.2857142857142857,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 32,
+      "printed": 32,
+      "occurrence": 47,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.3333333333333333,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    },
+    {
+      "measure": 17,
+      "printed": 17,
+      "occurrence": 48,
+      "tempo_status": "unassessed",
+      "tempo_ratio": null,
+      "performed_bpm": null,
+      "pitch_recall": 0.0,
+      "pace_ratio": null,
+      "pace": "unassessed",
+      "start_seconds": null,
+      "end_seconds": null
+    }
+  ],
+  "pace": {
+    "median_bpm": 126.0,
+    "marked_bpm": 126.0,
+    "rushed_bars": [],
+    "dragged_bars": []
+  },
+  "meta": {
+    "alignment_status": "uncertain",
+    "pitch_precision": 0.3991031390134529,
+    "pitch_recall": 0.28525641025641024,
+    "hands": "right",
+    "dropped_harmonics": 1,
+    "omitted_findings": 106,
+    "reconciled_pairs": 2,
+    "octave_pairs": 8,
+    "shifted_run_notes": 6,
+    "quiet_noise_dropped": 1,
+    "ornament_like": 15,
+    "placed_extras": 0,
+    "played_bars": [
+      2,
+      29
+    ],
+    "coverage": 0.69,
+    "warnings": [
+      "Insufficient pitch agreement for reliable alignment; discrepancies are candidates and tempo feedback is withheld.",
+      "Alignment is monotone and heuristic. Repeated identical passages, skipped/replayed bars, and partial takes can be ambiguous; inspect matches before grading.",
+      "Audio detections have uncalibrated confidence; discrepancies may come from transcription rather than playing."
+    ],
+    "explanations": "fallback"
+  },
+  "coach": "You played bars 2 to 29, so only those bars are marked."
+}

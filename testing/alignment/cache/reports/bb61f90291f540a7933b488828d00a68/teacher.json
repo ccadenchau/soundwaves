@@ -1,0 +1,41 @@
+{
+  "digest": "3ddddd30bb08cdcc1c2b53c1c03e8086fc73902e656cea6d89f95334479c4f58",
+  "feedback": {
+    "summary": "You have a solid, dependable start through the first ten bars where your reading is very accurate. After bar 10, the piece breaks down with many missing notes, which shows where your comfortable zone currently ends. The most useful next step is to break bars 11 to 13 into small, slow chunks so you can connect the two halves.",
+    "strengths": [
+      "Confident and accurate note reading across bars 1 through 6.",
+      "A clean, well-controlled decrease in volume in bar 8.",
+      "Steady pulse and timing throughout the opening section."
+    ],
+    "focus_areas": [
+      {
+        "title": "Rebuilding the middle section",
+        "bars": "bars 11-13",
+        "what_happened": "Most notes dropped out here after a stumble on the G and A, causing the momentum to stop completely.",
+        "tips": [
+          "Practise bar 11 hands separately at a slow tempo until both patterns feel secure.",
+          "Loop the transition from the final beat of bar 10 into the first note of bar 11 four times in a row."
+        ]
+      },
+      {
+        "title": "Holding notes for their full value",
+        "bars": "bars 5-6 and 9-10",
+        "what_happened": "You found all the correct notes, but released them well before their full duration, making the phrases sound clipped.",
+        "tips": [
+          "Count each beat out loud and keep your keys depressed right until the next note sounds.",
+          "Keep your wrist loose and cushioned rather than bouncing off the keys."
+        ]
+      },
+      {
+        "title": "Smoothing out the hesitation",
+        "bars": "bars 7-8",
+        "what_happened": "You slowed down significantly in bar 7, brushed a few extra notes, and played a C instead of a B in bar 8.",
+        "tips": [
+          "Check your fingering in bar 8 so your hand naturally lines up over the B.",
+          "Play bars 6 through 8 with a metronome set slightly slower than your opening speed to keep the pulse steady."
+        ]
+      }
+    ],
+    "practice_plan": "Begin your next session by playing bars 1 to 6 once at a relaxed pace to settle your hands. Devote ten minutes to bars 11 to 13, playing hands separately with a slow metronome until the finger patterns are comfortable. Finish by stitching bar 10 into bar 11 so you can move past the break smoothly."
+  }
+}

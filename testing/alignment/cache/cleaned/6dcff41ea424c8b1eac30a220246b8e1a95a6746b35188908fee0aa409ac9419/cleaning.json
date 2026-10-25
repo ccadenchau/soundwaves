@@ -1,0 +1,11 @@
+{
+  "method": "gentle_stationary_spectral_attenuation",
+  "noise_profile": "first_0.5_seconds_only",
+  "timing_preserved": true,
+  "input_duration_seconds": 4.778684807256236,
+  "output_duration_seconds": 4.778684807256236,
+  "lead_rms": 0.059314556928867314,
+  "active_rms_p90": 0.09803150955018775,
+  "applied": false,
+  "reason": "No clearly quiet lead-in; original audio retained."
+}

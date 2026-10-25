@@ -1,0 +1,8 @@
+{
+  "signature": "36d36d396063ea4f9debefeaaca417e146c012957ca33b4621dc59d3860789d6",
+  "source_sha256": "cbddcddbc90f3de73f6eac1881b9d5150db29728246b11686b7c035ca5f3c1d3",
+  "hashes": {
+    "converted/performance.mid": "26fffd39e02720f4a4aaa4b26801db79862c0df4f5c3cedf3609dc6281a5dcf7",
+    "converted/notes.json": "2eede446239c1f85c1d3c71445e542023f5f0589f6266e0a1c0dc710019b3bfa"
+  }
+}

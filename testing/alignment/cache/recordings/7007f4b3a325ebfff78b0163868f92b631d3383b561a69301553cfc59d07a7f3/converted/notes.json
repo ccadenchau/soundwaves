@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "source": "/home/alanlai/Documents/GitHub/soundwaves/testing/alignment/cache/inputs/cbddcddbc90f3de73f6eac1881b9d5150db29728246b11686b7c035ca5f3c1d3.mp3",
+  "source_type": "audio",
+  "source_sha256": "cbddcddbc90f3de73f6eac1881b9d5150db29728246b11686b7c035ca5f3c1d3",
+  "time_unit": "seconds",
+  "duration_seconds": 4.778684807256236,
+  "notes": [
+    {
+      "id": "p000000",
+      "pitch": 67,
+      "onset": 0.4295691609977324,
+      "duration": 0.11609977324263038,
+      "velocity": 54,
+      "model_score": 0.42402276396751404,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000001",
+      "pitch": 64,
+      "onset": 0.6849886621315193,
+      "duration": 0.09287981859410421,
+      "velocity": 60,
+      "model_score": 0.4708171486854553,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000002",
+      "pitch": 76,
+      "onset": 1.1145578231292517,
+      "duration": 0.24380952380952392,
+      "velocity": 65,
+      "model_score": 0.515147864818573,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000003",
+      "pitch": 79,
+      "onset": 1.5905668934240362,
+      "duration": 0.09596371882086174,
+      "velocity": 65,
+      "model_score": 0.5082235932350159,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000004",
+      "pitch": 67,
+      "onset": 1.7794104308390022,
+      "duration": 0.16253968253968254,
+      "velocity": 72,
+      "model_score": 0.5677196979522705,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000005",
+      "pitch": 62,
+      "onset": 2.058049886621315,
+      "duration": 0.16253968253968276,
+      "velocity": 63,
+      "model_score": 0.4957663118839264,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000006",
+      "pitch": 67,
+      "onset": 2.3715192743764173,
+      "duration": 0.09287981859410444,
+      "velocity": 73,
+      "model_score": 0.574465274810791,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000007",
+      "pitch": 67,
+      "onset": 2.4643990929705217,
+      "duration": 0.06965986394557788,
+      "velocity": 61,
+      "model_score": 0.48346951603889465,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000008",
+      "pitch": 65,
+      "onset": 2.65015873015873,
+      "duration": 0.08126984126984116,
+      "velocity": 51,
+      "model_score": 0.3986092209815979,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000009",
+      "pitch": 74,
+      "onset": 3.010068027210884,
+      "duration": 0.11609977324263054,
+      "velocity": 75,
+      "model_score": 0.5928598642349243,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000010",
+      "pitch": 67,
+      "onset": 3.431111111111111,
+      "duration": 0.15092970521541949,
+      "velocity": 76,
+      "model_score": 0.5966443419456482,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000011",
+      "pitch": 64,
+      "onset": 3.6865306122448978,
+      "duration": 0.09287981859410444,
+      "velocity": 67,
+      "model_score": 0.5288308262825012,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000012",
+      "pitch": 67,
+      "onset": 3.8839002267573695,
+      "duration": 0.11609977324263054,
+      "velocity": 68,
+      "model_score": 0.539103627204895,
+      "source": "performance",
+      "confidence": null
+    }
+  ],
+  "model": {
+    "name": "basic-pitch",
+    "weights_version": "0.4.0",
+    "decoder": "soundwaves-onset-frame-v1",
+    "runtime": "onnx",
+    "runtime_version": "1.31.0",
+    "model_sha256": "2c3c1d144bfa61ad236e92e169c13535c880469a12a047d4e73451f2c059a0ec",
+    "score_meaning": "Mean note activation, not calibrated correctness probability.",
+    "velocity_meaning": "Model activation scaled to MIDI velocity, not measured piano dynamics."
+  },
+  "config": {
+    "onset_threshold": 0.4,
+    "frame_threshold": 0.4,
+    "minimum_note_length_ms": 60.0,
+    "lowest_pitch": 21,
+    "highest_pitch": 108,
+    "maximum_duration_seconds": 600.0,
+    "save_model_output": false
+  },
+  "audio": {
+    "duration_seconds": 4.778684807256236,
+    "sample_rate": 22050,
+    "channels": 1,
+    "silent": false,
+    "peak_amplitude": 0.37501558661460876,
+    "timing": "Seconds from the beginning of the supplied audio; no silence trimming.",
+    "preprocessing": "Decode, mono downmix, and resample. No denoising or gain normalization."
+  },
+  "cleanup": {
+    "discarded_events": 0,
+    "clipped_events": 0
+  },
+  "warnings": [],
+  "confidence_meaning": "Confidence is null: model_score is not a calibrated error probability."
+}

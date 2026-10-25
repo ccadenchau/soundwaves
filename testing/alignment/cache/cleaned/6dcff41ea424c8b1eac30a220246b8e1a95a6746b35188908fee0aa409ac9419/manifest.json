@@ -1,0 +1,8 @@
+{
+  "signature": "dd0f7a2dfa66b99c10baf6427e28bfe613b6ebb56e64dd03da3d1e13999665c1",
+  "source_sha256": "cbddcddbc90f3de73f6eac1881b9d5150db29728246b11686b7c035ca5f3c1d3",
+  "hashes": {
+    "piano_cleaned.wav": "edaa9eb3236f65a79939f7aa376a18fd76e8554addf346a3828f958ec7f2d1a5",
+    "cleaning.json": "500ce8b7b4014be87d44d1ec2db3feb580dd016d83020e672e999ce5f638e115"
+  }
+}

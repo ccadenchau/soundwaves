@@ -1,0 +1,15 @@
+{
+  "report": "reports/4ce9d552c3ef48a1857ca53d683313c3/report.json",
+  "sheet_midi": "sheets/433aed3c60a08abe0d174f87cb421c84d548ed3633b4f4487e2b2ee9caf78820/converted/reference/reference.mid",
+  "recording_midi": "recordings/9e8244380e914541027a6e004d87e0e3161558543b32aec45c461557b96fa29f/converted/performance.mid",
+  "sheet_notes": "sheets/433aed3c60a08abe0d174f87cb421c84d548ed3633b4f4487e2b2ee9caf78820/converted/reference/reference.json",
+  "recording_notes": "recordings/9e8244380e914541027a6e004d87e0e3161558543b32aec45c461557b96fa29f/converted/notes.json",
+  "musicxml": "sheets/433aed3c60a08abe0d174f87cb421c84d548ed3633b4f4487e2b2ee9caf78820/converted/reference/reference.musicxml",
+  "repairs": "sheets/433aed3c60a08abe0d174f87cb421c84d548ed3633b4f4487e2b2ee9caf78820/converted/reference/repairs.json",
+  "audio": "inputs/cbddcddbc90f3de73f6eac1881b9d5150db29728246b11686b7c035ca5f3c1d3.mp3",
+  "cleaned_audio": "cleaned/978ec4b3792bd349cad10f1f7be86479aec09af9773c24165739ed437369e830/cleaned.wav",
+  "original_audio": "inputs/cbddcddbc90f3de73f6eac1881b9d5150db29728246b11686b7c035ca5f3c1d3.mp3",
+  "sheet": "inputs/2597fe13842b254b32ac89606f0a8190025469a1fc173bb4033f60670882a95b.pdf",
+  "sheet_midi_audio": "playback/394770095f11fd456b580f365c7ed4661de3c431d98d807d6f4991dcf2b2cc52/preview.wav",
+  "recording_midi_audio": "playback/9510faea57c8671f97500145307b75c25aa409589ae6437215d407a523354c5a/preview.wav"
+}

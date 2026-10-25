@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "source": "/home/alanlai/Documents/GitHub/soundwaves/testing/alignment/cache/cleaned/6dcff41ea424c8b1eac30a220246b8e1a95a6746b35188908fee0aa409ac9419/piano_cleaned.wav",
+  "source_type": "audio",
+  "source_sha256": "edaa9eb3236f65a79939f7aa376a18fd76e8554addf346a3828f958ec7f2d1a5",
+  "time_unit": "seconds",
+  "duration_seconds": 4.778684807256236,
+  "notes": [
+    {
+      "id": "p000000",
+      "pitch": 60,
+      "onset": 0.10345212819624905,
+      "duration": 0.04536927973602367,
+      "velocity": 90,
+      "model_score": 0.7086614173228346,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000001",
+      "pitch": 60,
+      "onset": 0.19084597979002815,
+      "duration": 0.049944288119707636,
+      "velocity": 81,
+      "model_score": 0.6377952755905512,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000002",
+      "pitch": 67,
+      "onset": 0.4133862429249042,
+      "duration": 0.03797357009922386,
+      "velocity": 84,
+      "model_score": 0.6614173228346457,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000003",
+      "pitch": 64,
+      "onset": 0.6682444621321846,
+      "duration": 0.03978544992113875,
+      "velocity": 86,
+      "model_score": 0.6771653543307087,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000004",
+      "pitch": 69,
+      "onset": 0.8881998652936112,
+      "duration": 0.032339947412884484,
+      "velocity": 82,
+      "model_score": 0.6456692913385826,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000005",
+      "pitch": 60,
+      "onset": 1.0634326088833976,
+      "duration": 0.03772706280489935,
+      "velocity": 86,
+      "model_score": 0.6771653543307087,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000006",
+      "pitch": 76,
+      "onset": 1.1017145927152399,
+      "duration": 0.23054145973015316,
+      "velocity": 81,
+      "model_score": 0.6377952755905512,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000007",
+      "pitch": 69,
+      "onset": 1.332597806069856,
+      "duration": 0.030326805893256648,
+      "velocity": 83,
+      "model_score": 0.6535433070866141,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000008",
+      "pitch": 64,
+      "onset": 1.5452056492050765,
+      "duration": 0.04506811622048623,
+      "velocity": 88,
+      "model_score": 0.6929133858267716,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000009",
+      "pitch": 60,
+      "onset": 1.57001165653843,
+      "duration": 0.0401833488827652,
+      "velocity": 77,
+      "model_score": 0.6062992125984252,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000010",
+      "pitch": 79,
+      "onset": 1.5831854808573826,
+      "duration": 0.426453979215383,
+      "velocity": 80,
+      "model_score": 0.6299212598425197,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000011",
+      "pitch": 67,
+      "onset": 1.7716328070331322,
+      "duration": 0.030297093813111076,
+      "velocity": 84,
+      "model_score": 0.6614173228346457,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000012",
+      "pitch": 62,
+      "onset": 2.050254643585136,
+      "duration": 0.03159719661790561,
+      "velocity": 80,
+      "model_score": 0.6299212598425197,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000013",
+      "pitch": 71,
+      "onset": 2.0764859973276018,
+      "duration": 0.028662529510706136,
+      "velocity": 83,
+      "model_score": 0.6535433070866141,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000014",
+      "pitch": 67,
+      "onset": 2.35857712899206,
+      "duration": 0.04205977182539655,
+      "velocity": 86,
+      "model_score": 0.6771653543307087,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000015",
+      "pitch": 65,
+      "onset": 2.6335265811392503,
+      "duration": 0.046593336680579966,
+      "velocity": 81,
+      "model_score": 0.6377952755905512,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000016",
+      "pitch": 69,
+      "onset": 2.905620387762852,
+      "duration": 0.051834690846554565,
+      "velocity": 79,
+      "model_score": 0.6220472440944882,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000017",
+      "pitch": 74,
+      "onset": 3.0002364627898697,
+      "duration": 0.031098264144931775,
+      "velocity": 83,
+      "model_score": 0.6535433070866141,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000018",
+      "pitch": 60,
+      "onset": 3.1405639658817623,
+      "duration": 0.029423663945966183,
+      "velocity": 87,
+      "model_score": 0.6850393700787402,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000019",
+      "pitch": 67,
+      "onset": 3.4255547510955875,
+      "duration": 0.043595900935651244,
+      "velocity": 86,
+      "model_score": 0.6771653543307087,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000020",
+      "pitch": 64,
+      "onset": 3.6722030411285616,
+      "duration": 0.031789132808070164,
+      "velocity": 88,
+      "model_score": 0.6929133858267716,
+      "source": "performance",
+      "confidence": null
+    },
+    {
+      "id": "p000021",
+      "pitch": 67,
+      "onset": 3.872589518921176,
+      "duration": 0.03718679311324102,
+      "velocity": 84,
+      "model_score": 0.6614173228346457,
+      "source": "performance",
+      "confidence": null
+    }
+  ],
+  "model": {
+    "name": "transkun",
+    "weights_version": "2.0",
+    "runtime": "torch/cpu",
+    "worker_seconds": 5.62,
+    "score_meaning": "MIDI velocity divided by 127; Transkun reports no per-note confidence.",
+    "velocity_meaning": "Estimated MIDI velocity from the model."
+  },
+  "config": {
+    "onset_threshold": 0.5,
+    "frame_threshold": 0.3,
+    "minimum_note_length_ms": 50.0,
+    "lowest_pitch": 21,
+    "highest_pitch": 108,
+    "maximum_duration_seconds": 600.0,
+    "save_model_output": false
+  },
+  "audio": {
+    "duration_seconds": 4.778684807256236,
+    "sample_rate": 22050,
+    "channels": 1,
+    "silent": false,
+    "peak_amplitude": 0.375030517578125,
+    "timing": "Seconds from the beginning of the supplied audio; no silence trimming.",
+    "preprocessing": "Decode, mono downmix, and resample. No denoising or gain normalization."
+  },
+  "cleanup": {
+    "discarded_events": 0,
+    "clipped_events": 0
+  },
+  "warnings": [],
+  "confidence_meaning": "Confidence is null: model_score is not a calibrated error probability."
+}
