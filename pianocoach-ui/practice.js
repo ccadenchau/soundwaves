@@ -315,5 +315,5 @@ $('#score').addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Hom
 new ResizeObserver(()=>{if(S.phase==='listening'&&S.follow)moveCursor(S.position);}).observe($('#score'));
 window.addEventListener('pagehide',()=>{S.phase='idle';void cleanup();});
 renderPiano();resetFeedback();
-(async()=>{try{const response=await fetch('/api/pieces');if(!response.ok)throw Error('Could not load the pieces.');const pieces=await response.json();if(!pieces.length)throw Error('No scores are available.');$('#piece').innerHTML=pieces.map(p=>`<option value="${escape(p.id)}">${escape(p.title)}</option>`).join('');await loadPiece();}catch(error){message(error.message);setStatus('Could not open the practice room.');}})();
+(async()=>{try{const response=await fetch('/api/pieces');if(!response.ok)throw Error('Could not load the pieces.');const pieces=await response.json();if(!pieces.length)throw Error('No scores are available.');$('#piece').innerHTML=pieces.map(p=>`<option value="${escape(p.id)}">${escape(p.title)}</option>`).join('');const want=new URLSearchParams(location.search).get('piece');if(want&&pieces.some(p=>p.id===want))$('#piece').value=want;await loadPiece();}catch(error){message(error.message);setStatus('Could not open the practice room.');}})();
 })();

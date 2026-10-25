@@ -189,7 +189,7 @@ input[type=file]{color:var(--dim);font:inherit}a{color:var(--ok)}
 <h1>Test the converters</h1>
 <p class="lead">Each case plays the Minuet in G with mistakes planted at known places, runs the real pipeline, and checks that what comes out matches what went in.</p>
 <div class="chips" id="chips"></div>
-<div class="bar"><button id="all">Run all checks</button><a class="btn ghost" href="/practice">Open the live practice screen</a><a class="btn ghost" href="/record">Record a take</a></div>
+<div class="bar"><button id="all">Run all checks</button><a class="btn ghost" href="/practice">Open the live practice screen</a><a class="btn ghost" href="/record">Record a take</a><a class="btn ghost" href="/upload">Add sheet music</a><a class="btn ghost" href="/convert">Audio to MIDI only</a></div>
 <div id="cases"></div>
 <h3>Try your own recording</h3>
 <div class="card"><p>Upload a WAV, MP3, M4A or MIDI file of someone playing the Minuet in G. You get the full review page.</p>
