@@ -318,7 +318,10 @@ async function start() {
   const from = S.score.bars?.find(b => b.measure === startBar)?.startBeat ?? 0;
   S.follower = new LiveScoreFollower(S.score.notes.filter(n => n.beat >= from - 1e-6), {bpm: S.score.piece.bpm, input: 'mic'});
   try {
-    S.ctx = new AudioContext({sampleRate: 44100}); await S.ctx.resume(); S.rate = S.ctx.sampleRate;
+    S.ctx = new AudioContext({sampleRate: 44100}); S.rate = S.ctx.sampleRate;
+    // Chrome only lets audio start after a real click. If the context stays suspended, say so instead of hanging.
+    await Promise.race([S.ctx.resume(), new Promise(r => setTimeout(r, 1500))]);
+    if (S.ctx.state !== 'running') throw Error('The browser did not allow audio to start. Click Start again.');
     const form = new FormData(); form.append('piece', $('#piece').value); form.append('rate', S.rate); form.append('start_bar', startBar);
     const res = await fetch('/api/live/session', {method: 'POST', body: form}); const data = await res.json();
     if (!res.ok) throw Error(data.error || 'Could not start the live check.');
@@ -333,7 +336,8 @@ async function start() {
       const player = $('#player'); player.src = URL.createObjectURL(S.file); player.currentTime = 0;
       S.source = S.ctx.createMediaElementSource(player); S.source.connect(S.ctx.destination); await capture(S.source);
       player.onended = () => { if (S.phase === 'live') setTimeout(() => void finish(), 2500); };
-      await player.play(); S.origin = S.ctx.currentTime;
+      try { await player.play(); } catch (error) { throw Error(`Could not play that recording (${error.name}). Click Start again, or try an MP3 or WAV.`); }
+      S.origin = S.ctx.currentTime;
     }
     setPhase('live'); void poll();
   } catch (error) { await cleanup(); setPhase('idle'); message(error.name === 'NotAllowedError' ? 'The browser blocked the microphone. Allow it in the address bar and press Start again.' : error.message); }
