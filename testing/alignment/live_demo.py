@@ -74,7 +74,7 @@ def live_finish():
         upload.save(path)
         try:
             result = compare_files(str(source), path, bpm=float(metadata.get('bpm', 120)),
-                                   title=metadata.get('title') or piece_id)
+                                   title=metadata.get('title') or piece_id, piece_id=piece_id)
         except Exception as error:
             return jsonify(error=str(error)[:300]), 422
     directory = CACHE / 'reports' / result['report_id']

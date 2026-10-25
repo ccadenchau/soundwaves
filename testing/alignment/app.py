@@ -89,10 +89,10 @@ REPORT = '''<!doctype html>
 <div class="metric"><strong>{{ summary.tempo }}</strong>Your tempo (score {{ summary.score_bpm }})</div>
 </div>
 <audio controls preload="metadata" id="audio" src="{{ url_for('artifact', report_id=result.report_id, kind='audio') }}"></audio>
-<div class="links"><a class="btn" href="/live">Play again live</a><a class="btn ghost" href="{{ url_for('check') }}">Check another recording</a></div>
+<div class="links"><a class="btn" href="/live{% if summary.piece_id %}?piece={{ summary.piece_id|urlencode }}{% endif %}">Play it again live</a><a class="btn ghost" href="{{ url_for('check') }}">Check another recording</a></div>
 </section>
 
-<section class="card" id="teacher" data-url="{{ url_for('report_feedback', report_id=result.report_id) }}">
+<section class="card" id="teacher" data-url="{{ url_for('report_feedback', report_id=result.report_id) }}" data-piece="{{ summary.piece_id or '' }}">
 <h2>Notes from your teacher</h2><p class="muted" id="teacher-status">Writing feedback…</p><div id="teacher-body"></div></section>
 
 <section class="card" id="score-view" data-url="{{ url_for('notation', report_id=result.report_id) }}">
@@ -154,8 +154,10 @@ try{const r=await fetch(box.dataset.url);const d=await r.json();if(!r.ok)throw E
 status.remove();el('p',d.summary,body).style.fontSize='18px';
 if(d.strengths&&d.strengths.length){el('h3','Going well',body);const u=el('ul','',body);d.strengths.forEach(t=>el('li',t,u));}
 if(d.focus_areas&&d.focus_areas.length){el('h3','What to work on',body);d.focus_areas.forEach(f=>{const c=document.createElement('div');c.className='focus';body.appendChild(c);
-el('strong',f.title+(f.bars?' · '+f.bars:''),c);el('p',f.what_happened,c);const u=el('ul','',c);f.tips.forEach(t=>el('li',t,u));});}
+el('strong',f.title+(f.bars?' · '+f.bars:''),c);el('p',f.what_happened,c);const u=el('ul','',c);f.tips.forEach(t=>el('li',t,u));
+const bar=(f.bars||'').match(/[0-9]+/);if(bar&&box.dataset.piece){const a=document.createElement('a');a.className='btn ghost';a.style.cssText='padding:7px 14px;font-size:14px;margin-top:4px';a.href=`/live?piece=${encodeURIComponent(box.dataset.piece)}&bar=${bar[0]}`;a.textContent=`Practise from bar ${bar[0]} live`;c.appendChild(a);}});}
 if(d.practice_plan){el('h3','Next practice session',body);el('p',d.practice_plan,body);}
+if(d.written_by){const w=el('p',`Written by ${/claude/i.test(d.written_by)?'Claude':'Gemini'} from the note-by-note comparison above.`,body);w.className='muted';w.style.fontSize='13px';}
 }catch(e){status.textContent=e.message;}})();
 document.querySelectorAll('.seek').forEach(button=>button.addEventListener('click',()=>{
 const audio=document.getElementById('audio');audio.currentTime=Number(button.dataset.time);audio.play().catch(()=>{});}));
@@ -203,9 +205,10 @@ def check():
             raise ValueError('Sheet music links must start with http:// or https://.')
         source = sheet_url if sheet_url else store_upload(sheet)
         audio = store_upload(recording, recording=True)
-        title = _piece_title(source) or (Path(sheet.filename).stem.replace('_', ' ').replace('-', ' ').strip().title()
-                                         if sheet and sheet.filename else None)
-        result = compare_files(source, audio, bpm=float(request.form.get('bpm', '120')), title=title)
+        piece_id, title = _known_piece(source)
+        title = title or (Path(sheet.filename).stem.replace('_', ' ').replace('-', ' ').strip().title()
+                          if sheet and sheet.filename else None)
+        result = compare_files(source, audio, bpm=float(request.form.get('bpm', '120')), title=title, piece_id=piece_id)
         directory = _report_directory(result['report_id'])
         (directory / 'cache.json').write_text(json.dumps(result['cache']), encoding='utf-8')
         return redirect(url_for('show_report', report_id=result['report_id']))
@@ -216,15 +219,17 @@ def check():
         return _render(CHECK, error=str(error)), 400
 
 
-def _piece_title(source):
-    """The name a piece was given on Add a piece, when this is the same file."""
+def _known_piece(source):
+    """(piece id, name) when this sheet music was already added on Add a piece, else (None, None)."""
     import hashlib
     try:
-        digest = hashlib.sha256(Path(source).read_bytes()).hexdigest()[:10]
-        sidecar = ROOT_DIR / 'pianocoach' / 'pieces' / f'upload-{digest}.json'
-        return json.loads(sidecar.read_text(encoding='utf-8')).get('title') if sidecar.is_file() else None
+        piece_id = 'upload-' + hashlib.sha256(Path(source).read_bytes()).hexdigest()[:10]
+        sidecar = ROOT_DIR / 'pianocoach' / 'pieces' / f'{piece_id}.json'
+        if sidecar.is_file():
+            return piece_id, json.loads(sidecar.read_text(encoding='utf-8')).get('title')
     except (OSError, ValueError):
-        return None
+        pass
+    return None, None
 
 
 def _summary(report, directory):
@@ -232,7 +237,8 @@ def _summary(report, directory):
     from statistics import median
     from music21 import pitch
     meta_path = directory / 'meta.json'
-    title = json.loads(meta_path.read_text(encoding='utf-8')).get('title') if meta_path.is_file() else None
+    meta = json.loads(meta_path.read_text(encoding='utf-8')) if meta_path.is_file() else {}
+    title, piece_id = meta.get('title'), meta.get('piece_id')
     bars = report['measures']
     numbers = [b['number'] for b in bars]
     span = f'{min(numbers)}–{max(numbers)}' if numbers and min(numbers) != max(numbers) else str(numbers[0]) if numbers else '—'
@@ -252,7 +258,7 @@ def _summary(report, directory):
         pace = 'close to the written tempo'
     line = (f'You played bar{"s" if "–" in span else ""} {span} and got {right:.0%} of the written notes, '
             f'{pace}. Start with the teacher notes below, then look for red and orange on the score.')
-    return dict(title=title or 'Your take', bars=span, tempo=tempo or '—', score_bpm=score_bpm or '—', line=line,
+    return dict(title=title or 'Your take', piece_id=piece_id, bars=span, tempo=tempo or '—', score_bpm=score_bpm or '—', line=line,
                 wrong=counts['wrong_pitch'], missing=counts['missing'], extra=counts['extra'],
                 repeats=len(set(numbers)) != len(numbers))
 

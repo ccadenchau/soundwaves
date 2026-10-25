@@ -145,7 +145,7 @@ def _cached(kind, source, signature, build, artifacts):
         return {name: destination / relative for name, relative in artifacts.items()}, False
 
 
-def compare_files(sheet, recording, *, bpm=120, title=None):
+def compare_files(sheet, recording, *, bpm=120, title=None, piece_id=None):
     """Reuse conversions, rerun alignment, and save a uniquely identified report."""
     if not math.isfinite(bpm) or not 20 <= bpm <= 400:
         raise ValueError('Fallback BPM must be between 20 and 400.')
@@ -213,7 +213,7 @@ def compare_files(sheet, recording, *, bpm=120, title=None):
                      **previews)
     _write_json(directory / 'artifacts.json', {k: str(v.relative_to(CACHE)) for k, v in artifacts.items()})
     name = title or Path(str(sheet)).stem.replace('_', ' ').replace('-', ' ').strip().title()
-    _write_json(directory / 'meta.json', dict(title=name))
+    _write_json(directory / 'meta.json', dict(title=name, piece_id=piece_id))
     prefetch_feedback(report_id)
     return dict(report=report, report_id=report_id, report_path=report_path,
                 cache=dict(sheet_hit=sheet_hit, recording_hit=recording_hit))

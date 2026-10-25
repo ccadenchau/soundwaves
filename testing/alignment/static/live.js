@@ -164,7 +164,23 @@ function renderFeed(marks) {
     return `<div class="item${isNew ? '' : ' seen'}" style="--c:${colour[g.kind]}"><small>Bar ${esc(g.bar)} · ${label[g.kind]}</small>${esc(text(g))}</div>`;
   }).join('');
   if (html !== S.feedHtml) { feedEl.innerHTML = html; S.feedHtml = html; }
-  for (const g of list) S.feedKeys.add(g.id);
+  for (const g of list) { if (!S.feedKeys.has(g.id)) say(`Bar ${g.bar}. ${text(g)}`); S.feedKeys.add(g.id); }
+}
+/* ---------- spoken coach: the browser's own voice, nothing to install ---------- */
+const voice = {queue: [], busy: false};
+function say(text) {
+  if (!$('#speak').checked || !('speechSynthesis' in window) || S.phase !== 'live') return;
+  // Keep it short and current: never more than two lines waiting, and never a stale one.
+  voice.queue.push(text.replace(/[♯]/g, ' sharp').replace(/[♭]/g, ' flat').replace(/\b([A-G])(\d)\b/g, '$1 $2'));
+  if (voice.queue.length > 2) voice.queue.splice(0, voice.queue.length - 2);
+  speakNext();
+}
+function speakNext() {
+  if (voice.busy || !voice.queue.length) return;
+  const u = new SpeechSynthesisUtterance(voice.queue.shift());
+  u.rate = 1.08; u.pitch = 1; voice.busy = true;
+  u.onend = u.onerror = () => { voice.busy = false; speakNext(); };
+  speechSynthesis.speak(u);
 }
 function applyState(state) {
   if (!state || state.version === S.version) return;
@@ -331,6 +347,7 @@ async function cleanup() {
 }
 async function finish() {
   if (S.phase !== 'live') return;
+  if ('speechSynthesis' in window) { voice.queue = []; speechSynthesis.cancel(); }
   setPhase('finishing');
   let file = S.file;
   try {
@@ -354,7 +371,7 @@ async function finish() {
 
 $('#go').addEventListener('click', () => S.phase === 'live' ? void finish() : void start());
 $('#piece').addEventListener('change', () => { history.replaceState(null, '', `?piece=${encodeURIComponent($('#piece').value)}`); void loadPiece(); });
-$('#mode').addEventListener('change', () => { $('#file-wrap').hidden = $('#mode').value !== 'file'; $('#file-spacer').hidden = $('#mode').value === 'file'; setPhase(S.phase); });
+$('#mode').addEventListener('change', () => { $('#file-wrap').hidden = $('#mode').value !== 'file'; $('#file-spacer').hidden = $('#mode').value === 'file'; $('#speak').checked = $('#mode').value === 'file'; setPhase(S.phase); });
 $('#file').addEventListener('change', () => setPhase(S.phase));
 window.addEventListener('pagehide', () => { if (S.session) navigator.sendBeacon?.(`/api/live/session/${S.session}/stop`); S.phase = 'idle'; void cleanup(); });
 (async () => {
@@ -362,8 +379,9 @@ window.addEventListener('pagehide', () => { if (S.session) navigator.sendBeacon?
     const pieces = await (await fetch('/api/pieces')).json();
     if (!pieces.length) throw Error('No pieces yet. Add sheet music first.');
     $('#piece').innerHTML = pieces.map(p => `<option value="${esc(p.id)}">${esc(p.title)}</option>`).join('');
-    const want = new URLSearchParams(location.search).get('piece');
+    const params = new URLSearchParams(location.search), want = params.get('piece');
     if (want && pieces.some(p => p.id === want)) $('#piece').value = want;
+    if (params.get('bar')) $('#start-bar').value = params.get('bar');
     await loadPiece();
   } catch (error) { overlay(''); message(error.message); }
 })();

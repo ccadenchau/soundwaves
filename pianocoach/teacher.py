@@ -1,5 +1,5 @@
 """What the comparison page needs beyond the raw alignment: the falling-keys note list, and
-piano-teacher feedback written by Gemini.
+piano-teacher feedback written by Claude (or Gemini when only a Gemini key is set).
 
 Both take an alignment report (the dict `alignment.align_performance` returns, saved as
 alignment.json or report.json). Feedback is cached next to the report so reopening a take
@@ -14,7 +14,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-from .explain import GEMINI_MODEL, load_env
+from .explain import GEMINI_MODEL, MODEL as CLAUDE_MODEL, load_env, provider
 
 PLACEHOLDER_KEY = 'YOUR_GEMINI_API_KEY_HERE'
 NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
@@ -122,9 +122,50 @@ def _key():
     load_env()
     key = (os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY') or '').strip()
     if not key or key == PLACEHOLDER_KEY:
-        raise FeedbackUnavailable('Teacher feedback is switched off. Paste your Google AI Studio key into '
-                                  '.env as GEMINI_API_KEY=... and restart the server.')
+        raise FeedbackUnavailable('Teacher feedback is switched off. Put an ANTHROPIC_API_KEY or a Google AI Studio '
+                                  'GEMINI_API_KEY in .env and restart the server.')
     return key
+
+
+def _ask_claude(payload, model):
+    """Claude writes the notes; the same system prompt and JSON schema as the Gemini path."""
+    import anthropic
+    try:
+        client = anthropic.Anthropic()
+        response = client.messages.create(
+            model=model, max_tokens=3000, system=SYSTEM,
+            messages=[{'role': 'user', 'content': json.dumps(payload)}],
+            output_config={'format': {'type': 'json_schema', 'schema': _strict(SCHEMA)}})
+    except anthropic.AuthenticationError:
+        raise FeedbackUnavailable('Anthropic rejected the API key in .env.') from None
+    except anthropic.APIConnectionError as error:
+        raise FeedbackUnavailable(f'Could not reach Claude: {error}'[:300]) from None
+    except anthropic.APIStatusError as error:
+        raise FeedbackUnavailable(f'Claude request failed ({error.status_code}).') from None
+    if response.stop_reason == 'refusal':
+        raise FeedbackUnavailable('Claude declined to write feedback for this take.')
+    try:
+        text = next(b.text for b in response.content if b.type == 'text')
+        return json.loads(text)
+    except (StopIteration, ValueError):
+        raise FeedbackUnavailable('Claude returned no usable feedback. Try again.') from None
+
+
+def _strict(schema):
+    """Claude's structured output wants every object closed; Gemini's wants them open."""
+    out = json.loads(json.dumps(schema))
+    def close(node):
+        if isinstance(node, dict):
+            if node.get('type') == 'object':
+                node['additionalProperties'] = False
+                node['required'] = list(node.get('properties', {}))
+            for v in node.values():
+                close(v)
+        elif isinstance(node, list):
+            for v in node:
+                close(v)
+    close(out)
+    return out
 
 
 def _ask(payload, key, model):
@@ -172,13 +213,16 @@ def teacher_feedback(alignment, cache_dir, title='', force=False):
     """Piano-teacher feedback for one comparison; cached in cache_dir/teacher.json."""
     load_env()
     payload = feedback_payload(alignment, title)
-    model = os.environ.get('GEMINI_MODEL') or GEMINI_MODEL
+    which = provider()
+    if which == 'claude' and not (os.environ.get('ANTHROPIC_API_KEY') or os.environ.get('ANTHROPIC_AUTH_TOKEN')):
+        which = 'gemini'  # no Anthropic credential: fall back rather than fail
+    model = CLAUDE_MODEL if which == 'claude' else (os.environ.get('GEMINI_MODEL') or GEMINI_MODEL)
     digest = hashlib.sha256((model + SYSTEM + json.dumps(payload, sort_keys=True)).encode()).hexdigest()
     cache = Path(cache_dir) / 'teacher.json'
     if cache.is_file() and not force:
         saved = json.loads(cache.read_text(encoding='utf-8'))
         if saved.get('digest') == digest:
-            return saved['feedback']
-    feedback = _ask(payload, _key(), model)
-    cache.write_text(json.dumps(dict(digest=digest, feedback=feedback), indent=2) + '\n', encoding='utf-8')
-    return feedback
+            return dict(saved['feedback'], written_by=saved.get('written_by', model))
+    feedback = _ask_claude(payload, model) if which == 'claude' else _ask(payload, _key(), model)
+    cache.write_text(json.dumps(dict(digest=digest, written_by=model, feedback=feedback), indent=2) + '\n', encoding='utf-8')
+    return dict(feedback, written_by=model)
