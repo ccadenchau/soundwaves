@@ -383,7 +383,7 @@ function show(r){
     <div class="facts"><div class="fact"><strong>${s.notes}</strong><span>notes</span></div><div class="fact"><strong>${s.chords}</strong><span>chords</span></div><div class="fact"><strong>${s.biggest_chord}</strong><span>biggest chord</span></div><div class="fact"><strong>${s.lowest??'–'}–${s.highest??'–'}</strong><span>range</span></div></div>
     ${roll(v.notes,v.duration,key==='cleaned'?marks:null)}
     ${r.difference?'<div class="legend"><span><i class="sw" style="background:hsl(158,62%,55%)"></i>note (brighter = louder)</span><span><i class="sw" style="background:var(--add)"></i>only found after cleaning</span></div>':''}
-    <div class="row">${s.notes?`<span class="dim" style="font-size:14px">Hear the MIDI on a piano:</span><audio controls preload="metadata" src="${f(key+'-as-piano.wav')}" style="max-width:360px"></audio>`:''}<a class="btn" href="${f(key+'.mid')}" download="${esc(r.file.replace(/\.[^.]+$/,''))}-${key}.mid">Download MIDI</a></div>
+    <div class="row">${s.notes?`<span class="dim" style="font-size:14px">Hear the MIDI on a piano:</span><audio controls preload="metadata" src="${f(key+'-as-piano.wav')}" style="max-width:360px"></audio>`:''}<a class="btn" href="${f(key+'.mid')}" download="${esc(r.file.replace(/[.][^.]+$/,''))}-${key}.mid">Download MIDI</a></div>
     <details><summary>All ${s.notes} notes</summary><table><tr><th>Time</th><th>Note</th><th>Length</th><th>Velocity</th></tr>${v.notes.map(n=>`<tr><td>${n.t.toFixed(2)} s</td><td>${n.name}</td><td>${n.d.toFixed(2)} s</td><td>${n.v}</td></tr>`).join('')}</table></details>
     ${v.warnings.length?`<p class="dim" style="margin-top:8px">${v.warnings.map(esc).join(' ')}</p>`:''}</div>`;}
   $('#out').innerHTML=html;history.replaceState(null,'','/convert?id='+r.id);
@@ -403,6 +403,102 @@ if(id)fetch('/api/convert/'+encodeURIComponent(id)+'/result.json').then(r=>r.ok?
 </script></body></html>"""
 
 CONVERT_FILES = {'cleaned.wav', 'cleaned.mid', 'original.mid', 'cleaned-as-piano.wav', 'original-as-piano.wav', 'result.json'}
+
+
+EASY_PAGE = """<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make it easy · PianoCoach</title>""" + SITE_HEAD + """
+<style>
+.drop{display:block;border:2px dashed #b9c7e6;border-radius:var(--radius);padding:30px 20px;text-align:center;cursor:pointer;background:#fafbff;font-weight:400}
+.drop.over{border-color:var(--accent);background:#eef2fb}input[type=file]{display:none}
+.grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:16px;margin-top:16px}.grid label small{display:block}
+.levels{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.levels label{display:flex;align-items:center;gap:6px;font-weight:600;background:#f3f5fa;border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
+#msg{min-height:1.4em;margin:14px 0 0}#msg.err{color:var(--wrong)}#done{display:none}#done.show{display:block}
+.tune{font:14px ui-monospace,Menlo,monospace;color:var(--muted);line-height:1.9;word-spacing:6px}
+.notation{height:420px}.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}}
+</style></head><body>""" + site_header('easy') + """<main>
+<h1>Make it easy</h1>
+<p class="lede">Drop in any recording you have: a song, a phone clip, you humming the tune. PianoCoach pulls out the melody, snaps it to the beat, moves it into one octave on the white keys, and adds it to the piece list so you can play it on Play live. A busy mix comes out approximate; a hummed tune comes out close.</p>
+<section class="card">
+<label class="drop" id="drop"><input type="file" id="file" accept=".mp3,.wav,.m4a,.webm,.ogg,.flac,.aiff,audio/*"><span id="pick">Drop a recording here, or click to choose one. MP3, WAV, M4A, up to a few minutes.</span></label>
+<div class="grid">
+<label>Name <small>what to call it in the list</small><input id="name" placeholder="Happy Birthday"></label>
+<label>Start at <small>seconds into the recording</small><input type="number" id="start" value="0" min="0" step="1"></label>
+<label>Bars <small>how much to keep</small><select id="bars"><option>8</option><option>12</option><option>16</option></select></label>
+<label>Tempo <small>for the easy score</small><input type="number" id="bpm" value="72" min="40" max="140"></label>
+</div>
+<div class="levels">
+<label><input type="radio" name="level" value="3" checked> As simple as it gets: white keys, one note per beat</label>
+<label><input type="radio" name="level" value="2"> Simple: one octave, whole beats, sharps and flats kept</label>
+<label><input type="radio" name="level" value="1"> Close to the original: eighth notes, original key</label>
+<label><input type="checkbox" id="solo"> This is a solo piano recording</label>
+</div>
+<p id="msg" class="muted">Takes about ten seconds for a minute of audio.</p>
+</section>
+<section class="card" id="done"><h2 id="title"></h2><p class="muted" id="facts"></p>
+<div class="notation" id="notation"></div>
+<p class="tune" id="tune"></p>
+<div class="row"><a class="btn" id="go-live">Play it live</a><a class="btn ghost" id="go-again" href="/easy">Make another</a></div></section>
+</main>""" + SITE_FOOTER + """<script>
+const $=s=>document.querySelector(s);
+async function send(file){
+  $('#msg').className='muted';$('#msg').textContent='Listening to the recording and writing the easy version…';$('#done').classList.remove('show');$('#pick').textContent=file.name;
+  const f=new FormData();f.append('audio',file);f.append('title',$('#name').value.trim());f.append('start',$('#start').value);f.append('bars',$('#bars').value);f.append('bpm',$('#bpm').value);
+  f.append('level',document.querySelector('input[name=level]:checked').value);f.append('solo',$('#solo').checked?'1':'0');
+  try{const r=await fetch('/api/easy',{method:'POST',body:f});const d=await r.json();if(!r.ok)throw Error(d.error||'Could not make an easy version.');
+    $('#msg').textContent='';$('#title').textContent=d.title;
+    $('#facts').textContent=`${d.bars} bars, ${d.notes} notes, in ${d.key}. Heard ${d.heard_notes} notes with ${d.transcriber}${d.bpm_detected?`, pulse about ${d.bpm_detected} bpm`:''}; written at ${d.bpm} bpm.`;
+    $('#tune').textContent=d.tune.map(t=>t.name).join(' ');
+    $('#go-live').href='/live?piece='+encodeURIComponent(d.id);$('#done').classList.add('show');
+    const n=await fetch('/api/live/notation/'+encodeURIComponent(d.id));const nd=await n.json();const box=$('#notation');box.innerHTML='';
+    if(n.ok)for(const page of nd.pages){const doc=new DOMParser().parseFromString(page,'image/svg+xml');const svg=document.importNode(doc.documentElement,true);svg.setAttribute('viewBox',`0 0 ${parseFloat(svg.getAttribute('width'))} ${parseFloat(svg.getAttribute('height'))}`);box.append(svg);}
+  }catch(e){$('#msg').className='err';$('#msg').textContent=e.message;}
+}
+$('#file').onchange=e=>e.target.files[0]&&send(e.target.files[0]);
+const drop=$('#drop');['dragenter','dragover'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.add('over');}));
+['dragleave','drop'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.remove('over');}));
+drop.addEventListener('drop',e=>e.dataTransfer.files[0]&&send(e.dataTransfer.files[0]));
+</script></body></html>"""
+
+
+@coach.get('/easy')
+def easy_page():
+    from flask import Response
+    return _no_cache(Response(EASY_PAGE, mimetype='text/html'))
+
+
+@coach.post('/api/easy')
+def easy_route():
+    """A recording in, an easy piece in the list out."""
+    import tempfile
+    from pianocoach.easy import make_easy
+    upload = request.files.get('audio')
+    if upload is None or not upload.filename:
+        return jsonify(error='Choose a recording first.'), 400
+    suffix = Path(upload.filename).suffix.lower() or '.wav'
+    if suffix not in AUDIO_SUFFIXES:
+        return jsonify(error='Use an audio file: MP3, WAV, M4A, WebM, OGG or FLAC.'), 400
+    try:
+        level = int(request.form.get('level', '3'))
+        bars = int(request.form.get('bars', '8'))
+        bpm = float(request.form.get('bpm', '72'))
+        start = float(request.form.get('start', '0') or 0)
+        if not 40 <= bpm <= 140 or start < 0:
+            raise ValueError
+    except ValueError:
+        return jsonify(error='Check the tempo and start time.'), 400
+    with tempfile.TemporaryDirectory(prefix='easy-upload-') as folder:
+        path = Path(folder) / f'recording{suffix}'
+        upload.save(path)
+        try:
+            result = make_easy(path, title=request.form.get('title', ''), level=level, bars=bars, start_seconds=start,
+                               bpm=bpm, solo_piano=request.form.get('solo') == '1', workdir=Path(folder) / 'work')
+        except ValueError as error:
+            return jsonify(error=str(error)[:300]), 422
+        except Exception as error:  # noqa: BLE001 - say why, in words
+            return jsonify(error=f'Could not make an easy version: {type(error).__name__}: {error}'[:300]), 500
+    return jsonify(result)
 
 
 @coach.get('/convert')

@@ -123,12 +123,13 @@ function marker(note, mark, extra) {
   const shift = engraved == null ? 0 : diatonic(mark.actual) - engraved;
   const x = box.x + box.width / 2 + (extra ? box.width * 1.4 : 0), y = box.y + box.height / 2 - shift * gap / 2;
   const g = document.createElementNS(NS, 'g'); g.classList.add('played-marker', 'fresh');
+  if (mark.maybe_noise) g.classList.add('faint');
   const e = document.createElementNS(NS, 'ellipse');
   for (const [k, v] of Object.entries({cx: x, cy: y, rx: box.width / 2, ry: box.height / 2})) e.setAttribute(k, v);
   const t = document.createElementNS(NS, 'text');
   t.setAttribute('x', x + box.width * .7); t.setAttribute('y', y - box.height * .7); t.setAttribute('font-size', gap * .7);
   t.textContent = `${extra ? '+ ' : ''}${pitchName(mark.actual)}`;
-  const title = document.createElementNS(NS, 'title'); title.textContent = extra ? `Extra ${pitchName(mark.actual)}` : `Played ${pitchName(mark.actual)}`;
+  const title = document.createElementNS(NS, 'title'); title.textContent = mark.maybe_noise ? `Faint ${pitchName(mark.actual)}, possibly room noise` : extra ? `Extra ${pitchName(mark.actual)}` : `Played ${pitchName(mark.actual)}`;
   g.append(e, t, title); note.append(g);
   return g;
 }
@@ -138,8 +139,9 @@ function renderFeed(marks) {
   const groups = new Map();
   for (const m of marks) {
     if (m.category === 'correct') continue;
-    const id = `${m.category}-${m.occurrence}`;
-    const g = groups.get(id) || {id, kind: m.category, bar: m.measure, items: [], time: -1};
+    const kind = m.category === 'extra' && m.maybe_noise ? 'noise' : m.category;
+    const id = `${kind}-${m.occurrence}`;
+    const g = groups.get(id) || {id, kind, bar: m.measure, items: [], time: -1};
     g.items.push(m); g.time = Math.max(g.time, m.time ?? -1); groups.set(id, g);
   }
   for (const t of S.tempoItems) groups.set(t.id, t);
@@ -152,10 +154,11 @@ function renderFeed(marks) {
     if (g.kind === 'missing') return n === 1 ? `${pitchName(g.items[0].expected)} didn't sound.`
       : `${n} notes didn't sound: ${[...new Set(g.items.map(m => pitchName(m.expected)))].slice(0, 6).join(', ')}.`;
     const names = [...new Set(g.items.map(m => pitchName(m.actual)))];
+    if (g.kind === 'noise') return `${n === 1 ? 'A faint sound' : `${n} faint sounds`} that may be the room, not keys (${names.slice(0, 4).join(', ')}${names.length > 4 ? '…' : ''}).`;
     return n === 1 ? `An extra ${names[0]} that isn't in the score.` : `${n} keys that aren't in the score (${names.slice(0, 5).join(', ')}${names.length > 5 ? '…' : ''}).`;
   };
-  const label = {wrong_pitch: 'wrong key', missing: 'skipped', extra: 'extra notes', tempo: 'tempo'};
-  const colour = {wrong_pitch: '#c43d48', missing: '#c07700', extra: '#793bcc', tempo: '#805000'};
+  const label = {wrong_pitch: 'wrong key', missing: 'skipped', extra: 'extra notes', tempo: 'tempo', noise: 'possibly noise'};
+  const colour = {wrong_pitch: '#c43d48', missing: '#c07700', extra: '#793bcc', tempo: '#805000', noise: '#8a94a6'};
   const feedEl = $('#feed');
   if (!list.length) return;
   $('#feed-empty')?.remove();
@@ -164,7 +167,7 @@ function renderFeed(marks) {
     return `<div class="item${isNew ? '' : ' seen'}" style="--c:${colour[g.kind]}"><small>Bar ${esc(g.bar)} · ${label[g.kind]}</small>${esc(text(g))}</div>`;
   }).join('');
   if (html !== S.feedHtml) { feedEl.innerHTML = html; S.feedHtml = html; }
-  for (const g of list) { if (!S.feedKeys.has(g.id)) say(`Bar ${g.bar}. ${text(g)}`); S.feedKeys.add(g.id); }
+  for (const g of list) { if (!S.feedKeys.has(g.id) && g.kind !== 'noise') say(`Bar ${g.bar}. ${text(g)}`); S.feedKeys.add(g.id); }
 }
 /* ---------- spoken coach: the browser's own voice, nothing to install ---------- */
 const voice = {queue: [], busy: false};
@@ -192,10 +195,11 @@ function applyState(state) {
   if (!state.ready) return;
   const timed = (state.marks || []).filter(m => m.time != null && m.measure != null);
   if (timed.length) { S.checkedBar = timed.reduce((a, b) => (b.time > a.time ? b : a)).measure; showBar(); }
-  const counts = {correct: 0, wrong_pitch: 0, missing: 0, extra: 0};
+  const counts = {correct: 0, wrong_pitch: 0, missing: 0, extra: 0, noise: 0};
   const located = (state.marks || []).filter(m => m.id && noteEl(m.id));
   for (const m of state.marks || []) {
-    counts[m.category] = (counts[m.category] || 0) + 1;
+    const bucket = m.category === 'extra' && m.maybe_noise ? 'noise' : m.category;  // faint room sounds don't count as extra keys
+    counts[bucket] = (counts[bucket] || 0) + 1;
     const key = m.id || `x${m.actual}@${(m.time ?? 0).toFixed(1)}`;
     const before = S.shown.get(key);
     if (before === m.category) continue;

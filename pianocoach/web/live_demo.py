@@ -191,6 +191,8 @@ class LiveSession:
             alignment = self._align(kept, total)
         except ValueError:
             return
+        from pianocoach.noise import apply_noise_rules
+        apply_noise_rules(alignment, kept, self.reference['notes'])
         self.state = self._summary(alignment, kept, total)
 
     def _align(self, kept, total):
@@ -266,12 +268,15 @@ class LiveSession:
                 continue
             mark = dict(id=m['score_note_id'], category=category, expected=m['expected_pitch'], actual=m['actual_pitch'],
                         time=m['audio_time'], measure=m['measure'], occurrence=m['measure_occurrence'])
+            if m.get('maybe_noise'):
+                mark['maybe_noise'] = True
             if category == 'correct' and timing.get(m['score_note_id']) is not None:
                 mark['timing_ms'] = round(timing[m['score_note_id']] * 1000)
             marks.append(mark)
         # A mistake is shown once two passes in a row agree on it; any mark three passes old is kept
         # from then on, so the page never repaints a note the player already saw because a later pass
         # re-paired notes a few beats back. The final report re-checks everything.
+        matched_total = sum(1 for m in marks if m['category'] == 'correct')
         streak = {}
         for m in marks:
             key = m['id'] or f"x{m['actual']}@{round(m['time'] or 0, 1)}"
@@ -287,7 +292,9 @@ class LiveSession:
             count = streak[key][1]
             if m['category'] == 'correct' or count >= 2:
                 shown[key] = m
-            if count >= 3 and (m['category'] != 'correct' or m['time'] is None or m['time'] <= settled):
+            # Nothing is locked until the take has enough matched notes to be sure where it is: a short
+            # tune that repeats its opening phrase can be aligned to the repeat for the first few passes.
+            if count >= 3 and matched_total >= 10 and (m['category'] != 'correct' or m['time'] is None or m['time'] <= settled):
                 self.frozen[key] = m
         marks = list(self.frozen.values()) + list(shown.values())
         bars = []

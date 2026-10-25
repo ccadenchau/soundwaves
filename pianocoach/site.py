@@ -1,6 +1,6 @@
 """One header and footer for every PianoCoach page, so the site reads as one thing."""
 
-NAV = (('live', '/live', 'Play live'), ('check', '/check', 'Check a recording'), ('add', '/upload', 'Add a piece'))
+NAV = (('live', '/live', 'Play live'), ('check', '/check', 'Check a recording'), ('add', '/upload', 'Add a piece'), ('easy', '/easy', 'Make it easy'))
 
 
 def header(active=''):
@@ -11,7 +11,6 @@ def header(active=''):
 
 FOOTER = ('<footer class="site-foot">PianoCoach listens to you play from your own sheet music and marks every note, '
           'for people learning piano without a teacher in the room. Made at Cal Hacks 13.0. '
-          'Team tools: <a href="/test">self-checks</a> · <a href="/convert">audio to MIDI</a> · '
-          '<a href="/practice">first live screen</a> · <a href="/record">record a take</a></footer>')
+          'Team tools: <a href="/test">self-checks</a> · <a href="/convert">audio to MIDI</a></footer>')
 
 HEAD = '<link rel="stylesheet" href="/site.css">'
