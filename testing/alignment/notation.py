@@ -4,9 +4,57 @@ import json
 from collections import defaultdict, deque
 from importlib.resources import files
 
+import numpy as np
 from music21 import pitch
 
 from alignment.inputs import load_performance
+
+
+def _extra_anchor(extra, report, located, locations, notes, note_by_id):
+    """The score note an extra played note should be drawn next to, or None.
+
+    Nearest-in-time alone pins a right-hand slip to a left-hand note that happens to sound
+    beside it, so the page shows an extra on the left and a missing note on the right. Prefer,
+    in order: (1) the missing score note in this bar that the extra is most likely a wrong
+    version of (same key, or a near or octave-off pitch, at about the same beat); (2) the
+    nearest played note on the staff whose pitch range fits the extra; (3) the nearest played
+    note on any staff."""
+    same = [m for m in located if m['measure_occurrence'] == extra['measure_occurrence']
+            and m['audio_time'] is not None]
+    if not same:
+        return None
+    nearest = min(same, key=lambda m: abs(m['audio_time'] - extra['audio_time']))
+    pitch_ = extra['actual_pitch']
+    anchors = report.get('alignment', {}).get('anchors') or []
+    beat = None
+    if pitch_ is not None and len(anchors) >= 2:
+        times = [a['audio_time'] for a in anchors]
+        if times[0] <= extra['audio_time'] <= times[-1]:
+            beat = float(np.interp(extra['audio_time'], times, [a['score_beat'] for a in anchors]))
+    if beat is not None:
+        wanted = []
+        for m in report['matches']:
+            if (m['category'] != 'missing' or m['score_note_id'] not in locations
+                    or m['measure_occurrence'] != extra['measure_occurrence'] or m['score_beat'] is None):
+                continue
+            gap = abs(pitch_ - m['expected_pitch'])
+            if (gap <= 2 or (gap <= 26 and gap % 12 in (0, 1, 2, 10, 11))) and abs(m['score_beat'] - beat) <= 0.75:
+                wanted.append((abs(m['score_beat'] - beat) + gap / 100, m))
+        if wanted:
+            return min(wanted, key=lambda w: w[0])[1]
+    measure = note_by_id[nearest['score_note_id']]['measure']
+    ranges = {}
+    for n in notes:
+        if n['measure'] == measure:
+            low, high = ranges.setdefault(n['part'], [n['pitch'], n['pitch']])
+            ranges[n['part']] = [min(low, n['pitch']), max(high, n['pitch'])]
+    if pitch_ is not None and len(ranges) > 1:
+        part = min(ranges, key=lambda p: (max(ranges[p][0] - pitch_, pitch_ - ranges[p][1], 0),
+                                          abs(pitch_ - sum(ranges[p]) / 2)))
+        on_staff = [m for m in same if note_by_id[m['score_note_id']]['part'] == part]
+        if on_staff:
+            return min(on_staff, key=lambda m: abs(m['audio_time'] - extra['audio_time']))
+    return nearest
 
 
 def build_notation(musicxml, reference, performance, report):
@@ -87,11 +135,8 @@ def build_notation(musicxml, reference, performance, report):
         xml_id = locations.get(match['score_note_id'])
         anchor = match
         if xml_id is None and match['category'] == 'extra':
-            candidates = [m for m in located
-                          if m['measure_occurrence'] == match['measure_occurrence']
-                          and m['audio_time'] is not None]
-            if candidates:
-                anchor = min(candidates, key=lambda m: abs(m['audio_time'] - match['audio_time']))
+            anchor = _extra_anchor(match, report, located, locations, notes, note_by_id)
+            if anchor is not None:
                 xml_id = locations[anchor['score_note_id']]
         if xml_id is None:
             unplaced.append(match)

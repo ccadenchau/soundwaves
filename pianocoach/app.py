@@ -525,6 +525,49 @@ def report(report_id):
     return _no_cache(jsonify(data))
 
 
+FALLING_UI = ROOT / 'pianocoach-ui' / 'falling-notes.html'
+
+
+@coach.get('/falling')
+def falling_page():
+    """Falling-notes view of a take. /falling?report=<id|latest> loads a finished comparison."""
+    from flask import Response
+    return _no_cache(Response(FALLING_UI.read_text(encoding='utf-8'), mimetype='text/html'))
+
+
+@coach.get('/api/falling/<report_id>')
+def falling(report_id):
+    """The recording's notes, each marked as matching the score or not.
+
+    'correct' = the score note at this spot was played with this pitch; 'wrong_pitch' and 'extra'
+    = a played note the score does not call for. For a wrong pitch, `expected` is the key the
+    score wanted. Score notes that were never played have no time in the recording and are
+    only counted, in `missing`."""
+    from pianocoach.teacher import falling_notes
+    session_dir = _session_dir(report_id)
+    path = session_dir / 'alignment.json'
+    if not path.is_file():
+        abort(404)
+    data = falling_notes(json.loads(path.read_text(encoding='utf-8')))
+    report_path = session_dir / 'report.json'
+    title = json.loads(report_path.read_text(encoding='utf-8')).get('piece', {}).get('title', '') if report_path.is_file() else ''
+    return _no_cache(jsonify(id=session_dir.name, title=title, **data))
+
+
+@coach.get('/api/feedback/<report_id>')
+def feedback(report_id):
+    """Piano-teacher feedback on a finished comparison (Gemini; cached per take)."""
+    from pianocoach.teacher import FeedbackUnavailable, teacher_feedback
+    session_dir = _session_dir(report_id)
+    path = session_dir / 'alignment.json'
+    if not path.is_file():
+        abort(404)
+    try:
+        return _no_cache(jsonify(teacher_feedback(json.loads(path.read_text(encoding='utf-8')), session_dir)))
+    except FeedbackUnavailable as error:
+        return jsonify(error=str(error)), 503
+
+
 @coach.get('/api/audio/<report_id>')
 def audio(report_id):
     matches = [p for p in _session_dir(report_id).glob('recording.*') if p.suffix.lower() in AUDIO_SUFFIXES]

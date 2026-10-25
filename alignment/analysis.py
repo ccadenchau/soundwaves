@@ -41,6 +41,41 @@ def _fit_bar(anchors, start, end):
                 anchor_count=len(points), median_residual_seconds=residual)
 
 
+def _merge_split_notes(matches, anchors):
+    """A missing note and an extra of the same pitch right next to it are one note.
+
+    The aligner groups attacks into chords with a fixed window, so a chord note that lands a
+    little late (or a transcriber that stamps it late) falls into its own group: the score
+    note is reported missing and the played note extra. When the extra has the missing note's
+    pitch and sounds within about half a beat of where that score note should fall, they are
+    merged into one correct match; any real lateness is then judged as timing, not as a
+    wrong note."""
+    if len(anchors) < 2:
+        return matches
+    beats, times = [a[0] for a in anchors], [a[1] for a in anchors]
+    if beats[-1] <= beats[0] or times[-1] <= times[0]:
+        return matches
+    seconds_per_beat = (times[-1] - times[0]) / (beats[-1] - beats[0])
+    window = max(0.25, 0.5 * seconds_per_beat)
+    extras = [m for m in matches if m['category'] == 'extra' and m['audio_time'] is not None]
+    drop = set()
+    for missing in matches:
+        if missing['category'] != 'missing' or missing['score_beat'] is None:
+            continue
+        predicted = float(np.interp(missing['score_beat'], beats, times))
+        near = [x for x in extras if id(x) not in drop and x['actual_pitch'] == missing['expected_pitch']
+                and abs(x['audio_time'] - predicted) <= window]
+        if not near:
+            continue
+        extra = min(near, key=lambda x: abs(x['audio_time'] - predicted))
+        drop.add(id(extra))
+        for key in ('performance_note_id', 'audio_time', 'actual_pitch',
+                    'performance_duration_seconds', 'performance_velocity'):
+            missing[key] = extra[key]
+        missing['category'] = 'correct'
+    return [m for m in matches if id(m) not in drop]
+
+
 def align_performance(reference, performance, output_path=None, *, config=None):
     """Return a JSON-serializable report; optionally save it without overwriting.
 
@@ -88,6 +123,7 @@ def align_performance(reference, performance, output_path=None, *, config=None):
             return None
         return float(np.interp(time, [t for _, t in anchors], [b for b, _ in anchors]))
 
+    matches = _merge_split_notes(matches, anchors)
     correct_total = sum(m['category'] == 'correct' for m in matches)
     recall = correct_total / len(score)
     precision = correct_total / len(played) if played else 0.0

@@ -146,7 +146,9 @@ class SpreadChordTests(unittest.TestCase):
             # No note may be called missing or extra; a roll wider than the tolerance may surface as timing.
             self.assertEqual([e['category'] for e in report['errors'] if e['category'] != 'timing'], [], (raw, report['errors']))
             self.assertLessEqual(len(report['errors']), 1)
-            self.assertGreaterEqual(report['meta']['reconciled_pairs'], 2 if raw else 0)
+            # The aligner now merges a roll's split notes itself, before the report layer sees them.
+            self.assertNotIn('missing', raw)
+            self.assertNotIn('extra', raw)
 
 
 class OctaveTests(unittest.TestCase):

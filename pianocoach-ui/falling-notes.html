@@ -19,11 +19,20 @@ input[type=range]{accent-color:var(--accent)}
 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 #drop{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink-2);pointer-events:none;padding:24px}
 #drop.over{background:#b9efdf18;color:var(--ink)}
+select{background:#ffffff14;border:1px solid #ffffff22;color:var(--ink);padding:5px 8px;border-radius:12px;font:inherit;max-width:180px}
+option{color:#000}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px}
+body.embed #open,body.embed #compare,body.embed h1,body.embed #fbtn{display:none}
+body.embed header{padding:6px 12px}
+#fb{position:absolute;z-index:5;top:0;right:0;bottom:0;width:min(380px,100%);overflow:auto;background:#142428f2;border-left:1px solid #ffffff22;padding:16px 18px;font-size:14px}
+#fb h3{margin:16px 0 6px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+#fb .area{border-left:3px solid var(--accent);padding:0 0 0 12px;margin:12px 0}
+#fb ul{margin:6px 0;padding-left:18px}#fb li{margin:4px 0}#fb p{margin:6px 0}
 #msg{color:#ff9b87;font:12px var(--mono)}
 </style></head><body>
 <header>
   <h1>Falling notes</h1>
-  <label class="btn">Open MIDI<input id="file" type="file" accept=".mid,.midi,audio/midi,audio/x-midi"></label>
+  <label class="btn" id="open">Open MIDI<input id="file" type="file" accept=".mid,.midi,audio/midi,audio/x-midi"></label>
   <button id="play" disabled>Play</button>
   <span class="title" id="name">No file</span>
   <span class="ctl"><span id="time">0:00 / 0:00</span></span>
@@ -31,9 +40,17 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   <label class="ctl">Speed <input id="speed" type="range" min="0.25" max="2" step="0.05" value="1" style="width:80px"><span id="speedv">1.00×</span></label>
   <label class="ctl">Fall <input id="look" type="range" min="1" max="6" step="0.25" value="3" style="width:70px"></label>
   <label class="ctl">Vol <input id="vol" type="range" min="0" max="1" step="0.05" value="0.7" style="width:70px"></label>
+  <span id="compare" hidden class="ctl">
+    <label class="btn">Upload score<input id="scorefile" type="file" accept=".musicxml,.xml,.mxl,.pdf"></label>
+    <span id="scorename" hidden></span>
+    <select id="piece" aria-label="Or pick a built-in piece"></select>
+    <label class="btn">Compare recording<input id="rec" type="file" accept="audio/*,.mid,.midi"></label>
+  </span>
+  <span id="legend" hidden class="ctl"><i class="sw" style="background:#3ddc97"></i>matches score <i class="sw" style="background:#ff5d5d"></i>doesn't <span id="score"></span></span>
+  <button id="fbtn" hidden>Teacher feedback</button>
   <span id="msg" role="alert"></span>
 </header>
-<div id="stage"><canvas id="cv"></canvas><div id="drop">Drop a .mid file here, or use Open MIDI.<br>Space plays/pauses · ←/→ seek 5s</div></div>
+<div id="stage"><canvas id="cv"></canvas><aside id="fb" hidden></aside><div id="drop">Drop a .mid file here, or use Open MIDI.<br>Space plays/pauses · ←/→ seek 5s</div></div>
 <script>
 "use strict";
 // ---------- MIDI parsing ----------
@@ -134,7 +151,7 @@ const cur = () => playing ? startPos + (ctx.currentTime - startCtx) * speed() : 
 function load(buf, name) {
   $("msg").textContent = "";
   try { song = parseMidi(buf); } catch (e) { $("msg").textContent = e.message; return; }
-  stop(); pos = 0; nextIdx = 0;
+  stop(); pos = 0; nextIdx = 0; viewIdx = 0; $("legend").hidden = true;
   $("name").textContent = name; $("name").title = name;
   $("play").disabled = false; $("seek").disabled = false; $("drop").hidden = true;
   updateTime();
@@ -180,7 +197,9 @@ const keyGeo = (() => { // x/width in unit space where white key = 1
   for (let n = LO; n <= HI; n++) if (isBlack(n)) { const l = geo[n - 1]; geo[n] = { x: l.x + 1 - 0.3, w: 0.6 }; }
   geo.total = w; return geo;
 })();
-function colorFor(n, a) { const h = n.ch % 2 ? 190 : 150 - (n.note - LO) * 0.3 + 60; return `hsla(${h},75%,${isBlack(n.note) ? 55 : 62}%,${a})`; }
+const GREEN = [145, 70], RED = [0, 85]; // hue, saturation
+function colorFor(n, a) {
+  if (n.ok !== undefined) { const [h, sat] = n.ok ? GREEN : RED; return `hsla(${h},${sat}%,${isBlack(n.note) ? 50 : 58}%,${a})`; } const h = n.ch % 2 ? 190 : 150 - (n.note - LO) * 0.3 + 60; return `hsla(${h},75%,${isBlack(n.note) ? 55 : 62}%,${a})`; }
 function resize() {
   const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
   cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr);
@@ -188,18 +207,26 @@ function resize() {
 }
 function rr(x, y, w, h, r) { g2.beginPath(); g2.roundRect(x, y, w, Math.max(0, h), r); }
 function draw() {
-  const W = cv.clientWidth, H = cv.clientHeight, kh = Math.min(150, H * 0.22), fallH = H - kh;
+  const W = cv.clientWidth, H = cv.clientHeight, kh = EMBED ? H : Math.min(150, H * 0.22), fallH = H - kh;
   const u = W / keyGeo.total, t = cur(), look = +$("look").value * speed();
   g2.clearRect(0, 0, W, H);
   // lane guides on C
   g2.fillStyle = "#ffffff07";
   for (let n = LO; n <= HI; n++) if (n % 12 === 0) g2.fillRect(keyGeo[n].x * u, 0, 1, fallH);
-  const active = new Set();
+  const wanted = new Set(); // keys the score wanted while a wrong note sounds
+  const active = new Map(); // key -> colour while a note is sounding
   if (song) {
     for (let i = Math.max(0, nextIdxView(t) - 1); i < song.notes.length; i++) {
       const n = song.notes[i]; if (n.t > t + look) break;
       if (n.end < t - 0.01) continue;
-      if (n.t <= t && n.end >= t) active.add(n.note);
+      if (n.t <= t && n.end >= t) active.set(n.note, n.ok === false ? "bad" : "good");
+      if (n.expected != null && n.t <= t && n.end >= t) wanted.add(n.expected);
+      if (!EMBED && n.expected != null && keyGeo[n.expected]) { // key the score wanted: hollow red outline
+        const ek = keyGeo[n.expected], eb = Math.min(fallH - (n.t - t) / look * fallH, fallH), et = Math.max(fallH - (n.end - t) / look * fallH, -4);
+        g2.strokeStyle = "#ff5d5d"; g2.lineWidth = 1.5; g2.setLineDash([4, 3]);
+        rr(ek.x * u + 2, et, ek.w * u - 4, Math.max(4, eb - et) - 1, 3); g2.stroke(); g2.setLineDash([]);
+      }
+      if (EMBED) continue; // keyboard-only view: keys light up, notes do not fall
       const gk = keyGeo[n.note]; if (!gk) continue;
       const yBot = fallH - (n.t - t) / look * fallH, yTop = fallH - (n.end - t) / look * fallH;
       const top = Math.max(yTop, -4), bot = Math.min(yBot, fallH);
@@ -213,13 +240,16 @@ function draw() {
   g2.fillStyle = "#071214"; g2.fillRect(0, ky - 2, W, 2);
   for (let n = LO; n <= HI; n++) if (!isBlack(n)) {
     const k = keyGeo[n], on = active.has(n);
-    g2.fillStyle = on ? "#7fe8c8" : "#f4f8f6"; g2.fillRect(k.x * u + 0.5, ky, k.w * u - 1, kh);
+    g2.fillStyle = on ? (active.get(n) === "bad" ? "#ff8a8a" : "#7fe8c8") : "#f4f8f6"; g2.fillRect(k.x * u + 0.5, ky, k.w * u - 1, kh);
     if (n % 12 === 0) { g2.fillStyle = "#5d7771"; g2.font = `${Math.min(10, u * 0.6)}px ui-monospace,monospace`; g2.textAlign = "center"; g2.fillText(NAMES[0] + (Math.floor(n / 12) - 1), (k.x + 0.5) * u, ky + kh - 6); }
   }
   for (let n = LO; n <= HI; n++) if (isBlack(n)) {
     const k = keyGeo[n], on = active.has(n);
-    g2.fillStyle = on ? "#2fb58f" : "#14201f"; rr(k.x * u, ky, k.w * u, kh * 0.62, [0, 0, 3, 3]); g2.fill();
+    g2.fillStyle = on ? (active.get(n) === "bad" ? "#d63d3d" : "#2fb58f") : "#14201f"; rr(k.x * u, ky, k.w * u, kh * 0.62, [0, 0, 3, 3]); g2.fill();
   }
+  g2.strokeStyle = "#ff3b3b"; g2.lineWidth = 3; g2.setLineDash([5, 3]);
+  for (const n of wanted) { const k = keyGeo[n]; if (k) { g2.strokeRect(k.x * u + 2, ky + 2, k.w * u - 4, (isBlack(n) ? kh * 0.62 : kh) - 4); } }
+  g2.setLineDash([]);
   if (!$("seek").matches(":active")) $("seek").value = song ? 1000 * Math.min(1, t / song.duration) : 0;
   updateTime(t);
 }
@@ -257,6 +287,70 @@ const drop = $("drop");
 addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) f.arrayBuffer().then(b => load(b, f.name)); });
 addEventListener("resize", resize);
 // optional: ?src=path/to/file.mid
+// ---------- Backend (served by pianocoach.app) ----------
+const EMBED = new URLSearchParams(location.search).has("embed");
+if (EMBED) document.body.classList.add("embed");
+let feedbackUrl = null;
+function loadReport(id, url = "/api/falling/" + id) {
+  $("msg").textContent = "";
+  return fetch(url).then(r => r.ok ? r.json() : Promise.reject(new Error("No comparison found for " + id)))
+    .then(d => {
+      const notes = d.notes.map(n => ({ ...n, ch: 0 }));
+      if (!notes.length) throw new Error("That take has no notes");
+      stop(); song = { notes, duration: Math.max(...notes.map(n => n.end)) }; pos = 0; nextIdx = 0; viewIdx = 0;
+      $("name").textContent = $("name").title = d.title || "Your take";
+      $("play").disabled = $("seek").disabled = false; $("drop").hidden = true;
+      $("legend").hidden = false;
+      $("score").textContent = `· ${d.matched}/${notes.length} played notes match` + (d.missing ? `, ${d.missing} score notes missed` : "");
+      if (!EMBED) history.replaceState(null, "", "?report=" + d.id);
+      feedbackUrl = EMBED ? null : "/api/feedback/" + d.id; $("fb").hidden = true; $("fb").textContent = ""; $("fbtn").hidden = !feedbackUrl;
+      updateTime();
+    }).catch(e => $("msg").textContent = e.message);
+}
+fetch("/api/pieces").then(r => r.ok ? r.json() : []).then(list => {
+  $("piece").hidden = !list.length;
+  $("piece").innerHTML = '<option value="">or pick a built-in piece…</option>' + list.map(p => `<option value="${p.id}">${p.title}</option>`).join("");
+  $("compare").hidden = false;
+}).catch(() => {});
+// An uploaded score replaces the piece for the next comparison; click the name to go back to the piece.
+let scoreFile = null;
+function setScore(f) {
+  scoreFile = f; $("piece").hidden = !!f; $("scorename").hidden = !f;
+  $("scorename").textContent = f ? f.name + " ✕" : "";
+}
+$("scorefile").onchange = e => { setScore(e.target.files[0] || null); e.target.value = ""; };
+$("scorename").onclick = () => setScore(null);
+$("scorename").style.cursor = "pointer";
+$("rec").onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  if (!scoreFile && !$("piece").value) { $("msg").textContent = "Upload your score first."; e.target.value = ""; return; }
+  const form = new FormData(); form.append("performance", f); if (scoreFile) form.append("score", scoreFile); else form.append("piece", $("piece").value); form.append("explain", "0");
+  $("msg").style.color = "var(--ink-2)"; $("msg").textContent = "Analysing… (audio can take a minute)";
+  fetch("/api/analyze", { method: "POST", body: form }).then(r => r.json().then(d => r.ok ? d : Promise.reject(new Error(d.error || "Analysis failed"))))
+    .then(d => loadReport(d.id)).then(() => { if (!$("msg").textContent.startsWith("No")) $("msg").textContent = ""; })
+    .catch(err => { $("msg").style.color = ""; $("msg").textContent = err.message; })
+    .finally(() => { e.target.value = ""; });
+};
+// Teacher feedback drawer (standalone page only; the comparison page shows it itself)
+const mk = (tag, text, parent, cls) => { const e = document.createElement(tag); e.textContent = text; if (cls) e.className = cls; parent.appendChild(e); return e; };
+$("fbtn").onclick = () => {
+  const fb = $("fb"); fb.hidden = !fb.hidden;
+  if (fb.hidden || fb.dataset.loaded === feedbackUrl) return;
+  fb.textContent = "Writing feedback…";
+  fetch(feedbackUrl).then(r => r.json().then(d => r.ok ? d : Promise.reject(new Error(d.error || "Could not get feedback"))))
+    .then(d => {
+      fb.textContent = ""; fb.dataset.loaded = feedbackUrl;
+      mk("p", d.summary, fb);
+      if (d.strengths && d.strengths.length) { mk("h3", "Going well", fb); const u = mk("ul", "", fb); d.strengths.forEach(t => mk("li", t, u)); }
+      if (d.focus_areas && d.focus_areas.length) { mk("h3", "What to work on", fb); d.focus_areas.forEach(f => {
+        const c = mk("div", "", fb, "area"); mk("strong", f.title + (f.bars ? " · " + f.bars : ""), c); mk("p", f.what_happened, c);
+        const u = mk("ul", "", c); f.tips.forEach(t => mk("li", t, u)); }); }
+      if (d.practice_plan) { mk("h3", "Next practice session", fb); mk("p", d.practice_plan, fb); }
+    }).catch(e => { fb.textContent = e.message; });
+};
+const qs = new URLSearchParams(location.search), report = qs.get("report"), api = qs.get("api");
+if (api && api.startsWith("/")) loadReport("embedded", api); // same-origin paths only
+else if (report) loadReport(report);
 const src = new URLSearchParams(location.search).get("src");
 if (src) fetch(src).then(r => r.ok ? r.arrayBuffer() : Promise.reject(new Error("Could not load " + src))).then(b => load(b, src.split("/").pop())).catch(e => $("msg").textContent = e.message);
 resize(); requestAnimationFrame(frame);

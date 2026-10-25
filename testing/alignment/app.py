@@ -94,6 +94,11 @@ small{font-weight:400}ul{padding-left:21px}li{margin:7px 0}.seek{padding:6px 9px
 {% for kind, label in [('report','JSON report'),('sheet_midi','Sheet MIDI'),('recording_midi','Recording MIDI'),('musicxml','Recognized score'),('repairs','Score repair log')] %}
 <a href="{{ url_for('artifact', report_id=result.report_id, kind=kind) }}">{{ label }}</a>
 {% endfor %}</div></section>
+<section class="card" id="teacher" data-url="{{ url_for('report_feedback', report_id=result.report_id) }}">
+<h2>Feedback from your teacher</h2><p class="muted" id="teacher-status">Writing feedback…</p><div id="teacher-body"></div></section>
+<section class="card"><h2>Right and wrong keys</h2>
+<p class="muted">Press play to hear your recording on a keyboard. Each key lights green when you played the right note and red when you did not; a dashed red outline shows the key the sheet wanted instead.</p>
+<iframe title="Falling keys" src="/falling?embed=1&api={{ url_for('report_falling', report_id=result.report_id)|urlencode }}" style="width:100%;height:230px;border:1px solid #dce3ef;border-radius:10px;background:#0c181b" allow="autoplay"></iframe></section>
 <section class="card" id="score-view" data-url="{{ url_for('notation', report_id=result.report_id) }}">
 <h2>Follow your performance on the score</h2>
 <p class="muted">Play the recording to follow detected notes. Click a colored note to listen there. Purple noteheads show the detected pitch; hover or focus for the exact note and time. Extra notes sit beside the nearest matched note in their bar.</p>
@@ -142,6 +147,16 @@ document.getElementById('upload').addEventListener('submit',()=>{
 document.getElementById('submit').disabled=true;
 document.getElementById('status').textContent='Converting sheet and original recording, preparing MIDI playback, then aligning bars. Keep this page open…';
 });
+(async()=>{const box=document.getElementById('teacher');if(!box)return;
+const status=document.getElementById('teacher-status'),body=document.getElementById('teacher-body');
+const el=(tag,text,parent)=>{const e=document.createElement(tag);e.textContent=text;parent.appendChild(e);return e;};
+try{const r=await fetch(box.dataset.url);const d=await r.json();if(!r.ok)throw Error(d.error||'Could not get feedback.');
+status.remove();el('p',d.summary,body).style.fontSize='18px';
+if(d.strengths&&d.strengths.length){el('h3','Going well',body);const u=el('ul','',body);d.strengths.forEach(t=>el('li',t,u));}
+if(d.focus_areas&&d.focus_areas.length){el('h3','What to work on',body);d.focus_areas.forEach(f=>{const c=document.createElement('div');c.style.cssText='border-left:4px solid #315bdb;padding:2px 14px;margin:14px 0';body.appendChild(c);
+el('strong',f.title+(f.bars?' · '+f.bars:''),c);el('p',f.what_happened,c);const u=el('ul','',c);f.tips.forEach(t=>el('li',t,u));});}
+if(d.practice_plan){el('h3','Next practice session',body);el('p',d.practice_plan,body);}
+}catch(e){status.textContent=e.message;}})();
 document.querySelectorAll('.seek').forEach(button=>button.addEventListener('click',()=>{
 const audio=document.getElementById('audio');audio.currentTime=Number(button.dataset.time);audio.play().catch(()=>{});
 }));
@@ -200,6 +215,26 @@ def show_report(report_id):
     return render_template_string(PAGE, result=dict(
         report=report, report_id=report_id, cache=cache, cleaned='cleaned_audio' in artifacts,
         midi_playback='sheet_midi_audio' in artifacts and 'recording_midi_audio' in artifacts), error=None)
+
+
+@app.get('/report/<report_id>/falling.json')
+def report_falling(report_id):
+    """This comparison's played notes, green where they match the sheet and red where they do not."""
+    from pianocoach.teacher import falling_notes
+    directory = _report_directory(report_id)
+    report = json.loads((directory / 'report.json').read_text(encoding='utf-8'))
+    return jsonify(id=report_id, title='', **falling_notes(report))
+
+
+@app.get('/report/<report_id>/feedback')
+def report_feedback(report_id):
+    """Piano-teacher feedback from Gemini, cached with the report."""
+    from pianocoach.teacher import FeedbackUnavailable, teacher_feedback
+    directory = _report_directory(report_id)
+    try:
+        return jsonify(teacher_feedback(json.loads((directory / 'report.json').read_text(encoding='utf-8')), directory))
+    except FeedbackUnavailable as error:
+        return jsonify(error=str(error)), 503
 
 
 @app.get('/artifact/<report_id>/<kind>')
