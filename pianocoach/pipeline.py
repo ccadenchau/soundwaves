@@ -286,3 +286,97 @@ def main(argv):
 if __name__ == '__main__':
     import sys
     sys.exit(main(sys.argv))
+
+
+def trim_to_played(alignment):
+    """Cut a comparison down to the bars the student actually played.
+
+    A pitch-only aligner pins a few stray notes to similar bars past the end of a short take, and
+    every score note after the last one played then shows as "missed". Where the take ends is
+    found from timing instead: the tempo of the last two well-matched bars, projected to the
+    last sound in the recording (and the same at the start). Outside that stretch, skipped notes
+    are dropped (the student never got there), bars are dropped, and matches are re-labelled as
+    the extra notes they are. Changes `alignment` in place and returns it."""
+    import numpy as np
+    matches, measures = alignment['matches'], alignment['measures']
+    solid = [b for b in measures if b['expected_notes'] and b['correct_notes'] / b['expected_notes'] >= 0.5]
+    times = [m['audio_time'] for m in matches if m['audio_time'] is not None]
+    if not solid or not times:
+        return alignment
+
+    def beat_at(bars, t):
+        spans = [(b['start_beat'], b['end_beat']) for b in bars]
+        pts = [(m['audio_time'], m['score_beat']) for m in matches if m['category'] == 'correct'
+               and m['audio_time'] is not None and m['score_beat'] is not None
+               and any(s <= m['score_beat'] < e for s, e in spans)]
+        if len({p[0] for p in pts}) < 2:
+            return None
+        slope, intercept = np.polyfit([p[0] for p in pts], [p[1] for p in pts], 1)
+        return intercept + slope * t if slope > 0 else None
+
+    by_occ = sorted(measures, key=lambda b: b['occurrence'])
+    def occ_at(beat, fallback):
+        if beat is None:
+            return fallback
+        for b in by_occ:
+            if b['start_beat'] <= beat < b['end_beat']:
+                return b['occurrence']
+        return by_occ[0]['occurrence'] if beat < by_occ[0]['start_beat'] else by_occ[-1]['occurrence']
+
+    end_beat = beat_at(solid[-2:], max(times))
+    start_beat = beat_at(solid[:2], min(times))
+    first = min(solid[0]['occurrence'], occ_at(start_beat, solid[0]['occurrence']))
+    last = max(solid[-1]['occurrence'], occ_at(end_beat, solid[-1]['occurrence']))
+    last_bar = next(b for b in by_occ if b['occurrence'] == last)
+    reached = end_beat if end_beat is not None else last_bar['end_beat']
+
+    kept, dropped, relabelled = [], set(), set()
+    for m in matches:
+        occ = m.get('measure_occurrence')
+        outside = occ is not None and not first <= occ <= last
+        if m['category'] == 'missing' and (outside or (m['score_beat'] is not None and m['score_beat'] > reached + 0.25)):
+            dropped.add(m.get('score_note_id'))
+            continue
+        if outside and m['category'] in ('correct', 'wrong_pitch'):
+            relabelled.add(m.get('score_note_id'))
+            m = dict(m, category='extra', score_note_id=None, expected_pitch=None, score_beat=None,
+                     measure=last_bar['number'], measure_occurrence=last, onset_error_seconds=None)
+        elif outside and m['category'] == 'extra':
+            m = dict(m, measure=last_bar['number'], measure_occurrence=last)
+        kept.append(m)
+    alignment['matches'] = kept
+    removed = dropped | relabelled
+    errors = [e for e in alignment['errors'] if e.get('score_note_id') not in removed or e.get('score_note_id') is None]
+    for e in errors:
+        if e.get('measure_occurrence') is not None and not first <= e['measure_occurrence'] <= last:
+            e['measure'], e['measure_occurrence'] = last_bar['number'], last
+    errors += [dict(category='extra', measure=m['measure'], measure_occurrence=m['measure_occurrence'],
+                    score_note_id=None, performance_note_id=m.get('performance_note_id'), score_beat=None,
+                    audio_time=m['audio_time'], expected_pitch=None, actual_pitch=m['actual_pitch'],
+                    onset_error_seconds=None, evidence_confidence=None,
+                    assessment='possible_transcription_or_playing_error')
+               for m in kept if m['category'] == 'extra' and m.get('performance_note_id') and
+               not any(e.get('performance_note_id') == m['performance_note_id'] for e in alignment['errors'])]
+    alignment['errors'] = errors
+    played = [b for b in measures if first <= b['occurrence'] <= last]
+    for b in played:
+        inside = [m for m in kept if m.get('measure_occurrence') == b['occurrence']]
+        b['correct_notes'] = sum(m['category'] == 'correct' for m in inside)
+        b['missing_notes'] = sum(m['category'] == 'missing' for m in inside)
+        b['wrong_pitch_notes'] = sum(m['category'] == 'wrong_pitch' for m in inside)
+        b['extra_notes'] = sum(m['category'] == 'extra' for m in inside)
+        b['expected_notes'] = b['correct_notes'] + b['missing_notes'] + b['wrong_pitch_notes']
+        b['pitch_recall'] = b['correct_notes'] / b['expected_notes'] if b['expected_notes'] else 0.0
+    alignment['measures'] = played
+    metrics = alignment['metrics']
+    metrics['expected_notes'] = sum(b['expected_notes'] for b in played)
+    metrics['correct_notes'] = sum(m['category'] == 'correct' for m in kept)
+    metrics['pitch_recall'] = metrics['correct_notes'] / metrics['expected_notes'] if metrics['expected_notes'] else 0.0
+    if metrics.get('performed_notes'):
+        metrics['pitch_precision'] = metrics['correct_notes'] / metrics['performed_notes']
+    p, r = metrics.get('pitch_precision', 0.0), metrics['pitch_recall']
+    metrics['pitch_f1'] = 2 * p * r / (p + r) if p + r else 0.0
+    metrics['tempo_assessed_measures'] = sum(b.get('tempo_fit') is not None for b in played)
+    alignment['played_span'] = dict(alignment.get('played_span') or {}, first_occurrence=first, last_occurrence=last,
+                                    unplayed_bars_hidden=len(measures) - len(played))
+    return alignment

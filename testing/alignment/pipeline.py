@@ -145,7 +145,7 @@ def _cached(kind, source, signature, build, artifacts):
         return {name: destination / relative for name, relative in artifacts.items()}, False
 
 
-def compare_files(sheet, recording, *, bpm=120):
+def compare_files(sheet, recording, *, bpm=120, title=None):
     """Reuse conversions, rerun alignment, and save a uniquely identified report."""
     if not math.isfinite(bpm) or not 20 <= bpm <= 400:
         raise ValueError('Fallback BPM must be between 20 and 400.')
@@ -160,7 +160,7 @@ def compare_files(sheet, recording, *, bpm=120):
     from transcribe_recording import transcribe_recording
     from transcribe_recording.models import TranscriptionConfig
     from pianocoach.clean import clean_notes
-    from pianocoach.pipeline import align_windowed, prepare_for_transcription, transcriber
+    from pianocoach.pipeline import align_windowed, prepare_for_transcription, transcriber, trim_to_played
     from testing.alignment.playback import render_midi
 
     sheet_signature = _signature('sheet_downloader', dict(bpm=bpm, measures_per_chunk=1,
@@ -189,6 +189,7 @@ def compare_files(sheet, recording, *, bpm=120):
     heard = json.loads(Path(take['notes']).read_text(encoding='utf-8'))['notes']
     kept, cleaning = clean_notes(heard, harmonics=backend is None)
     report, _ = align_windowed(score['notes'], kept)
+    trim_to_played(report)  # only the bars the student played: no "missed" notes past the end of a short take
     report['preprocessing'] = dict(report.get('preprocessing', {}), audio_cleaning=audio_cleaning,
                                    timestamp_origin='original_audio', transcriber=transcriber_name, **cleaning)
 
@@ -211,5 +212,34 @@ def compare_files(sheet, recording, *, bpm=120):
                      audio=audio_path, original_audio=audio_path, sheet=sheet_path,
                      **previews)
     _write_json(directory / 'artifacts.json', {k: str(v.relative_to(CACHE)) for k, v in artifacts.items()})
+    name = title or Path(str(sheet)).stem.replace('_', ' ').replace('-', ' ').strip().title()
+    _write_json(directory / 'meta.json', dict(title=name))
+    prefetch_feedback(report_id)
     return dict(report=report, report_id=report_id, report_path=report_path,
                 cache=dict(sheet_hit=sheet_hit, recording_hit=recording_hit))
+
+
+_feedback_jobs = {}
+
+
+def prefetch_feedback(report_id):
+    """Start the teacher's written feedback as soon as a comparison is saved, so it is ready (and
+    the page doesn't jump) by the time the report opens. The page's own request waits for this."""
+    import threading
+
+    def run():
+        try:
+            from pianocoach.teacher import teacher_feedback
+            directory = CACHE / 'reports' / report_id
+            teacher_feedback(json.loads((directory / 'report.json').read_text(encoding='utf-8')), directory)
+        except Exception:  # noqa: BLE001 - the page asks again and shows the reason
+            pass
+    job = threading.Thread(target=run, daemon=True, name=f'feedback-{report_id[:8]}')
+    _feedback_jobs[report_id] = job
+    job.start()
+
+
+def wait_for_feedback(report_id, timeout=90):
+    job = _feedback_jobs.get(report_id)
+    if job is not None:
+        job.join(timeout)

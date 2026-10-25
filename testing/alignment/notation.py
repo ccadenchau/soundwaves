@@ -64,7 +64,7 @@ def render_score(musicxml, notes):
     toolkit = verovio.toolkit(False)
     toolkit.setResourcePath(str(files('verovio') / 'data'))
     toolkit.setOptions(dict(pageWidth=1500, pageHeight=2000, scale=45,
-                            adjustPageHeight=True, breaks='auto'))
+                            adjustPageHeight=True, breaks='auto', header='none', footer='none'))
     if not toolkit.loadFile(str(musicxml)):
         raise ValueError('Could not render the recognized score.')
     toolkit.renderToMIDI()
