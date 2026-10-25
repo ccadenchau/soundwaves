@@ -45,8 +45,8 @@
 <section class="card"><details><summary>Bars</summary><div class="scroll"><table>
 <thead><tr><th>Bar</th><th>Notes right</th><th><span class="tally-missed">Skipped</span> / <span class="tally-wrong">Wrong</span> / <span class="tally-extra">Extra</span></th><th>Tempo</th><th>Score → you (BPM)</th><th>Timing and touch</th><th>Feedback</th></tr></thead><tbody>
 {% for bar in report.measures %}<tr>
-<td><strong>{{ bar.number }}</strong>{% if summary.repeats %}<br><small>Pass {{ bar.occurrence + 1 }}</small>{% endif %}
-{% if bar.estimated_start_seconds is not none %}<p><button class="seek" data-time="{{ [0,bar.estimated_start_seconds]|max }}">Listen</button></p>{% endif %}</td>
+<td><span class="bar-heading"><strong>{{ bar.number }}</strong>
+{% if bar.estimated_start_seconds is not none and bar.estimated_end_seconds is not none and bar.estimated_end_seconds > ([0,bar.estimated_start_seconds]|max) %}<button type="button" class="seek speaker-button" data-time="{{ [0,bar.estimated_start_seconds]|max }}" data-end="{{ bar.estimated_end_seconds }}" aria-label="Listen to bar {{ bar.number }}" data-tooltip="Listen to bar {{ bar.number }}"><svg aria-hidden="true" viewBox="0 0 24 24"><use href="/static/icons/speaker.svg#speaker"></use></svg></button>{% endif %}</span>{% if summary.repeats %}<br><small>Pass {{ bar.occurrence + 1 }}</small>{% endif %}</td>
 <td>{{ bar.correct_notes }}/{{ bar.expected_notes }}<br>{% if bar.pitch_recall is not none %}<progress aria-label="Notes right" max="1" value="{{ bar.pitch_recall }}"></progress>{% endif %}</td>
 <td class="tally"><span class="tally-missed">{{ bar.missing_notes }}</span> / <span class="tally-wrong">{{ bar.wrong_pitch_notes }}</span> / <span class="tally-extra">{{ bar.extra_notes }}</span></td>
 <td><span class="badge {{ bar.tempo_status }}">{{ {'on_target':'steady','too_fast':'rushed','too_slow':'dragged','irregular':'uneven','unassessed':'not enough notes'}.get(bar.tempo_status, bar.tempo_status|replace('_',' ')) }}</span>
@@ -83,4 +83,4 @@
 </table></div>
 {% if report.warnings %}<h3>Caveats</h3><ul class="muted">{% for warning in report.warnings %}<li>{{ warning }}</li>{% endfor %}</ul>{% endif %}
 </details></section>
-</main>{{ site_footer|safe }}<script src="{{ url_for('static', filename='pages/report.js') }}"></script><script src="{{ url_for('static', filename='notation.js') }}" defer></script></html>
+</main>{{ site_footer|safe }}<script src="{{ url_for('static', filename='bar-playback.js') }}"></script><script src="{{ url_for('static', filename='pages/report.js') }}"></script><script src="{{ url_for('static', filename='notation.js') }}" defer></script></html>

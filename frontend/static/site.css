@@ -118,3 +118,7 @@ html{overflow-x:clip}
 @media(forced-colors:active){h1,h2,h3,h4,h5,h6{background:none;color:CanvasText;-webkit-text-fill-color:CanvasText}}
 
 input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]):focus,textarea:focus{outline:none!important;box-shadow:none;border-color:#789b89;background-color:#ffffffb8}
+
+button.speaker-button{width:34px;min-width:34px;height:34px;min-height:34px;padding:7px;border-radius:10px}button.speaker-button svg{display:block;width:18px;height:18px;flex:none}
+
+.bar-heading{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}button.speaker-button,button.speaker-button:hover,button.speaker-button:active{width:26px;min-width:26px;height:26px;min-height:26px;padding:4px;border:0;border-radius:0;background:none;box-shadow:none;color:var(--muted)}button.speaker-button:hover{color:var(--accent)}

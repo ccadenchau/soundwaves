@@ -190,7 +190,16 @@ async function displayNotation() {
       row.textContent = `${item.category.replaceAll('_', ' ')}  /  MIDI pitch ${item.actual_pitch ?? item.expected_pitch}`;
       if (item.audio_time !== null) {
         const button = document.createElement('button');
-        button.textContent = `Listen at ${item.audio_time.toFixed(2)}s`;
+        button.type = 'button';
+        button.className = 'speaker-button';
+        button.setAttribute('aria-label', `Listen at ${item.audio_time.toFixed(2)} seconds`);
+        button.dataset.tooltip = `Listen at ${item.audio_time.toFixed(2)} seconds`;
+        const icon = document.createElementNS(ns, 'svg');
+        icon.setAttribute('viewBox', '0 0 24 24');
+        icon.setAttribute('aria-hidden', 'true');
+        const use = document.createElementNS(ns, 'use');
+        use.setAttribute('href', '/static/icons/speaker.svg#speaker');
+        icon.append(use); button.append(icon);
         button.addEventListener('click', () => seek(item.audio_time));
         row.append(' ', button);
       }

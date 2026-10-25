@@ -32,7 +32,5 @@ try{const r=await fetch(box.dataset.url.replace('/feedback','/bar-notes'));const
 let n=0;for(const [bar,note] of Object.entries(d.bars||{})){const td=document.querySelector(`td[data-bar="${bar}"]`);if(!td)continue;const div=document.createElement('div');div.className='barnote';div.textContent=note.replace(/\u00b7/g,' / ');td.prepend(div);n++;}
 if(n){const cap=document.getElementById('barnote-caption');cap.textContent='';cap.hidden=true;}
 }catch(e){}})();
-document.querySelectorAll('.seek').forEach(button=>button.addEventListener('click',()=>{
-const audio=document.getElementById('audio');audio.currentTime=Number(button.dataset.time);audio.play().catch(()=>{});}));
 document.querySelectorAll('audio').forEach(player=>player.addEventListener('play',()=>{
 document.querySelectorAll('audio').forEach(other=>{if(other!==player)other.pause();});}));
