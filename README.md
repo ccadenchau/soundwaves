@@ -60,7 +60,7 @@ Optional but recommended:
 - **Transkun** for piano-specific transcription: a Python 3.12 environment at `.venv-transkun` with `transkun` and PyTorch installed. Without it the bundled Basic Pitch model is used. The review page names the active transcriber. MIDI playback and downloads use the same cleaned detections as the comparison.
 - **Audiveris** for PDF scores: install the app (macOS: `/Applications/Audiveris.app`) or set `AUDIVERIS_PATH`. MusicXML and MXL work without it.
 
-Pages: `/` home, `/live` play live, `/check` check a recording, `/upload` add a piece, `/test` self-checks, `/convert` audio to MIDI without a score.
+Pages: `/` opens Play, `/live` play live, `/check` review a recording, `/learn` learn a piece, `/easy` simplify a recording, and `/test` self-checks. Add scores through **New piece** in the piece dropdown.
 
 ## Repository map
 

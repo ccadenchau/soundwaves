@@ -22,3 +22,5 @@ Moved and retained:
 - Retained browser tests → `testing/frontend/`.
 
 The old `soundwaves-ui/` and `soundwaves/web/static/` directories are gone. Saved reports, recordings, scores, and transcription models are preserved. Saved API/self-check sessions use the same current report template. Conversion and self-check tools now inherit the shared light theme; dark piano rolls and the embedded keyboard are visualization surfaces.
+
+Further consolidation: removed `frontend/templates/home.html`, `upload.html`, and `convert.html`, plus the old upload/conversion page CSS and scripts. Piece uploads now use `frontend/static/piece-modal.js`; `/` opens Play, and `/upload` opens the modal. The score-transcription backend and MIDI downloads remain part of practice/review.

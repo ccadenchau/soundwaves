@@ -24,8 +24,6 @@ function setPhase(value) {
   $('#go').classList.toggle('stop', live);
   $('#go').disabled = busy || !S.score || (!live && $('#mode').value === 'file' && !$('#file').files[0]);
   for (const id of ['#piece', '#mode', '#file']) $(id).disabled = live || busy;
-  $('#dot').classList.toggle('on', live);
-  $('#state').textContent = live ? ({mic: 'Listening', tap: 'Tap a key', file: 'Playing the recording'})[$('#mode').value] : 'Ready';
 }
 
 /* ---------- score ---------- */
@@ -175,11 +173,10 @@ function onEvent(pitch, time, velocity, duration) {
 }
 function finish() {
   $('#big').className = 'big ok'; $('#big').textContent = '✓';
-  $('#say').textContent = 'That was the whole tune.'; $('#sub').textContent = '';
+  $('#say').textContent = 'Complete.'; $('#sub').textContent = '';
   $('#bar').style.width = '100%'; $('#n-done').textContent = S.steps.length;
   const n = S.steps.length, first = S.ok;
-  $('#finish-text').textContent = `${n} notes. ${first} of them right first time, ${S.wrong} wrong ${S.wrong === 1 ? 'try' : 'tries'}. ` +
-    (S.wrong === 0 ? 'Clean. Now play it in time and let the score mark you.' : 'Play it again until the blue key is always the one you reach for, then try it in time.');
+  $('#finish-text').textContent = `${first}/${n} correct  /  ${S.wrong} retries`;
   $('#finish').classList.add('show');
   void stop(false);
 }
@@ -245,8 +242,6 @@ async function capture(node) {
     if (S.phase !== 'live') return;
     const time = Math.max(0, data.frame / S.rate - S.origin);
     S.pcm.push({time, samples: data.samples}); S.pcm = S.pcm.filter(c => c.time > time - WIN.context - .2);
-    let energy = 0; for (const x of data.samples) energy += x * x;
-    $('#level').style.width = `${Math.min(100, Math.sqrt(energy / data.samples.length) * 800)}%`;
     void sendWindow();
   };
   node.connect(S.worklet).connect(mute).connect(S.ctx.destination);
@@ -286,7 +281,6 @@ async function stop(keepPhase) {
   S.worklet?.disconnect(); S.worklet = null;
   if (S.source && S.source !== S.fileSource) S.source.disconnect();
   S.source = null; S.token++;
-  $('#level').style.width = '0%';
   if (!keepPhase || S.idx >= S.steps.length) setPhase('idle');
 }
 

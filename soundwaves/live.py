@@ -379,7 +379,7 @@ def _summary_payload(report_id, report, alignment):
                 and expected_measures <= anchored_measures)
     result.update(completed=complete, reachedMeasure=reached + 1,
                   reachedPrintedMeasure=measures[reached]['number'],
-                  coverage='Full passage reviewed.' if complete else f'Partial take · reached bar {measures[reached]["number"]}.')
+                  coverage='Full passage reviewed.' if complete else f'Partial take  /  reached bar {measures[reached]["number"]}.')
     if complete and alignment.get('alignment', {}).get('status') == 'aligned':
         result['errors'] = report.get('errors', [])
         result['coach'] = report.get('coach')

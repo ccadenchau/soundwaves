@@ -29,12 +29,10 @@ const overlay = text => { $('#overlay').hidden = !text; if (text) $('#overlay').
 function setPhase(value) {
   S.phase = value;
   const live = value === 'live', busy = value === 'starting' || value === 'finishing';
-  $('#go').textContent = live ? 'Stop and get the full report' : value === 'starting' ? 'Starting…' : value === 'finishing' ? 'Checking the take…' : 'Start';
+  $('#go').textContent = live ? 'Stop' : value === 'starting' ? 'Starting…' : value === 'finishing' ? 'Analyzing…' : 'Start';
   $('#go').classList.toggle('stop', live);
   $('#go').disabled = busy || !S.score || (!live && $('#mode').value === 'file' && !$('#file').files[0]);
   for (const id of ['#piece', '#mode', '#file', '#start-bar']) $(id).disabled = live || busy;
-  $('#dot').classList.toggle('on', live);
-  $('#state').textContent = live ? ($('#mode').value === 'mic' ? 'Listening' : 'Playing the recording') : value === 'finishing' ? 'Checking the whole take' : 'Ready';
 }
 
 /* ---------- score ---------- */
@@ -74,8 +72,8 @@ function reset() {
   S.markers.clear(); S.shown.clear(); S.feedKeys.clear(); S.barsSeen.clear(); S.version = -1; S.now = S.here = null;
   S.extras = {}; S.fastBar = S.checkedBar = 0; S.tempoItems = []; S.feedHtml = '';
   for (const id of ['#n-ok', '#n-wrong', '#n-miss', '#n-extra']) $(id).textContent = '0';
-  $('#bar').textContent = '–'; $('#behind').textContent = '';
-  $('#feed').innerHTML = '<p class="muted" id="feed-empty">Feedback appears here while you play: wrong keys, skipped notes, extra notes, and bars that rush or drag.</p>';
+  $('#bar').textContent = 'N/A';
+  $('#feed').innerHTML = '<p class="muted" id="feed-empty">No feedback yet.</p>';
   $('#bars').innerHTML = '<tr><td colspan="7" class="muted">Nothing yet.</td></tr>';
   $('#notation').scrollTop = 0;
 }
@@ -164,7 +162,7 @@ function renderFeed(marks) {
   $('#feed-empty')?.remove();
   const html = list.map(g => {
     const isNew = !S.feedKeys.has(g.id);
-    return `<div class="item${isNew ? '' : ' seen'}" style="--c:${colour[g.kind]}"><small>Bar ${esc(g.bar)} · ${label[g.kind]}</small>${esc(text(g))}</div>`;
+    return `<div class="item${isNew ? '' : ' seen'}" style="--c:${colour[g.kind]}"><small>Bar ${esc(g.bar)}  /  ${label[g.kind]}</small>${esc(text(g))}</div>`;
   }).join('');
   if (html !== S.feedHtml) { feedEl.innerHTML = html; S.feedHtml = html; }
   for (const g of list) { if (!S.feedKeys.has(g.id) && g.kind !== 'noise') say(`Bar ${g.bar}. ${text(g)}`); S.feedKeys.add(g.id); }
@@ -188,10 +186,6 @@ function speakNext() {
 function applyState(state) {
   if (!state || state.version === S.version) return;
   S.version = state.version;
-  if (state.heard_seconds != null && S.ctx) {
-    const behind = Math.max(0, (S.ctx.currentTime - S.origin) - state.heard_seconds);
-    $('#behind').textContent = `Checked up to ${fmt(state.heard_seconds)} · ${behind.toFixed(1)} s behind`;
-  }
   if (!state.ready) return;
   const timed = (state.marks || []).filter(m => m.time != null && m.measure != null);
   if (timed.length) { S.checkedBar = timed.reduce((a, b) => (b.time > a.time ? b : a)).measure; showBar(); }
@@ -230,10 +224,10 @@ function renderBars(bars) {
   $('#bars').innerHTML = bars.map(b => {
     const ratio = b.tempo_ratio, status = b.tempo_status || 'unassessed';
     const label = {on_target: 'steady', too_fast: 'rushed', too_slow: 'dragged', irregular: 'uneven', unassessed: 'not enough notes yet'}[status] || status;
-    const detail = [b.median_onset_ms != null ? `Off the beat by ${b.median_onset_ms} ms` : '', (b.early != null && b.late != null) ? `<small>${b.early} early · ${b.late} late</small>` : ''].filter(Boolean).join('<br>');
+    const detail = [b.median_onset_ms != null ? `Off the beat by ${b.median_onset_ms} ms` : '', (b.early != null && b.late != null) ? `<small>${b.early} early  /  ${b.late} late</small>` : ''].filter(Boolean).join('<br>');
     return `<tr class="${b.occurrence === newest ? 'newest' : ''}"><td><strong>${b.number}</strong></td>
       <td>${b.correct}/${b.expected}<br><progress max="${b.expected}" value="${b.correct}"></progress></td>
-      <td>${b.missing} / ${b.wrong} / ${b.extra}</td>
+      <td class="tally"><span class="tally-missed">${b.missing}</span> / <span class="tally-wrong">${b.wrong}</span> / <span class="tally-extra">${b.extra}</span></td>
       <td><span class="badge ${status}">${label}</span>${ratio ? `<br><small>${ratio.toFixed(2)}× score speed</small>` : ''}</td>
       <td>${b.score_bpm ? b.score_bpm.toFixed(0) : '–'} → ${b.played_bpm ? b.played_bpm.toFixed(0) : '–'}</td>
       <td>${detail}</td><td>${(b.feedback || []).map(esc).join(' ')}</td></tr>`;
@@ -307,10 +301,9 @@ async function capture(node) {
     if (S.phase !== 'live') return;
     const time = Math.max(0, data.frame / S.rate - S.origin);
     S.pcm.push({time, samples: data.samples}); S.pcm = S.pcm.filter(c => c.time > time - WIN.context - .2);
-    const ints = new Int16Array(data.samples.length); let energy = 0;
-    for (let i = 0; i < data.samples.length; i++) { const x = Math.max(-1, Math.min(1, data.samples[i])); ints[i] = x < 0 ? x * 32768 : x * 32767; energy += x * x; }
+    const ints = new Int16Array(data.samples.length);
+    for (let i = 0; i < data.samples.length; i++) { const x = Math.max(-1, Math.min(1, data.samples[i])); ints[i] = x < 0 ? x * 32768 : x * 32767; }
     S.queue.push(ints); if (S.queue.reduce((n, p) => n + p.length, 0) >= S.rate / 4) void upload();
-    $('#level').style.width = `${Math.min(100, Math.sqrt(energy / data.samples.length) * 800)}%`;
     void sendWindow();
   };
   node.connect(S.worklet).connect(mute).connect(S.ctx.destination);
@@ -353,12 +346,12 @@ async function cleanup() {
   if (S.stream) { S.stream.getTracks().forEach(t => t.stop()); S.stream = null; }
   S.worklet?.disconnect(); S.source?.disconnect(); S.worklet = S.source = null;
   if (S.ctx) { await S.ctx.close().catch(() => {}); S.ctx = null; }
-  $('#level').style.width = '0%';
 }
 async function finish() {
   if (S.phase !== 'live') return;
   if ('speechSynthesis' in window) { voice.queue = []; speechSynthesis.cancel(); }
   setPhase('finishing');
+  window.SoundwavesLoading?.show();
   let file = S.file;
   try {
     if (S.recorder) {
@@ -371,12 +364,16 @@ async function finish() {
     if (S.session) fetch(`/api/live/session/${S.session}`, {method: 'DELETE'}).catch(() => {});
     S.token++;
     if (!file || !file.size) throw Error('Nothing was recorded. Check the microphone and try again.');
-    overlay('Checking the whole take for the full report… about 10–30 seconds');
+    window.SoundwavesLoading?.setRecording(file);
     const form = new FormData(); form.append('piece', $('#piece').value); form.append('recording', file);
     const res = await fetch('/api/live/finish', {method: 'POST', body: form, signal: AbortSignal.timeout(300000)});
     const data = await res.json(); if (!res.ok) throw Error(data.error || 'The full check failed.');
     location.href = data.report_url;
-  } catch (error) { await cleanup(); overlay(''); setPhase('idle'); message(error.name === 'TimeoutError' ? 'The full check took too long. Try a shorter take.' : error.message); }
+  } catch (error) {
+    await cleanup(); overlay(''); setPhase('idle');
+    const text=error.name==='TimeoutError'?'Analysis took too long; try a shorter take.':error.message;
+    message(text);window.SoundwavesLoading?.fail(text);
+  }
 }
 
 $('#go').addEventListener('click', () => S.phase === 'live' ? void finish() : void start());

@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Soundwaves · Falling notes</title><link rel="stylesheet" href="{{ url_for('static', filename='pages/keyboard-replay.css') }}"></head><body>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/site.css"><script src="/static/controls.js" defer></script>
+<title>Soundwaves  /  Falling notes</title><link rel="stylesheet" href="{{ url_for('static', filename='pages/keyboard-replay.css') }}"></head><body>
 <header>
   <h1>Falling notes</h1>
   <label class="btn" id="open">Open MIDI<input id="file" type="file" accept=".mid,.midi,audio/midi,audio/x-midi"></label>
@@ -20,5 +21,5 @@
   <button id="fbtn" hidden>Teacher feedback</button>
   <span id="msg" role="alert"></span>
 </header>
-<div id="stage"><canvas id="cv"></canvas><aside id="fb" hidden></aside><div id="drop">Drop a .mid file here, or use Open MIDI.<br>Space plays/pauses · ←/→ seek 5s</div></div>
+<div id="stage"><canvas id="cv"></canvas><aside id="fb" hidden></aside><div id="drop" aria-hidden="true"></div></div>
 <script src="{{ url_for('static', filename='pages/keyboard-replay.js') }}"></script></body></html>

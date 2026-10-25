@@ -1,6 +1,6 @@
 """One header and footer for every Soundwaves page, so the site reads as one thing."""
 
-NAV = (('live', '/live', 'Play live'), ('check', '/check', 'Check a recording'), ('add', '/upload', 'Add a piece'), ('easy', '/easy', 'Make it easy'), ('learn', '/learn', 'Learn a tune'))
+NAV = (('live', '/live', 'Play'), ('check', '/check', 'Review'), ('easy', '/easy', 'Simplify'), ('learn', '/learn', 'Learn'))
 
 
 from pathlib import Path

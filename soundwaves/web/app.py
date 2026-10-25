@@ -57,7 +57,7 @@ def index():
         if report_id == 'latest':
             report_id = _session_dir(report_id).name
         return redirect(url_for('show_report', report_id=report_id))
-    return _render('home.html')
+    return redirect(url_for('live_demo.live_page'))
 
 
 @app.route('/check', methods=['GET', 'POST'])
@@ -199,6 +199,24 @@ def report_ask(report_id):
                                        _meta_title(directory), body.get('question', ''), body.get('history') or []))
     except FeedbackUnavailable as error:
         return jsonify(error=str(error)), 503
+
+
+@app.get('/artifact/<report_id>/<kind>/waveform')
+def artifact_waveform(report_id, kind):
+    if kind not in {'audio', 'original_audio', 'recording_midi_audio', 'sheet_midi_audio'}:
+        abort(404)
+    directory = _report_directory(report_id)
+    manifest = json.loads((directory / 'artifacts.json').read_text())
+    if kind not in manifest:
+        abort(404)
+    path = (CACHE / manifest[kind]).resolve()
+    if not path.is_relative_to(CACHE.resolve()) or not path.is_file():
+        abort(404)
+    from soundwaves.web.waveform import waveform_response
+    try:
+        return waveform_response(path)
+    except (ValueError, OSError):
+        return jsonify(error='Waveform unavailable.'), 422
 
 
 @app.get('/artifact/<report_id>/<kind>')

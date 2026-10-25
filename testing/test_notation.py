@@ -82,7 +82,7 @@ class NotationTests(unittest.TestCase):
                 first.close()
                 with client.get('/static/notation.js') as response:
                     self.assertEqual(response.status_code, 200)
-                self.assertEqual(client.get('/').status_code, 200)
+                self.assertEqual(client.get('/').location, '/live')
 
 
 class ExtraAnchorTests(unittest.TestCase):

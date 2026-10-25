@@ -211,7 +211,7 @@ def main(argv):
         r = run_case(kind)
         print(f"{'PASS' if r['ok'] else 'FAIL'}  {CASES[kind]['title']}  ({r['seconds']} s, {r['transcriber']})")
         for c in r['checks']:
-            print(f"      {'✓' if c['ok'] else ('✗' if c['required'] else '!')} {c['label']} · {c['detail']}")
+            print(f"      {'✓' if c['ok'] else ('✗' if c['required'] else '!')} {c['label']}  /  {c['detail']}")
         failed += not r['ok']
     print(f"\n{len(kinds) - failed} of {len(kinds)} passed.")
     return 1 if failed else 0

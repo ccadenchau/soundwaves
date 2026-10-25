@@ -10,7 +10,7 @@ UNIT_TESTS = [
     "testing.soundwaves.test_audio_cleaner", "testing.soundwaves.test_clean", "testing.soundwaves.test_scoreprep",
     "testing.soundwaves.test_report", "testing.soundwaves.test_partial", "testing.soundwaves.test_pipeline",
     "testing.soundwaves.test_live", "testing.soundwaves.test_transkun", "sheet_downloader.test_reference",
-    "testing.test_notation", "testing.test_frontend",
+    "testing.test_notation", "testing.test_frontend", "testing.test_waveform",
 ]
 
 

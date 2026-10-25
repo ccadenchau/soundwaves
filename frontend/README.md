@@ -15,8 +15,12 @@ frontend/
     audio/               Sampled piano bank and attribution
 ```
 
-Pages: `/` home, `/live` live practice, `/check` recording analysis, `/report/<id>` saved review, `/upload` add a score, `/easy` simplify a recording, `/convert` audio-to-MIDI tools, and `/test` self-checks. The report embeds `/falling?embed=1` for keyboard replay. `/practice` and `/record` redirect to `/live` and `/check`.
+Pages: `/` redirects to `/live` for live practice, `/check` recording analysis, `/report/<id>` saved review, `/easy` simplify a recording, `/test` self-checks. The report embeds `/falling?embed=1` for keyboard replay. `/practice` and `/record` redirect to `/live` and `/check`.
 
 Browser tests: `node --test testing/frontend/*.test.cjs`.
 
 The standalone iPad keyboard is outside the app in `ipad_keys/`; see its README.
+
+Shared waveform players use the original audio elements as their playback clock; envelopes are generated and cached by `soundwaves/web/waveform.py`. The shared analysis overlay is in `static/loading.js`. Quicksand is bundled locally in `static/fonts/` with its license.
+
+Add sheet music with **New piece** in the piece dropdown; the shared upload modal selects it after saving. The old `/upload` link opens that modal. The Home and standalone audio-to-MIDI pages have been removed.

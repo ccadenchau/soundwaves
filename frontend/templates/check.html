@@ -1,17 +1,17 @@
 <!doctype html>
 <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Check a recording · Soundwaves</title>{{ site_head|safe }}
+<title>Check a recording  /  Soundwaves</title>{{ site_head|safe }}
 <link rel="stylesheet" href="{{ url_for('static', filename='pages/check.css') }}">
 <body>{{ site_header('check')|safe }}<main>
 <h1>Check a recording</h1>
-<p class="lede">Upload a recording of yourself and the sheet music you played from. Use the same passage in both.</p>
-<section class="card"><form method="post" action="{{ url_for('check') }}" enctype="multipart/form-data" id="upload">
-<label>Sheet music <small>PDF, MusicXML or MXL, up to 20 MB</small><input type="file" name="sheet" accept=".pdf,.musicxml,.xml,.mxl"></label>
-<label>Recording <small>MP3, WAV or M4A, up to 10 minutes</small><input type="file" name="recording" accept=".mp3,.wav,.m4a,.webm,.ogg,.flac,audio/*" required></label>
-<label>Or a link to the sheet music <small>a direct PDF or MusicXML download</small><input type="url" name="sheet_url" placeholder="https://example.com/score.pdf"></label>
-<label>Tempo if the score has none <small>beats per minute</small><input type="number" name="bpm" min="20" max="400" step="any" value="120" required></label>
-<div class="wide"><button type="submit" id="submit">Check my playing</button>
-<p class="muted" id="status">A new PDF takes a minute or two to read the first time. After that the same piece is instant.</p></div>
+
+<section class="card"><form method="post" action="{{ url_for('check') }}" enctype="multipart/form-data" id="upload" data-analysis>
+<label>Sheet music <small>PDF  /  MusicXML  /  MXL</small><input type="file" name="sheet" accept=".pdf,.musicxml,.xml,.mxl"></label>
+<label>Recording <small>Audio  /  up to 10 min</small><input type="file" name="recording" accept=".mp3,.wav,.m4a,.webm,.ogg,.flac,audio/*" required></label>
+<label>Score URL <small>optional</small><input type="url" name="sheet_url" placeholder="https://example.com/score.pdf"></label>
+<label>Tempo <small>BPM</small><input type="number" name="bpm" min="20" max="400" step="any" value="120" required></label>
+<div class="wide"><button type="submit" id="submit">Review</button>
+<p class="muted" id="status"></p></div>
 </form></section>
 {% if error %}<section class="card error" role="alert">{{ error }}</section>{% endif %}
 </main>{{ site_footer|safe }}<script src="{{ url_for('static', filename='pages/check.js') }}"></script></body></html>

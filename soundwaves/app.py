@@ -52,7 +52,7 @@ def site_css():
 
 @coach.get('/upload')
 def upload_page():
-    return _no_cache(render_template('upload.html', site_head=SITE_HEAD, site_header=site_header, site_footer=SITE_FOOTER))
+    return redirect('/live?add-piece=1')
 
 
 @coach.post('/api/pieces/upload')
@@ -152,11 +152,6 @@ def easy_route():
     return jsonify(result)
 
 
-@coach.get('/convert')
-def convert_page():
-    return _no_cache(render_template('convert.html', site_head=SITE_HEAD, site_header=site_header, site_footer=SITE_FOOTER))
-
-
 @coach.post('/api/convert')
 def convert_route():
     from soundwaves.convert import AUDIO_TYPES, CONVERT, convert_audio
@@ -188,6 +183,30 @@ def convert_route():
     finally:
         import shutil
         shutil.rmtree(staging, ignore_errors=True)
+
+
+@coach.get('/api/convert/<run_id>/<name>/waveform')
+def convert_waveform(run_id, name):
+    from soundwaves.convert import CONVERT
+    from soundwaves.web.waveform import waveform_response
+    if not ID.fullmatch(run_id):
+        abort(404)
+    folder = CONVERT / run_id
+    if name == 'original':
+        matches = sorted(folder.glob('original.*'))
+        if not matches:
+            abort(404)
+        source = matches[0]
+    elif name in {'cleaned.wav', 'cleaned-as-piano.wav', 'original-as-piano.wav'}:
+        source = folder / name
+    else:
+        abort(404)
+    if not source.is_file():
+        abort(404)
+    try:
+        return waveform_response(source)
+    except (ValueError, OSError):
+        return jsonify(error='Waveform unavailable.'), 422
 
 
 @coach.get('/api/convert/<run_id>/<name>')

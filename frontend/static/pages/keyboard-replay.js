@@ -143,7 +143,7 @@ const keyGeo = (() => { // x/width in unit space where white key = 1
   for (let n = LO; n <= HI; n++) if (isBlack(n)) { const l = geo[n - 1]; geo[n] = { x: l.x + 1 - 0.3, w: 0.6 }; }
   geo.total = w; return geo;
 })();
-const GREEN = [145, 70], RED = [0, 85]; // hue, saturation
+const GREEN = [158, 55], RED = [348, 65]; // hue, saturation
 function colorFor(n, a) {
   if (n.ok !== undefined) { const [h, sat] = n.ok ? GREEN : RED; return `hsla(${h},${sat}%,${isBlack(n.note) ? 50 : 58}%,${a})`; } const h = n.ch % 2 ? 190 : 150 - (n.note - LO) * 0.3 + 60; return `hsla(${h},75%,${isBlack(n.note) ? 55 : 62}%,${a})`; }
 function resize() {
@@ -157,7 +157,7 @@ function draw() {
   const u = W / keyGeo.total, t = cur(), look = +$("look").value * speed();
   g2.clearRect(0, 0, W, H);
   // lane guides on C
-  g2.fillStyle = "#ffffff07";
+  g2.fillStyle = "#a0c2b31c";
   for (let n = LO; n <= HI; n++) if (n % 12 === 0) g2.fillRect(keyGeo[n].x * u, 0, 1, fallH);
   const wanted = new Set(); // keys the score wanted while a wrong note sounds
   const active = new Map(); // key -> colour while a note is sounding
@@ -169,7 +169,7 @@ function draw() {
       if (n.expected != null && n.t <= t && n.end >= t) wanted.add(n.expected);
       if (!EMBED && n.expected != null && keyGeo[n.expected]) { // key the score wanted: hollow red outline
         const ek = keyGeo[n.expected], eb = Math.min(fallH - (n.t - t) / look * fallH, fallH), et = Math.max(fallH - (n.end - t) / look * fallH, -4);
-        g2.strokeStyle = "#ff5d5d"; g2.lineWidth = 1.5; g2.setLineDash([4, 3]);
+        g2.strokeStyle = "#df516d"; g2.lineWidth = 1.5; g2.setLineDash([4, 3]);
         rr(ek.x * u + 2, et, ek.w * u - 4, Math.max(4, eb - et) - 1, 3); g2.stroke(); g2.setLineDash([]);
       }
       if (EMBED) continue; // keyboard-only view: keys light up, notes do not fall
@@ -183,17 +183,22 @@ function draw() {
   }
   // keys
   const ky = fallH;
-  g2.fillStyle = "#071214"; g2.fillRect(0, ky - 2, W, 2);
+  g2.fillStyle = '#b7cec2'; g2.fillRect(0, ky - 1, W, 1);
+  const paint = (top,bottom,height) => { const gradient=g2.createLinearGradient(0,ky,0,ky+height);gradient.addColorStop(0,top);gradient.addColorStop(1,bottom);return gradient; };
+  const white=paint('#ffffff','#e5eee9',kh),whiteGood=paint('#d2f3e4','#7ac8a8',kh),whiteBad=paint('#ffe2e9','#ef9cb4',kh);
+  const black=paint('#536b61','#293e35',kh*.62),blackGood=paint('#62bda0','#2e8768',kh*.62),blackBad=paint('#e88aa5','#ba4d6d',kh*.62);
   for (let n = LO; n <= HI; n++) if (!isBlack(n)) {
     const k = keyGeo[n], on = active.has(n);
-    g2.fillStyle = on ? (active.get(n) === "bad" ? "#ff8a8a" : "#7fe8c8") : "#f4f8f6"; g2.fillRect(k.x * u + 0.5, ky, k.w * u - 1, kh);
-    if (n % 12 === 0) { g2.fillStyle = "#5d7771"; g2.font = `${Math.min(10, u * 0.6)}px ui-monospace,monospace`; g2.textAlign = "center"; g2.fillText(NAMES[0] + (Math.floor(n / 12) - 1), (k.x + 0.5) * u, ky + kh - 6); }
+    g2.fillStyle = on ? (active.get(n) === 'bad' ? whiteBad : whiteGood) : white;
+    rr(k.x*u+.7,ky+1,k.w*u-1.4,kh-2,[0,0,5,5]);g2.fill();g2.strokeStyle='#b5cbc066';g2.lineWidth=.7;g2.stroke();
+    if (n % 12 === 0) { g2.fillStyle = "#5d7771"; g2.font = `${Math.min(10, u * 0.6)}px Quicksand,sans-serif`; g2.textAlign = "center"; g2.fillText(NAMES[0] + (Math.floor(n / 12) - 1), (k.x + 0.5) * u, ky + kh - 6); }
   }
   for (let n = LO; n <= HI; n++) if (isBlack(n)) {
     const k = keyGeo[n], on = active.has(n);
-    g2.fillStyle = on ? (active.get(n) === "bad" ? "#d63d3d" : "#2fb58f") : "#14201f"; rr(k.x * u, ky, k.w * u, kh * 0.62, [0, 0, 3, 3]); g2.fill();
+    g2.fillStyle = on ? (active.get(n) === 'bad' ? blackBad : blackGood) : black;
+    rr(k.x*u,ky,k.w*u,kh*.62,[0,0,4,4]);g2.fill();g2.strokeStyle='#ffffff44';g2.lineWidth=.8;g2.stroke();
   }
-  g2.strokeStyle = "#ff3b3b"; g2.lineWidth = 3; g2.setLineDash([5, 3]);
+  g2.strokeStyle = "#df516d"; g2.lineWidth = 3; g2.setLineDash([5, 3]);
   for (const n of wanted) { const k = keyGeo[n]; if (k) { g2.strokeRect(k.x * u + 2, ky + 2, k.w * u - 4, (isBlack(n) ? kh * 0.62 : kh) - 4); } }
   g2.setLineDash([]);
   if (!$("seek").matches(":active")) $("seek").value = song ? 1000 * Math.min(1, t / song.duration) : 0;
@@ -247,7 +252,7 @@ function loadReport(id, url = "/api/falling/" + id) {
       $("name").textContent = $("name").title = d.title || "Your take";
       $("play").disabled = $("seek").disabled = false; $("drop").hidden = true;
       $("legend").hidden = false;
-      $("score").textContent = `· ${d.matched}/${notes.length} played notes match` + (d.missing ? `, ${d.missing} score notes missed` : "");
+      $("score").textContent = ` /  ${d.matched}/${notes.length} played notes match` + (d.missing ? `, ${d.missing} score notes missed` : "");
       if (!EMBED) history.replaceState(null, "", "?report=" + d.id);
       feedbackUrl = EMBED ? null : "/api/feedback/" + d.id; $("fb").hidden = true; $("fb").textContent = ""; $("fbtn").hidden = !feedbackUrl;
       const t0 = +qs0.get("t"); if (t0 > 0) seekTo(t0); // ?t=12.5 starts there
@@ -290,7 +295,7 @@ $("fbtn").onclick = () => {
       mk("p", d.summary, fb);
       if (d.strengths && d.strengths.length) { mk("h3", "Going well", fb); const u = mk("ul", "", fb); d.strengths.forEach(t => mk("li", t, u)); }
       if (d.focus_areas && d.focus_areas.length) { mk("h3", "What to work on", fb); d.focus_areas.forEach(f => {
-        const c = mk("div", "", fb, "area"); mk("strong", f.title + (f.bars ? " · " + f.bars : ""), c); mk("p", f.what_happened, c);
+        const c = mk("div", "", fb, "area"); mk("strong", f.title + (f.bars ? "  /  " + f.bars : ""), c); mk("p", f.what_happened, c);
         const u = mk("ul", "", c); f.tips.forEach(t => mk("li", t, u)); }); }
       if (d.practice_plan) { mk("h3", "Next practice session", fb); mk("p", d.practice_plan, fb); }
     }).catch(e => { fb.textContent = e.message; });

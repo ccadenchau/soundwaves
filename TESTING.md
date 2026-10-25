@@ -29,12 +29,6 @@ Green ✓ is a pass, red ✗ is a failure, and an orange ! is a warning (for exa
 Transkun does not). The first run takes about a minute because it renders the piano audio; later runs are cached.
 The top of the page shows which transcriber is active and whether a microphone or MIDI keyboard is connected.
 
-## Test only the audio → MIDI conversion (no sheet music)
-
-Open **http://127.0.0.1:5001/convert** and drop in any piano recording (an iPhone voice memo `.m4a` works). You get
-the original and cleaned audio side by side, a piano roll of the notes found, the MIDI played back on a sampled
-piano so you can hear what the converter heard, the MIDI file to download, and what the cleaner changed. 
-
 ## Try it by hand
 
 - **http://127.0.0.1:5001/live** — the current live screen.

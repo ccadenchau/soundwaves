@@ -31,33 +31,6 @@ async function displayNotation() {
     }, {once: true});
     audio.load();
   });
-  const cleanedButton = document.getElementById('play-cleaned');
-  cleanedButton.addEventListener('click', () => {
-    const cleanedSource = [...mode.options].find(option => option.textContent === 'Cleaned audio').value;
-    if (mode.value === cleanedSource && audio.readyState >= 1) {
-      startPlayback();
-      return;
-    }
-    mode.value = cleanedSource;
-    cleanedButton.disabled = true;
-    cleanedButton.textContent = 'Preparing cleaned audio…';
-    mode.dispatchEvent(new Event('change'));
-    const version = sourceVersion;
-    const reset = () => {
-      cleanedButton.disabled = false;
-      cleanedButton.textContent = 'Play cleaned audio';
-      audio.removeEventListener('loadedmetadata', ready);
-      audio.removeEventListener('error', reset);
-      mode.removeEventListener('change', reset);
-    };
-    const ready = () => {
-      reset();
-      if (sourceVersion === version) startPlayback();
-    };
-    audio.addEventListener('loadedmetadata', ready);
-    audio.addEventListener('error', reset);
-    mode.addEventListener('change', reset);
-  });
   audio.addEventListener('error', () => {
     status.textContent = 'Could not load playback. Try another playback mode.';
   });
@@ -214,7 +187,7 @@ async function displayNotation() {
     unplaced.hidden = !data.unplaced.length;
     for (const item of data.unplaced) {
       const row = document.createElement('p');
-      row.textContent = `${item.category.replaceAll('_', ' ')} · MIDI pitch ${item.actual_pitch ?? item.expected_pitch}`;
+      row.textContent = `${item.category.replaceAll('_', ' ')}  /  MIDI pitch ${item.actual_pitch ?? item.expected_pitch}`;
       if (item.audio_time !== null) {
         const button = document.createElement('button');
         button.textContent = `Listen at ${item.audio_time.toFixed(2)}s`;
