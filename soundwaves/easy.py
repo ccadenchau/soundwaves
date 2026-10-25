@@ -175,7 +175,9 @@ def simplify(melody, *, level=3, bars=8, beats_per_bar=4, beat=None):
     if not melody:
         return [], dict(bpm_detected=None, key='C major', shift=0)
     beat_seconds, bpm_detected = (beat, round(60 / beat)) if beat else estimate_beat([n['onset'] for n in melody])
-    grid = 0.5 if level <= 1 else 1.0
+    # Keep eighth-note motion at the middle level so ordinary melodies do not turn into
+    # a slow stream of quarter notes. Level 3 remains the deliberately slower option.
+    grid = 1.0 if level >= 3 else 0.5
     start = melody[0]['onset']
     # Key first, so the fold happens in the final key.
     shift, mode = _key_shift(melody) if level >= 2 else (0, 'major')
@@ -214,7 +216,7 @@ def simplify(melody, *, level=3, bars=8, beats_per_bar=4, beat=None):
         length = nxt - e['beat']
         # Easy lengths only: nothing longer than a bar, nothing shorter than the grid.
         length = max(grid, min(beats_per_bar, length))
-        if level >= 2:
+        if level >= 3:
             length = float(round(length))  # whole beats
             if length < 1:
                 length = 1.0
