@@ -31,9 +31,16 @@ def live_page():
 
 @live_demo.get('/live-assets/<name>')
 def live_asset(name):
-    if name not in ('live.js',):
+    if name not in ('live.js', 'learn.js'):
         return ('', 404)
     return send_file(STATIC / name, mimetype='text/javascript', max_age=0)
+
+
+@live_demo.get('/learn')
+def learn_page():
+    """Step-by-step mode for someone who has never played: the next key is shown, the page waits for it."""
+    from soundwaves.site import FOOTER, HEAD, header
+    return render_template('learn.html', site_head=HEAD, site_header=header, site_footer=FOOTER)
 
 
 @live_demo.get('/api/live/notation/<piece_id>')

@@ -17,3 +17,4 @@ venv/
 /testing/datasets/results_audio/
 
 /.python-transkun/
+testing/datasets/results_easy/

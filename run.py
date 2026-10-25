@@ -3,6 +3,7 @@
 import hashlib
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import venv
@@ -18,9 +19,17 @@ def setup():
     if not python.exists():
         venv.EnvBuilder(with_pip=True).create(environment)
     if not stamp.exists():
-        subprocess.run([str(python), "-m", "pip", "install", "--quiet", "-r",
-                        str(requirements)], check=True, stdout=subprocess.DEVNULL)
-        stamp.touch()
+        # A venv made by uv has no pip; use uv there. If neither works, say so and carry on with
+        # whatever is installed rather than refusing to start.
+        commands = [[str(python), "-m", "pip", "install", "--quiet", "-r", str(requirements)]]
+        if shutil.which("uv"):
+            commands.insert(0, ["uv", "pip", "install", "--quiet", "--python", str(python), "-r", str(requirements)])
+        for command in commands:
+            if subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
+                stamp.touch()
+                break
+        else:
+            print("Could not install requirements (no pip or uv). Continuing with what is installed.", file=sys.stderr)
     return python
 
 
